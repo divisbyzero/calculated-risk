@@ -1,5 +1,14 @@
 {
   "latex-workshop.latex.recipes": [
+    // First recipe = the one run on save: builds game.pdf (answer key) and
+    // game-questions.pdf (study questions) in tempfiles/.
+    {
+      "name": "Answer key + study questions",
+      "tools": [
+        "latexmk",
+        "latexmk-questions"
+      ]
+    },
     {
       "name": "latexmk",
       "tools": [
@@ -20,6 +29,24 @@
         "-pdflatex=xelatex -interaction=nonstopmode -synctex=1",
         "-file-line-error",
         "-outdir=tempfiles",
+        "%DOC%"
+      ]
+    },
+    {
+      // Same build, but defines \JeopardyQuestionsOnly first, which makes
+      // jeopardy.sty print only the clues, to <name>-questions.pdf.
+      "name": "latexmk-questions",
+      "command": "latexmk",
+      "args": [
+        "-shell-escape",
+        "-e",
+        "ensure_path('TEXINPUTS', '%WORKSPACE_FOLDER%/latex//')",
+        "-pdf",
+        "-pdflatex=xelatex -interaction=nonstopmode -synctex=1",
+        "-file-line-error",
+        "-outdir=tempfiles",
+        "-jobname=%DOCFILE%-questions",
+        "-usepretex=\\def\\JeopardyQuestionsOnly{}",
         "%DOC%"
       ]
     }

@@ -1,4 +1,4 @@
-% jeopardy.sty -- lets a Jeopardy game file compile as a printable answer key.
+% jeopardy.sty -- typesets a Jeopardy game file as a printable document.
 %
 % The web app reads the same .tex file directly. Commands provided:
 %   \gametitle{...}                        (preamble)
@@ -6,61 +6,312 @@
 %   \begin{clue} ... \response ... \end{clue}
 %   \begin{clue} ... \response ... \solution ... \end{clue}   (worked solution)
 %   \begin{clue}[dailydouble] ... \response ... \end{clue}
-%   \begin{final}{Category} ... \response ... \end{final}
+%   \begin{final}{Category} ... \response ... \solution ... \end{final}
 %
 % Clue values are assigned by position: 100, 200, 300, ...
+%
+% Two versions:
+%   answer key (default)  clues, responses, solutions, and a board overview
+%   study questions       clues only, for students
+% Choose the study questions with \usepackage[questions]{jeopardy}, or
+% without editing the file by defining \JeopardyQuestionsOnly before it is
+% read, e.g.  latexmk -usepretex='\def\JeopardyQuestionsOnly{}' game.tex
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{jeopardy}[2026/11/23 Jeopardy game files]
 
+%----------------------------------------------------------------------
+% Options
+
+\newif\ifjeo@key
+\jeo@keytrue
+\DeclareOption{key}{\jeo@keytrue}
+\DeclareOption{questions}{\jeo@keyfalse}
+\ProcessOptions\relax
+\@ifundefined{JeopardyQuestionsOnly}{}{\jeo@keyfalse}
+
+%----------------------------------------------------------------------
+% Packages
+
 \RequirePackage{amsmath}
 \RequirePackage{amssymb}
+\PassOptionsToPackage{dvipsnames,table,xcdraw}{xcolor} % same as the usual templates
+\RequirePackage{xcolor}
+\RequirePackage{geometry}
+\geometry{letterpaper, margin=1in, headheight=14pt}
+\RequirePackage{array}
+\RequirePackage{environ}
+\RequirePackage{fancyhdr}
+\RequirePackage{tcolorbox}
+\tcbuselibrary{breakable,skins}
+
+%----------------------------------------------------------------------
+% Colors
+
+\definecolor{jeoAccent}{HTML}{1B2A6B} % deep navy
+\definecolor{jeoGold}{HTML}{A87B12}   % muted gold
+\definecolor{jeoMuted}{HTML}{6B7280}  % gray text
+\definecolor{jeoRule}{HTML}{D5DAE5}   % light rules
+\definecolor{jeoSoft}{HTML}{F3F5FA}   % panel background
+
+%----------------------------------------------------------------------
+% Title, headers, and footers
 
 \newcommand*{\jeo@title}{Jeopardy!}
 \newcommand{\gametitle}[1]{\renewcommand*{\jeo@title}{#1}}
 
-\AtBeginDocument{%
-  \begin{center}
-    {\LARGE\bfseries \jeo@title\par}
-    \medskip
-    {\large Answer key\par}
-  \end{center}
-  \bigskip
+\ifjeo@key
+  \newcommand*{\jeo@version}{Answer Key}
+\else
+  \newcommand*{\jeo@version}{Study Questions}
+\fi
+
+\newcommand*{\jeo@kicker}{\sffamily\bfseries\footnotesize\color{jeoGold}}
+\newcommand*{\jeo@meta}{\sffamily\footnotesize\color{jeoMuted}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyhead[L]{\jeo@meta\jeo@title}
+\fancyhead[R]{\jeo@meta\jeo@version}
+\fancyfoot[C]{\jeo@meta\thepage}
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \fancyfoot[C]{\jeo@meta\thepage}%
 }
+
+\newcommand{\jeo@maketitle}{%
+  \thispagestyle{plain}%
+  \noindent{\jeo@kicker JEOPARDY!}\par
+  \vspace{6pt}%
+  \noindent{\fontsize{24}{29}\selectfont\bfseries\color{jeoAccent}\jeo@title\par}%
+  \vspace{4pt}%
+  \noindent{\large\sffamily\color{jeoMuted}\jeo@version}\par
+  \vspace{8pt}%
+  \noindent{\color{jeoAccent}\rule{\linewidth}{1.2pt}}\par
+  \vspace{14pt}%
+  \ifjeo@key\jeo@board\fi
+}
+\AtBeginDocument{\jeo@maketitle}
+
+%----------------------------------------------------------------------
+% Board overview (answer key only)
+%
+% Each run records the categories and Daily Doubles in the .aux file; the
+% next run draws them as a small board. latexmk reruns automatically.
+
+\newcommand*{\jeo@ncat}{0}
+\newcommand*{\jeo@nrows}{0}
+\newcommand*{\jeo@finalname}{}
+\newcommand{\jeo@auxcat}[2]{%
+  \global\@namedef{jeo@cat@#1}{#2}%
+  \ifnum#1>\jeo@ncat\relax\xdef\jeo@ncat{#1}\fi
+}
+\newcommand{\jeo@auxclue}[3]{%
+  \global\@namedef{jeo@dd@#1@#2}{#3}%
+  \ifnum#2>\jeo@nrows\relax\xdef\jeo@nrows{#2}\fi
+}
+\newcommand{\jeo@auxfinal}[1]{\gdef\jeo@finalname{#1}}
+
+\newcount\jeo@k
+\newcount\jeo@r
+\newdimen\jeo@colw
+
+\newcommand*{\jeo@headcell}[1]{%
+  \cellcolor{jeoAccent}\color{white}\sffamily\bfseries\scriptsize
+  \rule{0pt}{2.6ex}\@nameuse{jeo@cat@#1}\rule[-1.2ex]{0pt}{0pt}}
+\newcommand*{\jeo@valcell}[2]{%
+  \expandafter\ifx\csname jeo@dd@#1@#2\endcsname\jeo@one
+    \cellcolor{jeoGold!22}\sffamily\bfseries\footnotesize
+    \color{jeoGold}\the\numexpr100*#2\relax\,{\tiny DD}%
+  \else
+    \cellcolor{jeoSoft}\sffamily\footnotesize\color{jeoAccent}\the\numexpr100*#2\relax
+  \fi}
+\def\jeo@one{1}
+
+\def\jeo@addheads{%
+  \xdef\jeo@rows{\unexpanded\expandafter{\jeo@rows}%
+    \ifnum\jeo@k>1 &\fi\noexpand\jeo@headcell{\the\jeo@k}}%
+  \advance\jeo@k 1
+  \ifnum\jeo@k>\jeo@ncat\relax\else\expandafter\jeo@addheads\fi}
+\def\jeo@addcells{%
+  \xdef\jeo@rows{\unexpanded\expandafter{\jeo@rows}%
+    \ifnum\jeo@k>1 &\fi\noexpand\jeo@valcell{\the\jeo@k}{\the\jeo@r}}%
+  \advance\jeo@k 1
+  \ifnum\jeo@k>\jeo@ncat\relax\else\expandafter\jeo@addcells\fi}
+
+\newcommand{\jeo@board}{%
+  \ifnum\jeo@ncat>0
+    \gdef\jeo@rows{}%
+    \jeo@k=1 \jeo@addheads
+    \jeo@r=1
+    \loop
+      \xdef\jeo@rows{\unexpanded\expandafter{\jeo@rows}\noexpand\\}%
+      \jeo@k=1 \jeo@addcells
+      \advance\jeo@r 1
+    \ifnum\jeo@r<\numexpr\jeo@nrows+1\relax\repeat
+    \jeo@colw=\dimexpr(\linewidth-\numexpr\jeo@ncat+1\relax\dimexpr2pt\relax)/\jeo@ncat-2\tabcolsep\relax
+    \begingroup
+    \centering
+    \arrayrulecolor{white}%
+    \setlength{\arrayrulewidth}{2pt}%
+    \renewcommand{\arraystretch}{1.25}%
+    \begin{tabular}{*{\jeo@ncat}{|>{\centering\arraybackslash}m{\jeo@colw}}|}
+      \jeo@rows
+    \end{tabular}\par
+    \ifx\jeo@finalname\@empty\else
+      \vspace{6pt}%
+      {\jeo@meta Final Jeopardy:\ \jeo@finalname}\par
+    \fi
+    \endgroup
+    \vspace{10pt}%
+  \fi
+}
+
+%----------------------------------------------------------------------
+% Categories
 
 \newcounter{jeocategory}
 \newcounter{jeoclue}[jeocategory]
 
-\def\jeo@dailydouble{dailydouble}
+% Start a new page if less than #1 of space is left on this one. (Unlike
+% the needspace package, this never encourages a break when there's room.)
+\newcommand{\jeo@needspace}[1]{%
+  \par
+  \ifdim\pagegoal<\maxdimen
+    \ifdim\dimexpr\pagegoal-\pagetotal\relax<#1\relax\newpage\fi
+  \fi}
+
+\newcommand{\jeo@heading}[2]{% #1 = kicker, #2 = name
+  \par\addvspace{22pt}%
+  \jeo@needspace{12\baselineskip}%
+  \noindent{\jeo@kicker #1}\par\nopagebreak
+  \vspace{2pt}%
+  \noindent{\Large\bfseries\color{jeoAccent}#2}\par\nopagebreak
+  \vspace{5pt}%
+  \noindent{\color{jeoRule}\rule{\linewidth}{0.6pt}}\par\nopagebreak
+  \vspace{4pt}%
+}
 
 \newenvironment{category}[1]{%
   \stepcounter{jeocategory}%
-  \section*{Category \thejeocategory: #1}%
-}{}
+  \protected@write\@auxout{}{\string\jeo@auxcat{\thejeocategory}{\unexpanded{#1}}}%
+  \jeo@heading{CATEGORY \thejeocategory}{#1}%
+}{\par}
 
-\newenvironment{clue}[1][]{%
+%----------------------------------------------------------------------
+% Clues
+%
+% The clue body is split at \response and \solution. These are only
+% markers, so they're defined to do nothing (and not redefined if another
+% package already has a \solution command).
+
+\providecommand{\response}{}
+\providecommand{\solution}{}
+
+\newif\ifjeo@dd
+\def\jeo@dailydouble{dailydouble}
+
+\long\def\jeo@split#1\response#2\solution#3\solution#4\jeo@stop{%
+  \jeo@entry{#1}{#2}{#3}{#4}}
+
+\newcommand{\jeo@ifblank}[1]{%
+  \if\relax\detokenize{#1}\relax\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi}
+
+\newcommand*{\jeo@label}[1]{{\sffamily\bfseries\scriptsize\color{jeoAccent}#1}}
+
+\newtcolorbox{jeo@answer}{%
+  enhanced,
+  colback=jeoSoft, colframe=jeoAccent,
+  boxrule=0pt, leftrule=2pt, arc=0pt, outer arc=0pt,
+  left=9pt, right=9pt, top=6pt, bottom=6pt,
+  before skip=6pt, after skip=2pt,
+  segmentation style={draw=jeoRule, line width=0.6pt},
+  middle=6pt,
+}
+
+\newcommand*{\jeo@valuetext}{}
+\let\jeo@auxwrite\relax
+\newcommand{\jeo@makevalue}[1]{%
+  {\sffamily\bfseries\color{jeoAccent}#1}}
+
+% Tighter display spacing inside entries.
+\newcommand{\jeo@displayskips}{%
+  \setlength{\abovedisplayskip}{6pt plus 2pt minus 2pt}%
+  \setlength{\belowdisplayskip}{6pt plus 2pt minus 2pt}%
+  \setlength{\abovedisplayshortskip}{2pt plus 2pt}%
+  \setlength{\belowdisplayshortskip}{6pt plus 2pt minus 2pt}}
+
+% When a clue starts with \[ ... \], set that formula centered on the same
+% line as the value (in display style) instead of leaving an empty line
+% beside the value.
+\newif\ifjeo@raise
+\long\def\jeo@inlinedisplay\[#1\]{%
+  \hspace*{\fill}$\displaystyle #1$\hspace*{\fill}\par}
+
+% #1 clue, #2 response, #3 solution, #4 nonempty if there is a solution.
+% Each entry is set in a minipage so a clue never separates from its
+% answer across a page break.
+\newcommand{\jeo@entry}[4]{%
+  \par\addvspace{\ifjeo@key 14pt\else 10pt\fi}%
+  \noindent\begin{minipage}{\linewidth}%
+  \jeo@auxwrite
+  \jeo@displayskips
+  \begin{list}{}{%
+    \setlength{\leftmargin}{3.4em}%
+    \setlength{\labelwidth}{2.8em}%
+    \setlength{\labelsep}{0.6em}%
+    \setlength{\topsep}{0pt}%
+    \setlength{\partopsep}{0pt}%
+    \setlength{\itemsep}{0pt}%
+    \setlength{\parsep}{4pt}}%
+  \item[\jeo@makevalue{\jeo@valuetext}]%
+    \ifjeo@key\ifjeo@dd
+      \colorbox{jeoGold}{\color{white}\sffamily\bfseries\tiny DAILY DOUBLE}\par\nobreak
+      \vspace{2pt}%
+    \fi\fi
+    \begingroup
+    \jeo@raisetrue
+    \ifjeo@key\ifjeo@dd\jeo@raisefalse\fi\fi
+    \ifjeo@raise\expandafter\jeo@checkdisplay\fi
+    #1\par
+    \endgroup
+    \ifjeo@key
+      \jeo@ifblank{#4}%
+        {\begin{jeo@answer}\jeo@label{RESPONSE}\jeo@afterlabel #2\end{jeo@answer}}%
+        {\begin{jeo@answer}\jeo@label{RESPONSE}\jeo@afterlabel #2%
+          \tcblower\jeo@label{SOLUTION}\jeo@afterlabel #3\end{jeo@answer}}%
+    \fi
+  \end{list}%
+  \end{minipage}\par
+}
+
+\newcommand{\jeo@checkdisplay}{\@ifnextchar\[{\jeo@inlinedisplay}{}}
+
+% After a RESPONSE or SOLUTION label: start a new line, unless a display
+% comes next (then the display itself starts below the label).
+\newcommand{\jeo@afterlabel}{\@ifnextchar\[{}{\par\nobreak}}
+
+\NewEnviron{clue}[1][]{%
   \stepcounter{jeoclue}%
   \def\jeo@opt{#1}%
-  \par\addvspace{\medskipamount}\noindent
-  \textbf{\the\numexpr 100*\value{jeoclue}\relax}%
-  \ifx\jeo@opt\jeo@dailydouble
-    \hspace{1em}\fbox{\scriptsize DAILY DOUBLE}%
-  \fi
-  \par\nopagebreak
-  \begin{list}{}{\setlength{\leftmargin}{2em}\setlength{\itemsep}{2pt}}%
-  \item[] \textit{Clue:}\enspace
-}{%
-  \end{list}%
+  \ifx\jeo@opt\jeo@dailydouble\jeo@ddtrue\else\jeo@ddfalse\fi
+  \edef\jeo@auxwrite{\noexpand\protected@write\noexpand\@auxout{}%
+    {\string\jeo@auxclue{\thejeocategory}{\thejeoclue}{\ifjeo@dd 1\else 0\fi}}}%
+  \edef\jeo@valuetext{\the\numexpr100*\value{jeoclue}\relax}%
+  \expandafter\jeo@split\BODY\solution\solution\jeo@stop
 }
 
-\newenvironment{final}[1]{%
-  \section*{Final Jeopardy: #1}%
-  \begin{list}{}{\setlength{\leftmargin}{2em}\setlength{\itemsep}{2pt}}%
-  \item[] \textit{Clue:}\enspace
-}{%
-  \end{list}%
-}
+%----------------------------------------------------------------------
+% Final Jeopardy
 
-\newcommand{\response}{\item[] \textit{Response:}\enspace}
-\newcommand{\solution}{\item[] \textit{Solution:}\enspace}
+\NewEnviron{final}[1]{%
+  \protected@write\@auxout{}{\string\jeo@auxfinal{\unexpanded{#1}}}%
+  \jeo@heading{FINAL JEOPARDY}{#1}%
+  \jeo@ddfalse
+  \let\jeo@auxwrite\relax
+  \def\jeo@valuetext{}%
+  \expandafter\jeo@split\BODY\solution\solution\jeo@stop
+}
 
 \endinput
