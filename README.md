@@ -64,11 +64,12 @@ During the game:
 
 ## Writing a game
 
-Copy [`latex/template.tex`](latex/template.tex) and fill it in:
+Copy [`games/template.tex`](games/template.tex) and fill it in. Keep
+[`jeopardy.sty`](games/jeopardy.sty) in the same folder as your game.
 
 ```latex
 \documentclass{article}
-\usepackage{jeopardy}
+\usepackage[solutions]{jeopardy}     % or questions, or answers (see below)
 \gametitle{Calculus I Review}
 \newcommand{\dd}[1]{\frac{d}{d#1}}   % macros work inside math
 
@@ -118,30 +119,23 @@ Copy [`latex/template.tex`](latex/template.tex) and fill it in:
 - When you load a file, the app lists problems with line numbers, and
   **Preview every clue and response** shows everything rendered.
 
-**Your macros:** games can `\usepackage{MyMathMacros}`. The app reads macros
-from any `.sty` file in `latex/`, so `\R`, `\ep`, `\proj`, `\bvec` and the rest
-work on screen. [`latex/MyMathMacros.sty`](latex/MyMathMacros.sty) is a copy
-of the one in LaTeX-templates-and-masters; copy it over again when that one
-changes. A few macros that MathJax can't run (`\dotprod`, `\uveci`, `\uvecj`,
-`\ndv`, and esvect's `\vv`) have screen versions in `MATHJAX_MACROS` in
-[`js/config.js`](js/config.js).
+**Macros:** define them in the game's preamble with `\newcommand` or
+`\DeclareMathOperator`; they work in the app and in the PDF. A game can also
+`\usepackage{...}` a style file you put in `games/`; the app reads its macros
+too.
 
-**Printed versions:** open a game in VS Code and save it. Each save builds
-two PDFs in `tempfiles/` next to the game:
+**Printing:** compile the game file with LaTeX as usual (pdflatex, xelatex
+or Overleaf all work). The option on `\usepackage[...]{jeopardy}` at the top
+of the file chooses the PDF:
 
-- `game.pdf`, the **answer key**: a board overview (with the Daily Double
-  highlighted), then every clue with its response and worked solution. This
-  is the one to proofread while you write a game.
-- `game-questions.pdf`, the **study questions**: the clues only, with no
-  responses, solutions or Daily Double markers, to give students.
+| Option | The PDF contains |
+| --- | --- |
+| `questions` | The clues only, e.g. a study sheet for students |
+| `answers` | The clues and responses, after an overview of the board |
+| `solutions` (default) | The clues, responses and worked solutions, after an overview of the board. This is the one to proofread while you write a game. |
 
-The game file itself stays bare-bones; all the layout lives in
-[`latex/jeopardy.sty`](latex/jeopardy.sty). The workspace settings use the
-same LaTeX Workshop setup as LaTeX-templates-and-masters (xelatex through
-latexmk, latexindent on save) and also find `jeopardy.sty` and
-`MyMathMacros.sty` in `latex/`. Outside VS Code, use
-`\usepackage[questions]{jeopardy}` to get the study questions instead of the
-key.
+To make another version, change the option and compile again. The web game
+ignores this option, and the PDFs never mention the Daily Double.
 
 **Built-in games:** put a `.tex` file in `games/` and add it to
 [`games/index.json`](games/index.json).
@@ -156,6 +150,4 @@ key.
 | `js/config.js` | Board size and values (5 or 6 categories of 5 clues; set `enforceStandardSize` to `false` to allow other sizes) |
 | `js/sync.js` | Connects the two windows (BroadcastChannel) |
 | `js/math.js`, `js/mathjax-config.js` | MathJax setup and typesetting |
-| `latex/` | `jeopardy.sty`, a copy of `MyMathMacros.sty`, and a blank template |
-| `.vscode/settings.json`, `localSettings.yaml` | LaTeX Workshop and latexindent settings, copied from LaTeX-templates-and-masters |
-| `games/` | Built-in games and their list |
+| `games/` | Built-in games, their list, `template.tex`, and `jeopardy.sty` |

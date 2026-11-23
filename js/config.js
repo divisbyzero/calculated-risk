@@ -19,10 +19,6 @@ export const BOARD = {
 // esvect) is always available.
 export const MATHJAX_MACROS = {
   vv: '\\newcommand{\\vv}[1]{\\overrightarrow{#1}}',
-  dotprod: '\\newcommand{\\dotprod}{\\mathbin{\\scriptstyle\\bullet}}',
-  uveci: '\\newcommand{\\uveci}{\\boldsymbol{\\hat{\\imath}}}',
-  uvecj: '\\newcommand{\\uvecj}{\\boldsymbol{\\hat{\\jmath}}}',
-  ndv: '\\newcommand{\\ndv}{\\nmid}',
 };
 
 export function clueValue(row) {

@@ -1,4 +1,4 @@
-// Reads a game written as a .tex file (see latex/template.tex) and turns it
+// Reads a game written as a .tex file (see games/template.tex) and turns it
 // into a game object whose clue and response fields are HTML with the math
 // left as LaTeX for MathJax to typeset.
 //
@@ -97,7 +97,7 @@ export function parseGame(source, options = {}) {
     if (packages[name] !== undefined) {
       parseMacros(stripComments(packages[name]), null).forEach(({ name: n, def }) => macros.set(n, def));
     } else if (!KNOWN_PACKAGES.has(name)) {
-      warn(`The app can't read the package ${name}, so its macros won't work on screen. To fix this, put a copy of ${name}.sty in the app's latex/ folder.`);
+      warn(`The app can't read the package ${name}, so its macros won't work on screen. To fix this, put a copy of ${name}.sty in the app's games/ folder.`);
     }
   }
   parseMacros(text.slice(0, preEnd), err).forEach(({ name: n, def }) => macros.set(n, def));

@@ -14,14 +14,17 @@
 %   * Mark a Daily Double with \begin{clue}[dailydouble].
 %   * Saving in VS Code builds two PDFs: the answer key and study questions.
 %   * Math works inside $...$, \(...\), \[...\], and environments like align*.
-%   * Macros from MyMathMacros.sty (\R, \ep, \proj, \bvec, ...) and any
-%     \newcommand macros defined below work inside math.
+%   * \newcommand and \DeclareMathOperator macros defined below work
+%     inside math.
 %   * In text you can use \textbf, \emph, \textit, itemize, enumerate, \\,
 %     and \$ for a dollar sign.
 
 \documentclass{article}
-\usepackage{jeopardy}
-\usepackage{MyMathMacros}
+% Which PDF to make (the web game ignores this):
+%   questions  clues only, e.g. a study sheet for students
+%   answers    clues and responses
+%   solutions  clues, responses, and worked solutions
+\usepackage[solutions]{jeopardy}
 
 \gametitle{My Game Title}
 

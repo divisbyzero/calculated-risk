@@ -6,28 +6,30 @@
 %   \begin{clue} ... \response ... \end{clue}
 %   \begin{clue} ... \response ... \solution ... \end{clue}   (worked solution)
 %   \begin{clue}[dailydouble] ... \response ... \end{clue}
+%     (the Daily Double is for the game only; the PDF doesn't show it)
 %   \begin{final}{Category} ... \response ... \solution ... \end{final}
 %
 % Clue values are assigned by position: 100, 200, 300, ...
 %
-% Two versions:
-%   answer key (default)  clues, responses, solutions, and a board overview
-%   study questions       clues only, for students
-% Choose the study questions with \usepackage[questions]{jeopardy}, or
-% without editing the file by defining \JeopardyQuestionsOnly before it is
-% read, e.g.  latexmk -usepretex='\def\JeopardyQuestionsOnly{}' game.tex
+% Choose the version of the PDF with a package option:
+%   \usepackage[questions]{jeopardy}  clues only (a study sheet for students)
+%   \usepackage[answers]{jeopardy}    clues and responses
+%   \usepackage[solutions]{jeopardy}  clues, responses, and worked solutions
+%                                     (the default)
+% The answers and solutions versions start with an overview of the board.
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{jeopardy}[2026/11/23 Jeopardy game files]
 
 %----------------------------------------------------------------------
 % Options
 
-\newif\ifjeo@key
-\jeo@keytrue
-\DeclareOption{key}{\jeo@keytrue}
-\DeclareOption{questions}{\jeo@keyfalse}
+\newif\ifjeo@key       % show responses
+\newif\ifjeo@solutions % show worked solutions
+\DeclareOption{questions}{\jeo@keyfalse\jeo@solutionsfalse}
+\DeclareOption{answers}{\jeo@keytrue\jeo@solutionsfalse}
+\DeclareOption{solutions}{\jeo@keytrue\jeo@solutionstrue}
+\ExecuteOptions{solutions}
 \ProcessOptions\relax
-\@ifundefined{JeopardyQuestionsOnly}{}{\jeo@keyfalse}
 
 %----------------------------------------------------------------------
 % Packages
@@ -59,11 +61,13 @@
 \newcommand*{\jeo@title}{Jeopardy!}
 \newcommand{\gametitle}[1]{\renewcommand*{\jeo@title}{#1}}
 
-\ifjeo@key
+\ifjeo@solutions
+  \newcommand*{\jeo@version}{Answer Key with Solutions}
+\else\ifjeo@key
   \newcommand*{\jeo@version}{Answer Key}
 \else
-  \newcommand*{\jeo@version}{Study Questions}
-\fi
+  \newcommand*{\jeo@version}{Questions}
+\fi\fi
 
 \newcommand*{\jeo@kicker}{\sffamily\bfseries\footnotesize\color{jeoGold}}
 \newcommand*{\jeo@meta}{\sffamily\footnotesize\color{jeoMuted}}
@@ -97,8 +101,8 @@
 %----------------------------------------------------------------------
 % Board overview (answer key only)
 %
-% Each run records the categories and Daily Doubles in the .aux file; the
-% next run draws them as a small board. latexmk reruns automatically.
+% Each run records the categories in the .aux file; the next run draws
+% them as a small board. latexmk reruns automatically.
 
 \newcommand*{\jeo@ncat}{0}
 \newcommand*{\jeo@nrows}{0}
@@ -107,9 +111,8 @@
   \global\@namedef{jeo@cat@#1}{#2}%
   \ifnum#1>\jeo@ncat\relax\xdef\jeo@ncat{#1}\fi
 }
-\newcommand{\jeo@auxclue}[3]{%
-  \global\@namedef{jeo@dd@#1@#2}{#3}%
-  \ifnum#2>\jeo@nrows\relax\xdef\jeo@nrows{#2}\fi
+\newcommand{\jeo@auxrow}[1]{%
+  \ifnum#1>\jeo@nrows\relax\xdef\jeo@nrows{#1}\fi
 }
 \newcommand{\jeo@auxfinal}[1]{\gdef\jeo@finalname{#1}}
 
@@ -121,13 +124,7 @@
   \cellcolor{jeoAccent}\color{white}\sffamily\bfseries\scriptsize
   \rule{0pt}{2.6ex}\@nameuse{jeo@cat@#1}\rule[-1.2ex]{0pt}{0pt}}
 \newcommand*{\jeo@valcell}[2]{%
-  \expandafter\ifx\csname jeo@dd@#1@#2\endcsname\jeo@one
-    \cellcolor{jeoGold!22}\sffamily\bfseries\footnotesize
-    \color{jeoGold}\the\numexpr100*#2\relax\,{\tiny DD}%
-  \else
-    \cellcolor{jeoSoft}\sffamily\footnotesize\color{jeoAccent}\the\numexpr100*#2\relax
-  \fi}
-\def\jeo@one{1}
+  \cellcolor{jeoSoft}\sffamily\footnotesize\color{jeoAccent}\the\numexpr100*#2\relax}
 
 \def\jeo@addheads{%
   \xdef\jeo@rows{\unexpanded\expandafter{\jeo@rows}%
@@ -209,9 +206,6 @@
 \providecommand{\response}{}
 \providecommand{\solution}{}
 
-\newif\ifjeo@dd
-\def\jeo@dailydouble{dailydouble}
-
 \long\def\jeo@split#1\response#2\solution#3\solution#4\jeo@stop{%
   \jeo@entry{#1}{#2}{#3}{#4}}
 
@@ -245,14 +239,15 @@
 % When a clue starts with \[ ... \], set that formula centered on the same
 % line as the value (in display style) instead of leaving an empty line
 % beside the value.
-\newif\ifjeo@raise
 \long\def\jeo@inlinedisplay\[#1\]{%
   \hspace*{\fill}$\displaystyle #1$\hspace*{\fill}\par}
 
 % #1 clue, #2 response, #3 solution, #4 nonempty if there is a solution.
+% (A solution is shown only in the solutions version.)
 % Each entry is set in a minipage so a clue never separates from its
 % answer across a page break.
 \newcommand{\jeo@entry}[4]{%
+  \def\jeo@hassolution{#4}%
   \par\addvspace{\ifjeo@key 14pt\else 10pt\fi}%
   \noindent\begin{minipage}{\linewidth}%
   \jeo@auxwrite
@@ -266,18 +261,13 @@
     \setlength{\itemsep}{0pt}%
     \setlength{\parsep}{4pt}}%
   \item[\jeo@makevalue{\jeo@valuetext}]%
-    \ifjeo@key\ifjeo@dd
-      \colorbox{jeoGold}{\color{white}\sffamily\bfseries\tiny DAILY DOUBLE}\par\nobreak
-      \vspace{2pt}%
-    \fi\fi
     \begingroup
-    \jeo@raisetrue
-    \ifjeo@key\ifjeo@dd\jeo@raisefalse\fi\fi
-    \ifjeo@raise\expandafter\jeo@checkdisplay\fi
+    \jeo@checkdisplay
     #1\par
     \endgroup
     \ifjeo@key
-      \jeo@ifblank{#4}%
+      \ifjeo@solutions\else\def\jeo@hassolution{}\fi
+      \expandafter\jeo@ifblank\expandafter{\jeo@hassolution}%
         {\begin{jeo@answer}\jeo@label{RESPONSE}\jeo@afterlabel #2\end{jeo@answer}}%
         {\begin{jeo@answer}\jeo@label{RESPONSE}\jeo@afterlabel #2%
           \tcblower\jeo@label{SOLUTION}\jeo@afterlabel #3\end{jeo@answer}}%
@@ -292,12 +282,11 @@
 % comes next (then the display itself starts below the label).
 \newcommand{\jeo@afterlabel}{\@ifnextchar\[{}{\par\nobreak}}
 
+% The optional argument ([dailydouble]) is accepted but not shown.
 \NewEnviron{clue}[1][]{%
   \stepcounter{jeoclue}%
-  \def\jeo@opt{#1}%
-  \ifx\jeo@opt\jeo@dailydouble\jeo@ddtrue\else\jeo@ddfalse\fi
   \edef\jeo@auxwrite{\noexpand\protected@write\noexpand\@auxout{}%
-    {\string\jeo@auxclue{\thejeocategory}{\thejeoclue}{\ifjeo@dd 1\else 0\fi}}}%
+    {\string\jeo@auxrow{\thejeoclue}}}%
   \edef\jeo@valuetext{\the\numexpr100*\value{jeoclue}\relax}%
   \expandafter\jeo@split\BODY\solution\solution\jeo@stop
 }
@@ -308,7 +297,6 @@
 \NewEnviron{final}[1]{%
   \protected@write\@auxout{}{\string\jeo@auxfinal{\unexpanded{#1}}}%
   \jeo@heading{FINAL JEOPARDY}{#1}%
-  \jeo@ddfalse
   \let\jeo@auxwrite\relax
   \def\jeo@valuetext{}%
   \expandafter\jeo@split\BODY\solution\solution\jeo@stop

@@ -147,14 +147,14 @@ function markSelected(btn) {
   document.querySelectorAll('.game-option').forEach((b) => b.classList.toggle('selected', b === btn));
 }
 
-// Fetch latex/<name>.sty for each package the game uses, when it exists, so
+// Fetch games/<name>.sty for each package the game uses, when it exists, so
 // the game's macros from those packages work on screen.
 async function fetchPackages(text) {
   const packages = {};
   for (const name of packagesUsed(text)) {
     if (name === 'jeopardy' || !/^[A-Za-z0-9_-]+$/.test(name)) continue;
     try {
-      const res = await fetch(`latex/${name}.sty`, { cache: 'no-cache' });
+      const res = await fetch(`games/${name}.sty`, { cache: 'no-cache' });
       if (res.ok) packages[name] = await res.text();
     } catch {
       /* not available */
