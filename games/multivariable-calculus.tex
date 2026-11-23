@@ -1,5 +1,15 @@
 % Multivariable Calculus review game, built from the Lab 11 final review.
-% Clues marked "Placeholder" hold topic ideas still to be written.
+%
+% Marked with "% NEW" (written by Claude, not from Lab 11):
+%   Vectors and Surfaces 500, Curves and Motion 400 and 500,
+%   Partial Derivatives 100, Optimization 100 and 200,
+%   Multiple Integrals 500, and Final Jeopardy.
+% Potpourri 100, 200, and 400 come from the Calculus II game.
+%
+% Marked with "% PICTURE" (would benefit from a figure):
+%   Vectors and Surfaces 500, Curves and Motion 500,
+%   Partial Derivatives 100, Optimization 500, Multiple Integrals 100,
+%   400, and 500, Potpourri 500, and Final Jeopardy.
 \documentclass{article}
 % Which PDF to make (the web game ignores this):
 %   questions  clues only, e.g. a study sheet for students
@@ -79,10 +89,18 @@
     $\left\langle \frac{1}{\sqrt{3}},\,\frac{1}{\sqrt{3}},\,\frac{-1}{\sqrt{3}}\right\rangle,$ is also a unit vector orthogonal to both vectors.
   \end{clue}
 
+  % NEW: written by Claude, not from Lab 11.
+  % PICTURE: the hyperboloid of two sheets, with the y-axis through both pieces.
   \begin{clue}
-    \textbf{Placeholder.} Topic idea: identify a quadric surface from its equation, such as telling a hyperboloid of one sheet from a hyperboloid of two sheets (Section 4.3).
+    This is the name of the surface $y^2-x^2-z^2=4$.
   \response
-    To be written.
+    What is a hyperboloid of two sheets?
+  \solution
+    The traces in the planes $y=k$ are
+    \[
+    x^2+z^2=k^2-4.
+    \]
+    These are empty when $|k|<2$, a single point when $|k|=2$, and circles when $|k|>2$. The traces in the planes $x=k$ are the hyperbolas $y^2-z^2=4+k^2$. So, the surface comes in two pieces, and it is a hyperboloid of two sheets with axis the $y$-axis.
   \end{clue}
 
 \end{category}
@@ -140,16 +158,37 @@
     \]
   \end{clue}
 
+  % NEW: written by Claude, not from Lab 11.
   \begin{clue}
-    \textbf{Placeholder.} Topic idea: the slope of the tangent line to a parametric or polar curve at a given point (Sections 3.2 and 3.4.1).
+    Find the slope of the tangent line to the parametric curve $x=t^2$, $y=t^3-3t$ at the point where $t=2$.
   \response
-    To be written.
+    What is $\frac{9}{4}$?
+  \solution
+    \[
+    \frac{dy}{dx}=\frac{dy/dt}{dx/dt}=\frac{3t^2-3}{2t}.
+    \]
+    So, when $t=2$,
+    \[
+    \frac{dy}{dx}=\frac{3(2)^2-3}{2(2)}=\frac{9}{4}.
+    \]
   \end{clue}
 
+  % NEW: written by Claude, not from Lab 11.
+  % PICTURE: the four-petal rose r = cos(2 theta), with the right petal shaded.
   \begin{clue}
-    \textbf{Placeholder.} Topic idea: the area enclosed by a polar curve, such as one petal of a rose curve (Section 3.4.2).
+    Find the area enclosed by one petal of the rose $r=\cos 2\theta$.
   \response
-    To be written.
+    What is $\frac{\pi}{8}$?
+  \solution
+    One petal is traced out as $\theta$ goes from $-\frac{\pi}{4}$ to $\frac{\pi}{4}$. So,
+    \begin{align*}
+    A
+    &=\frac{1}{2}\int_{-\pi/4}^{\pi/4}\cos^2 2\theta\,d\theta \\
+    &=\frac{1}{2}\int_{-\pi/4}^{\pi/4}\frac{1+\cos 4\theta}{2}\,d\theta \\
+    &=\frac{1}{4}\left[\theta+\frac{\sin 4\theta}{4}\right]_{-\pi/4}^{\pi/4} \\
+    &=\frac{1}{4}\cdot\frac{\pi}{2} \\
+    &=\frac{\pi}{8}.
+    \end{align*}
   \end{clue}
 
 \end{category}
@@ -157,10 +196,14 @@
 %======================================================================
 \begin{category}{Partial Derivatives}
 
+  % NEW: written by Claude, not from Lab 11.
+  % PICTURE (optional): a contour map of f(x,y) = x^2 + y^2.
   \begin{clue}
-    \textbf{Placeholder.} Topic idea: describe the level curves of a simple function of two variables (Section 5.2).
+    These are the level curves of $f(x,y)=x^2+y^2$.
   \response
-    To be written.
+    What are circles centered at the origin?
+  \solution
+    The level curve $f(x,y)=k$ is $x^2+y^2=k$. For $k>0$, this is the circle of radius $\sqrt{k}$ centered at the origin. (For $k=0$, it is the single point $(0,0)$, and for $k<0$, it is empty.)
   \end{clue}
 
   \begin{clue}
@@ -236,16 +279,29 @@
 %======================================================================
 \begin{category}{Optimization}
 
+  % NEW: written by Claude, not from Lab 11.
   \begin{clue}
-    \textbf{Placeholder.} Topic idea: find the critical point of a simple function of two variables, such as a sum of squares (Section 5.10).
+    Find the critical point of $f(x,y)=x^2+y^2-4x+6y$.
   \response
-    To be written.
+    What is $(2,-3)$?
+  \solution
+    Set the first derivatives equal to zero,
+    \[
+    f_x(x,y)=2x-4=0,\qquad f_y(x,y)=2y+6=0.
+    \]
+    So, $x=2$ and $y=-3$, and the critical point is $(2,-3)$.
   \end{clue}
 
+  % NEW: written by Claude, not from Lab 11.
   \begin{clue}
-    \textbf{Placeholder.} Topic idea: use the Second Derivatives Test to classify a critical point, given the values of the second partial derivatives there (Section 5.10.1).
+    At a critical point $(a,b)$ of $f$, we have $f_{xx}(a,b)=1$, $f_{yy}(a,b)=4$, and $f_{xy}(a,b)=3$. Classify the critical point.
   \response
-    To be written.
+    What is a saddle point?
+  \solution
+    \[
+    D=f_{xx}(a,b)f_{yy}(a,b)-(f_{xy}(a,b))^2=1\cdot 4-3^2=-5<0.
+    \]
+    So, by the Second Derivatives Test, $(a,b)$ is a saddle point. (Even though $f_{xx}$ and $f_{yy}$ are both positive, it is not a local minimum.)
   \end{clue}
 
   \begin{clue}
@@ -289,6 +345,7 @@
     we find that the minimum value is $-2$.
   \end{clue}
 
+  % PICTURE: the unit square with the candidate points marked (Lab 11 had one).
   \begin{clue}
     Find the minimum value of the function $f(x,y) = x^2 - y^2+x^2y+4$ on the square with vertices at $(0,0),(1,0),(0,1),(1,1)$.
   \response
@@ -321,6 +378,7 @@
 %======================================================================
 \begin{category}{Multiple Integrals}
 
+  % PICTURE: the unit square split into four subrectangles, lower-left corners marked (Lab 11 had one).
   \begin{clue}
     Let $f(x,y) = xy+1$ and let $R = [0,1] \times [0,1]$. Let $R$ be partitioned into four subrectangles by the lines $x=1/2$ and $y=1/2$. Calculate the Riemann sum of $f$ using the lower left corner of each rectangle as the sample point.
   \response
@@ -366,6 +424,7 @@
     \end{align*}
   \end{clue}
 
+  % PICTURE: the triangle below y = x on 0 <= x <= 1 (Lab 11 had one).
   \begin{clue}
     Rewrite $\displaystyle \int_0^1 \int_0^x F(x,y) \; dy\, dx$ with the order of integration reversed.
   \response
@@ -378,10 +437,22 @@
     \]
   \end{clue}
 
+  % NEW: written by Claude, not from Lab 11.
+  % PICTURE: the region between y = x^2 (below) and y = x (above) for 0 <= x <= 1.
   \begin{clue}
-    \textbf{Placeholder.} Topic idea: a double integral over a region that is not a rectangle, such as a triangle bounded by two lines and an axis (Section 6.2).
+    Evaluate $\displaystyle \iint_D x\,dA$, where $D$ is the region bounded by $y=x$ and $y=x^2$.
   \response
-    To be written.
+    What is $\frac{1}{12}$?
+  \solution
+    The curves meet at $x=0$ and $x=1$, and $x^2\le x$ for $0\le x\le 1$. So,
+    \begin{align*}
+    \iint_D x\,dA
+    &=\int_0^1\int_{x^2}^{x}x\,dy\,dx \\
+    &=\int_0^1 x\left(x-x^2\right)dx \\
+    &=\int_0^1\left(x^2-x^3\right)dx \\
+    &=\left.\left(\frac{x^3}{3}-\frac{x^4}{4}\right)\right|_0^1 \\
+    &=\frac{1}{12}.
+    \end{align*}
   \end{clue}
 
 \end{category}
@@ -422,6 +493,7 @@
     What is the ``INTEGRA LS''?
   \end{clue}
 
+  % PICTURE: the cube and its unfolded net with the diagonal path (Lab 11 had both).
   \begin{clue}
     Suppose an ant is at one corner of a $1\times 1\times 1$ cube. What's the shortest distance it must walk (on the outside of the cube) to reach the opposite corner?
   \response
@@ -433,10 +505,25 @@
 \end{category}
 
 %======================================================================
-\begin{final}{To be chosen}
-  \textbf{Placeholder.} Topic idea: a problem that ties several chapters together, such as the volume of the solid under a tangent plane and above a rectangle.
+% NEW: written by Claude, not from Lab 11.
+% PICTURE (optional): the tangent plane above the square R.
+\begin{final}{Planes and Volume}
+  This is the volume of the solid that lies under the tangent plane to $z=x^2+y^2$ at the point $(1,1,2)$ and above the square $R=[1,2]\times[1,2]$.
 \response
-  To be written.
+  What is $4$?
+\solution
+  We have $f_x(x,y)=2x$ and $f_y(x,y)=2y$. So, $f_x(1,1)=2$ and $f_y(1,1)=2$, and the tangent plane is
+  \[
+  z=2+2(x-1)+2(y-1)=2x+2y-2.
+  \]
+  This plane is above the $xy$-plane on $R$. So, the volume is
+  \begin{align*}
+  \int_1^2\int_1^2(2x+2y-2)\,dy\,dx
+  &=\int_1^2\left[2xy+y^2-2y\right]_1^2\,dx \\
+  &=\int_1^2(2x+1)\,dx \\
+  &=\left.\left(x^2+x\right)\right|_1^2 \\
+  &=4.
+  \end{align*}
 \end{final}
 
 \end{document}
