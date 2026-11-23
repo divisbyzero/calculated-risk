@@ -291,6 +291,9 @@ details summary { cursor: pointer; color: var(--blue); margin-top: 14px; }
 .clue-head .cat-name { font-size: 20px; font-weight: 700; }
 .clue-head .amount { font-size: 18px; font-weight: 700; color: var(--gold); }
 .tag { font-size: 12px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: #c0392b; color: #fff; }
+.mode-tag { text-transform: none; letter-spacing: 0; white-space: nowrap; }
+.mode-write { background: #e67e22; }
+.mode-say { background: #1e8449; }
 
 .box { border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; }
 .box-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }

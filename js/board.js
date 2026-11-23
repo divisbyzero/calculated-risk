@@ -102,6 +102,7 @@ function buildMain() {
         : `
         <div class="screen">
           <div class="screen-label">${label}</div>
+          ${modeBadge(pub.final.mode)}
           <div class="screen-body" data-fit-max="0.085" data-fit-min="0.02">
             <div class="fit-inner clue-content"><div class="clue-text">${pub.final.clue}</div></div>
           </div>
@@ -149,12 +150,21 @@ function clueHtml() {
   return `
     <div class="screen">
       <div class="screen-label">${label}</div>
+      ${modeBadge(a.mode)}
       <div class="screen-body" data-fit-max="0.085" data-fit-min="0.02">
         <div class="fit-inner clue-content">
           <div class="clue-text">${a.clue}</div>
         </div>
       </div>
     </div>`;
+}
+
+// Tells the players whether they must write their response before ringing
+// in, or may just say it.
+function modeBadge(mode) {
+  if (mode === 'write') return `<div class="mode-badge mode-write"><span class="mode-icon">✍️</span>WRITE IT</div>`;
+  if (mode === 'say') return `<div class="mode-badge mode-say"><span class="mode-icon">🗣️</span>SAY IT</div>`;
+  return '';
 }
 
 function resultsHtml() {

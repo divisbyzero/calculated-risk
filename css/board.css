@@ -154,6 +154,28 @@ body.idle { cursor: none; }
   text-shadow: 0.25vh 0.25vh 0 rgba(0, 0, 0, 0.6);
 }
 
+/* Write it / say it badge on the clue screen */
+
+.mode-badge {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 2.5vh;
+  margin-bottom: 3vh;
+  padding: 1.2vh 4vh 1.2vh 2.5vh;
+  border-radius: 999px;
+  font-size: 6.5vh;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  color: #fff;
+  box-shadow: 0 0.6vh 0 rgba(0, 0, 0, 0.45);
+}
+
+.mode-icon { font-size: 9vh; line-height: 1; }
+.mode-badge.mode-write { background: #e67e22; }
+.mode-badge.mode-say { background: #1e8449; }
+
 /* Answer screen */
 
 .answer-response {

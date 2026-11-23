@@ -10,6 +10,10 @@
 %   Vectors and Surfaces 500, Curves and Motion 500,
 %   Partial Derivatives 100, Optimization 500, Multiple Integrals 100,
 %   400, and 500, Potpourri 500, and Final Jeopardy.
+%
+% Each clue is marked [write] or [say]: whether players must write their
+% response before ringing in, or can just say it. The game board shows
+% this on the clue screen; the PDF doesn't.
 \documentclass{article}
 % Which PDF to make (the web game ignores this):
 %   questions  clues only, e.g. a study sheet for students
@@ -31,8 +35,8 @@
 %======================================================================
 \begin{category}{Vectors and Surfaces}
 
-  \begin{clue}
-    Find the length of the vector $\bvec{a}-\bvec{b}$, where $\bvec{a} = \langle1,3\rangle$ and $\bvec{b} = \langle5,2\rangle$.
+  \begin{clue}[say]
+    It is the length of the vector $\bvec{a}-\bvec{b}$, where $\bvec{a} = \langle1,3\rangle$ and $\bvec{b} = \langle5,2\rangle$.
   \response
     What is $\sqrt{17}$?
   \solution
@@ -46,8 +50,8 @@
     \]
   \end{clue}
 
-  \begin{clue}
-    For what value of $x$ will the two vectors $\langle x,3\rangle$ and $\langle4,5\rangle$ be orthogonal?
+  \begin{clue}[say]
+    It is the value of $x$ that makes the vectors $\langle x,3\rangle$ and $\langle4,5\rangle$ orthogonal.
   \response
     What is $x=-\frac{15}{4}$?
   \solution
@@ -55,8 +59,8 @@
     $\langle x,\,3\rangle \dotprod \langle 4,\,5\rangle = 4x+15=0.$ So, $x=-\frac{15}{4}$.
   \end{clue}
 
-  \begin{clue}
-    Find a unit vector that is perpendicular to the plane $x+2y+2z=10$.
+  \begin{clue}[write]
+    It is a unit vector perpendicular to the plane $x+2y+2z=10$.
   \response
     What is $\left\langle \frac{1}{3}, \frac{2}{3}, \frac{2}{3}\right\rangle$ (or its negative)?
   \solution
@@ -74,8 +78,8 @@
     \]
   \end{clue}
 
-  \begin{clue}
-    Find a unit vector that is orthogonal to both of the vectors $\langle1, -1, 0\rangle$ and $\langle1,2,3\rangle$.
+  \begin{clue}[write]
+    It is a unit vector orthogonal to both $\langle1, -1, 0\rangle$ and $\langle1,2,3\rangle$.
   \response
     What is $\left\langle \frac{1}{\sqrt{3}}, \frac{1}{\sqrt{3}}, \frac{-1}{\sqrt{3}}\right\rangle$ (or its negative)?
   \solution
@@ -91,8 +95,8 @@
 
   % NEW: written by Claude, not from Lab 11.
   % PICTURE: the hyperboloid of two sheets, with the y-axis through both pieces.
-  \begin{clue}
-    This is the name of the surface $y^2-x^2-z^2=4$.
+  \begin{clue}[say]
+    It is the name of the surface $y^2-x^2-z^2=4$.
   \response
     What is a hyperboloid of two sheets?
   \solution
@@ -108,8 +112,8 @@
 %======================================================================
 \begin{category}{Curves and Motion}
 
-  \begin{clue}
-    Find the tangent vector to $\bvec{r}(t) = \sin t \uveci - \cos t \uvecj$ when $t = \frac{\pi}{3}$.
+  \begin{clue}[write]
+    It is the tangent vector to $\bvec{r}(t) = \sin t \uveci - \cos t \uvecj$ when $t = \frac{\pi}{3}$.
   \response
     What is $\displaystyle \frac{1}{2} \uveci + \frac{\sqrt{3}}{2}\uvecj$?
   \solution
@@ -122,8 +126,8 @@
     \]
   \end{clue}
 
-  \begin{clue}
-    Find the length of the curve $\bvec{r}(t) = \langle t, 2t, 2t\rangle$ when $0 \leq t \leq 2$.
+  \begin{clue}[say]
+    It is the length of the curve $\bvec{r}(t) = \langle t, 2t, 2t\rangle$ for $0 \leq t \leq 2$.
   \response
     What is $6$?
   \solution
@@ -138,8 +142,8 @@
     \end{align*}
   \end{clue}
 
-  \begin{clue}
-    Let $\bvec{v}(t) = \uveci + t \uvecj$ be the velocity of a particle at time $t$. Suppose its position at time $t=0$ is $\bvec{r}(0) = \uvecj + 2\uveck$. Find its position when $t=2$.
+  \begin{clue}[write]
+    A particle has velocity $\bvec{v}(t) = \uveci + t \uvecj$ and starts at $\bvec{r}(0) = \uvecj + 2\uveck$. It is the particle's position at time $t=2$.
   \response
     What is $2 \uveci + 3 \uvecj + 2 \uveck$?
   \solution
@@ -159,8 +163,8 @@
   \end{clue}
 
   % NEW: written by Claude, not from Lab 11.
-  \begin{clue}
-    Find the slope of the tangent line to the parametric curve $x=t^2$, $y=t^3-3t$ at the point where $t=2$.
+  \begin{clue}[say]
+    It is the slope of the tangent line to the parametric curve $x=t^2$, $y=t^3-3t$ at the point where $t=2$.
   \response
     What is $\frac{9}{4}$?
   \solution
@@ -175,8 +179,8 @@
 
   % NEW: written by Claude, not from Lab 11.
   % PICTURE: the four-petal rose r = cos(2 theta), with the right petal shaded.
-  \begin{clue}
-    Find the area enclosed by one petal of the rose $r=\cos 2\theta$.
+  \begin{clue}[say]
+    It is the area enclosed by one petal of the rose $r=\cos 2\theta$.
   \response
     What is $\frac{\pi}{8}$?
   \solution
@@ -198,17 +202,16 @@
 
   % NEW: written by Claude, not from Lab 11.
   % PICTURE (optional): a contour map of f(x,y) = x^2 + y^2.
-  \begin{clue}
-    These are the level curves of $f(x,y)=x^2+y^2$.
+  \begin{clue}[say]
+    They are the level curves of $f(x,y)=x^2+y^2$.
   \response
     What are circles centered at the origin?
   \solution
     The level curve $f(x,y)=k$ is $x^2+y^2=k$. For $k>0$, this is the circle of radius $\sqrt{k}$ centered at the origin. (For $k=0$, it is the single point $(0,0)$, and for $k<0$, it is empty.)
   \end{clue}
 
-  \begin{clue}
-    Let $\displaystyle f(x,y) = (x^3 + x)y^2$.
-    Find the value of $f_{xy}(0,1)$.
+  \begin{clue}[say]
+    It is the value of $f_{xy}(0,1)$ when $\displaystyle f(x,y) = (x^3 + x)y^2$.
   \response
     What is $2$?
   \solution
@@ -226,8 +229,8 @@
     \]
   \end{clue}
 
-  \begin{clue}
-    Let $\displaystyle f(x,y) = \frac{xy}{x^2 + y^2}$, and let $C_m$ be the curve with equation $y = mx$, where $m$ is a constant. Find the limit of $f(x,y)$ as $(x,y)$ approaches $(0,0)$ along $C_m$.
+  \begin{clue}[write]
+    It is the limit of $\displaystyle f(x,y) = \frac{xy}{x^2 + y^2}$ as $(x,y)$ approaches $(0,0)$ along the line $y = mx$, where $m$ is a constant.
   \response
     What is $\displaystyle \frac{m}{1+m^2}$?
   \solution
@@ -240,8 +243,8 @@
     \]
   \end{clue}
 
-  \begin{clue}
-    Find the equation of the tangent plane to the surface $z = e^{x+y}$ at the point $(0,0,1)$.
+  \begin{clue}[write]
+    It is the equation of the tangent plane to the surface $z = e^{x+y}$ at the point $(0,0,1)$.
   \response
     What is $z=x+y+1$?
   \solution
@@ -257,8 +260,8 @@
     \]
   \end{clue}
 
-  \begin{clue}
-    Find the directional derivative of the function $\displaystyle f(x,y,z) = xe^{\frac{xy}{z}}$ in the direction $\bvec{u} = \left\langle\frac{-1}{3}, \frac{2}{3}, \frac{2}{3}\right\rangle$ at the point $(3,0,1)$.
+  \begin{clue}[say]
+    It is the directional derivative of the function $\displaystyle f(x,y,z) = xe^{\frac{xy}{z}}$ in the direction $\bvec{u} = \left\langle\frac{-1}{3}, \frac{2}{3}, \frac{2}{3}\right\rangle$ at the point $(3,0,1)$.
   \response
     What is $\frac{17}{3}$?
   \solution
@@ -280,8 +283,8 @@
 \begin{category}{Optimization}
 
   % NEW: written by Claude, not from Lab 11.
-  \begin{clue}
-    Find the critical point of $f(x,y)=x^2+y^2-4x+6y$.
+  \begin{clue}[say]
+    It is the critical point of $f(x,y)=x^2+y^2-4x+6y$.
   \response
     What is $(2,-3)$?
   \solution
@@ -293,8 +296,8 @@
   \end{clue}
 
   % NEW: written by Claude, not from Lab 11.
-  \begin{clue}
-    At a critical point $(a,b)$ of $f$, we have $f_{xx}(a,b)=1$, $f_{yy}(a,b)=4$, and $f_{xy}(a,b)=3$. Classify the critical point.
+  \begin{clue}[say]
+    It is the type of critical point $(a,b)$ of $f$ when $f_{xx}(a,b)=1$, $f_{yy}(a,b)=4$, and $f_{xy}(a,b)=3$.
   \response
     What is a saddle point?
   \solution
@@ -304,8 +307,8 @@
     So, by the Second Derivatives Test, $(a,b)$ is a saddle point. (Even though $f_{xx}$ and $f_{yy}$ are both positive, it is not a local minimum.)
   \end{clue}
 
-  \begin{clue}
-    The function $f(x,y) = x^2 + y^2 + xy + x$ has one critical point. Determine its location and type.
+  \begin{clue}[say]
+    The function $f(x,y) = x^2 + y^2 + xy + x$ has just one critical point. It is the type and location of that point.
   \response
     What is a local minimum at $\left(\frac{-2}{3},\frac{1}{3}\right)$?
   \solution
@@ -324,8 +327,8 @@
     and $f_{xx}\left(-\tfrac{2}{3},\,\tfrac{1}{3}\right)>0$. So, the critical point is a local minimum.
   \end{clue}
 
-  \begin{clue}[dailydouble]
-    Find the minimum value of the function $f(x,y) = xy$ subject to the constraint $4x^2 + y^2=8$.
+  \begin{clue}[dailydouble, say]
+    It is the minimum value of $f(x,y) = xy$ subject to the constraint $4x^2 + y^2=8$.
   \response
     What is $-2$?
   \solution
@@ -346,8 +349,8 @@
   \end{clue}
 
   % PICTURE: the unit square with the candidate points marked (Lab 11 had one).
-  \begin{clue}
-    Find the minimum value of the function $f(x,y) = x^2 - y^2+x^2y+4$ on the square with vertices at $(0,0),(1,0),(0,1),(1,1)$.
+  \begin{clue}[say]
+    It is the minimum value of $f(x,y) = x^2 - y^2+x^2y+4$ on the square with vertices at $(0,0),(1,0),(0,1),(1,1)$.
   \response
     What is $3$?
   \solution
@@ -379,8 +382,8 @@
 \begin{category}{Multiple Integrals}
 
   % PICTURE: the unit square split into four subrectangles, lower-left corners marked (Lab 11 had one).
-  \begin{clue}
-    Let $f(x,y) = xy+1$ and let $R = [0,1] \times [0,1]$. Let $R$ be partitioned into four subrectangles by the lines $x=1/2$ and $y=1/2$. Calculate the Riemann sum of $f$ using the lower left corner of each rectangle as the sample point.
+  \begin{clue}[say]
+    The lines $x=1/2$ and $y=1/2$ split $R = [0,1] \times [0,1]$ into four subrectangles. It is the Riemann sum of $f(x,y) = xy+1$ over $R$, using the lower left corner of each subrectangle as the sample point.
   \response
     What is $\frac{17}{16}$?
   \solution
@@ -394,8 +397,8 @@
     \end{align*}
   \end{clue}
 
-  \begin{clue}
-    Evaluate $\displaystyle \iint_R (x + \sin y) \; dA$, where $R = [0,2] \times [0, \pi]$.
+  \begin{clue}[say]
+    It is the value of $\displaystyle \iint_R (x + \sin y) \; dA$, where $R = [0,2] \times [0, \pi]$.
   \response
     What is $4+2\pi$?
   \solution
@@ -409,8 +412,8 @@
     \end{align*}
   \end{clue}
 
-  \begin{clue}
-    Evaluate $\displaystyle \iiint_E (x^2 + 2y) \; dV$ where $E = \{(x,y,z) \colon 0 \leq x \leq 1, 0 \leq y \leq 1, 0 \leq z \leq 1\}.$
+  \begin{clue}[say]
+    It is the value of $\displaystyle \iiint_E (x^2 + 2y) \; dV$, where $E = \{(x,y,z) \colon 0 \leq x \leq 1, 0 \leq y \leq 1, 0 \leq z \leq 1\}.$
   \response
     What is $\frac{4}{3}$?
   \solution
@@ -425,8 +428,8 @@
   \end{clue}
 
   % PICTURE: the triangle below y = x on 0 <= x <= 1 (Lab 11 had one).
-  \begin{clue}
-    Rewrite $\displaystyle \int_0^1 \int_0^x F(x,y) \; dy\, dx$ with the order of integration reversed.
+  \begin{clue}[write]
+    It is $\displaystyle \int_0^1 \int_0^x F(x,y) \; dy\, dx$ with the order of integration reversed.
   \response
     What is $\displaystyle \int_0^1 \int_y^1 F(x,y) \; dx\, dy$?
   \solution
@@ -439,8 +442,8 @@
 
   % NEW: written by Claude, not from Lab 11.
   % PICTURE: the region between y = x^2 (below) and y = x (above) for 0 <= x <= 1.
-  \begin{clue}
-    Evaluate $\displaystyle \iint_D x\,dA$, where $D$ is the region bounded by $y=x$ and $y=x^2$.
+  \begin{clue}[say]
+    It is the value of $\displaystyle \iint_D x\,dA$, where $D$ is the region bounded by $y=x$ and $y=x^2$.
   \response
     What is $\frac{1}{12}$?
   \solution
@@ -460,20 +463,20 @@
 %======================================================================
 \begin{category}{Potpourri}
 
-  \begin{clue}
-    The smallest of the irrational numbers $\pi$, $e$, and $\sqrt{2}$.
+  \begin{clue}[say]
+    It is the smallest of the irrational numbers $\pi$, $e$, and $\sqrt{2}$.
   \response
     What is $\sqrt{2}$?
   \end{clue}
 
-  \begin{clue}
-    The second full moon in a single month
+  \begin{clue}[say]
+    It is the second full moon in a single month.
   \response
     What is a blue moon?
   \end{clue}
 
-  \begin{clue}
-    Evaluate $\displaystyle \int xe^x \, dx$.
+  \begin{clue}[write]
+    It is the indefinite integral $\displaystyle \int xe^x \, dx$.
   \response
     What is $xe^x-e^x+C$?
   \solution
@@ -485,8 +488,8 @@
     \end{align*}
   \end{clue}
 
-  \begin{clue}
-    A ``mathematical'' car from Acura
+  \begin{clue}[say]
+    It is a ``mathematical'' car from Acura
 
     (at least the ``LS'' model)
   \response
@@ -494,8 +497,8 @@
   \end{clue}
 
   % PICTURE: the cube and its unfolded net with the diagonal path (Lab 11 had both).
-  \begin{clue}
-    Suppose an ant is at one corner of a $1\times 1\times 1$ cube. What's the shortest distance it must walk (on the outside of the cube) to reach the opposite corner?
+  \begin{clue}[say]
+    An ant sits at one corner of a $1\times 1\times 1$ cube. It is the shortest distance the ant can walk, on the outside of the cube, to reach the opposite corner.
   \response
     What is $\sqrt{5}$?
   \solution
@@ -508,7 +511,7 @@
 % NEW: written by Claude, not from Lab 11.
 % PICTURE (optional): the tangent plane above the square R.
 \begin{final}{Planes and Volume}
-  This is the volume of the solid that lies under the tangent plane to $z=x^2+y^2$ at the point $(1,1,2)$ and above the square $R=[1,2]\times[1,2]$.
+  It is the volume of the solid that lies under the tangent plane to $z=x^2+y^2$ at the point $(1,1,2)$ and above the square $R=[1,2]\times[1,2]$.
 \response
   What is $4$?
 \solution

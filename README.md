@@ -103,6 +103,14 @@ Copy [`games/template.tex`](games/template.tex) and fill it in. Keep
 \end{document}
 ```
 
+- **Write it or say it** (optional): mark a clue `\begin{clue}[write]` when
+  players must write their response before ringing in (a long expression),
+  or `\begin{clue}[say]` when they can just say it (like "What is 6?"). The
+  board shows a large ✍️ WRITE IT or 🗣️ SAY IT banner on the clue
+  screen, and your screen shows it too. Combine options with commas, as in
+  `\begin{clue}[dailydouble, write]`. A clue with neither shows no banner,
+  which suits Final Jeopardy, where every team writes anyway. The PDFs
+  don't show it.
 - `\solution` is optional. Use it for worked steps (`align*` works well). It
   appears on the answer screen and on your host screen.
 - MathJax doesn't support `@{...}` in array column specs and silently drops

@@ -152,7 +152,17 @@ export function parseGame(source, options = {}) {
     }
 
     const endTag = `\\end{${kind}}`;
-    const g = readGroup(text, skipWs(text, afterBegin));
+    // Final Jeopardy can take [write] or [say] before its category name.
+    let nameAt = skipWs(text, afterBegin);
+    let finalOpts = '';
+    if (kind === 'final' && text[nameAt] === '[') {
+      const b = readBracket(text, nameAt);
+      if (b) {
+        finalOpts = b.content.trim();
+        nameAt = skipWs(text, b.end);
+      }
+    }
+    const g = readGroup(text, nameAt);
     if (!g) {
       const example = kind === 'final' ? '\\begin{final}{Series}' : '\\begin{category}{Limits}';
       err(`\\begin{${kind}} must be followed by a name in braces, like ${example}.`, m.index);
@@ -184,7 +194,8 @@ export function parseGame(source, options = {}) {
       warn('More than one Final Jeopardy found; using the first one.', m.index);
     } else {
       const parts = splitResponse(text, g.end, e, 'Final Jeopardy', m.index, { err, convert });
-      final = { categoryText: nameText, categoryHtml: nameHtml, ...parts };
+      const { mode } = parseClueOptions(finalOpts, 'Final Jeopardy', m.index, { err, warn }, false);
+      final = { categoryText: nameText, categoryHtml: nameHtml, mode, ...parts };
     }
     re.lastIndex = e + endTag.length;
   }
@@ -287,18 +298,33 @@ function parseClues(text, start, end, label, ctx) {
     const where = `category "${label}", ${value} clue`;
     const parts = splitResponse(text, i, e, where, m.index, ctx);
 
-    let dailyDouble = false;
-    if (opts) {
-      if (opts.toLowerCase() === 'dailydouble') dailyDouble = true;
-      else ctx.warn(`Unknown clue option [${opts}] (${where}). The only option is [dailydouble].`, m.index);
-    }
+    const { dailyDouble, mode } = parseClueOptions(opts, where, m.index, ctx, true);
 
-    clues.push({ value, dailyDouble, ...parts });
+    clues.push({ value, dailyDouble, mode, ...parts });
     pos = e + '\\end{clue}'.length;
     re.lastIndex = pos;
   }
   checkStray(pos, end);
   return clues;
+}
+
+// Read a clue's options, e.g. [dailydouble, write]. "write" or "say" tells
+// the players whether they must write their response before ringing in;
+// the board shows it on the clue screen (the PDF ignores it).
+function parseClueOptions(opts, where, off, ctx, allowDD) {
+  let dailyDouble = false;
+  let mode = null;
+  const allowed = allowDD ? '[dailydouble], [write] and [say]' : '[write] and [say]';
+  for (const raw of opts.split(',')) {
+    const o = raw.trim().toLowerCase();
+    if (!o) continue;
+    if (o === 'dailydouble' && allowDD) dailyDouble = true;
+    else if (o === 'write' || o === 'say') {
+      if (mode && mode !== o) ctx.warn(`Both [write] and [say] are marked (${where}); using [${o}].`, off);
+      mode = o;
+    } else ctx.warn(`Unknown option [${raw.trim()}] (${where}). The options are ${allowed}.`, off);
+  }
+  return { dailyDouble, mode };
 }
 
 // Split a clue into its parts: clue \response response [\solution solution].

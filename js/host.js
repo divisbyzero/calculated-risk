@@ -199,15 +199,21 @@ function renderPreview() {
   g.categories.forEach((c, ci) => {
     html += `<h3 class="clue-content">${ci + 1}. ${c.nameHtml}</h3><table><tr><th>Value</th><th>Clue</th><th>Response</th></tr>`;
     for (const q of c.clues) {
-      html += `<tr><td>${q.value}${q.dailyDouble ? ' <span class="tag">DD</span>' : ''}</td><td class="clue-content">${q.clueHtml}</td><td class="clue-content">${responseCell(q)}</td></tr>`;
+      html += `<tr><td>${q.value}${q.dailyDouble ? ' <span class="tag">DD</span>' : ''}${modeTag(q)}</td><td class="clue-content">${q.clueHtml}</td><td class="clue-content">${responseCell(q)}</td></tr>`;
     }
     html += '</table>';
   });
   if (g.final) {
     html += `<h3>Final Jeopardy: <span class="clue-content">${g.final.categoryHtml}</span></h3><table><tr><th></th><th>Clue</th><th>Response</th></tr>
-      <tr><td></td><td class="clue-content">${g.final.clueHtml}</td><td class="clue-content">${responseCell(g.final)}</td></tr></table>`;
+      <tr><td>${modeTag(g.final)}</td><td class="clue-content">${g.final.clueHtml}</td><td class="clue-content">${responseCell(g.final)}</td></tr></table>`;
   }
   setMathHTML($('#preview-body'), html);
+}
+
+// Players must write (✍️) or may just say (🗣️) their response.
+const MODE_LABEL = { write: '✍️ Write', say: '🗣️ Say' };
+function modeTag(q) {
+  return q.mode ? ` <span class="tag mode-tag mode-${q.mode}">${MODE_LABEL[q.mode]}</span>` : '';
 }
 
 function responseCell(q) {
@@ -425,6 +431,7 @@ function publicState() {
       ddTeam: ddStarted ? state.teams[a.ddTeam].name : null,
       ddTeamIndex: ddStarted ? a.ddTeam : null,
       clue: state.view === 'clue' ? q.clueHtml : null,
+      mode: q.mode || null,
       // When set, the board shows the answer screen instead of the clue.
       response: state.view === 'clue' && a.showResponse ? q.responseHtml : null,
       solution: state.view === 'clue' && a.showResponse ? q.solutionHtml : null,
@@ -435,6 +442,7 @@ function publicState() {
     pub.final = {
       category: g.final.categoryHtml,
       clue: showClue ? g.final.clueHtml : null,
+      mode: g.final.mode || null,
       response: state.final.showResponse ? g.final.responseHtml : null,
       solution: state.final.showResponse ? g.final.solutionHtml : null,
     };
@@ -735,7 +743,7 @@ function renderMain() {
 
 function responseBoxes(q) {
   return `
-    <div class="box box-clue clue-content"><div class="box-label">Clue</div>${q.clueHtml}</div>
+    <div class="box box-clue clue-content"><div class="box-label">Clue${modeTag(q)}</div>${q.clueHtml}</div>
     <div class="box box-response clue-content"><div class="box-label">Correct response</div>${q.responseHtml}</div>
     ${q.solutionHtml ? `<div class="box box-solution clue-content"><div class="box-label">Worked solution</div>${q.solutionHtml}</div>` : ''}`;
 }

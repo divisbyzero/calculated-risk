@@ -7,7 +7,12 @@
 %   \begin{clue} ... \response ... \solution ... \end{clue}   (worked solution)
 %   \begin{clue}[dailydouble] ... \response ... \end{clue}
 %     (the Daily Double is for the game only; the PDF doesn't show it)
+%   \begin{clue}[write] ... or \begin{clue}[say] ...
+%     (tells the players whether to write their response before ringing
+%     in or just say it; the game shows it, the PDF doesn't. Combine with
+%     commas: \begin{clue}[dailydouble, write])
 %   \begin{final}{Category} ... \response ... \solution ... \end{final}
+%   \begin{final}[write]{Category} ...   (same write/say option)
 %
 % Clue values are assigned by position: 100, 200, 300, ...
 %
@@ -282,7 +287,7 @@
 % comes next (then the display itself starts below the label).
 \newcommand{\jeo@afterlabel}{\@ifnextchar\[{}{\par\nobreak}}
 
-% The optional argument ([dailydouble]) is accepted but not shown.
+% The optional argument ([dailydouble], [write], [say]) is accepted but not shown.
 \NewEnviron{clue}[1][]{%
   \stepcounter{jeoclue}%
   \edef\jeo@auxwrite{\noexpand\protected@write\noexpand\@auxout{}%
@@ -294,9 +299,10 @@
 %----------------------------------------------------------------------
 % Final Jeopardy
 
-\NewEnviron{final}[1]{%
-  \protected@write\@auxout{}{\string\jeo@auxfinal{\unexpanded{#1}}}%
-  \jeo@heading{FINAL JEOPARDY}{#1}%
+% The optional argument ([write], [say]) is accepted but not shown.
+\NewEnviron{final}[2][]{%
+  \protected@write\@auxout{}{\string\jeo@auxfinal{\unexpanded{#2}}}%
+  \jeo@heading{FINAL JEOPARDY}{#2}%
   \let\jeo@auxwrite\relax
   \def\jeo@valuetext{}%
   \expandafter\jeo@split\BODY\solution\solution\jeo@stop
