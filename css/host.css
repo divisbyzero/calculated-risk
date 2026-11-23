@@ -180,6 +180,16 @@ details summary { cursor: pointer; color: var(--blue); margin-top: 14px; }
   border-radius: 8px;
 }
 
+.check { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
+.check input { margin-top: 4px; width: 16px; height: 16px; flex: 0 0 auto; }
+
+.side-option { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 13px; }
+
+.box-solution { background: #f1f3f8; border: 1px solid var(--line); font-size: 18px; font-family: Georgia, "Times New Roman", serif; }
+.box-solution .box-label { color: var(--muted); font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; }
+
+.preview .sol { margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--line); color: var(--muted); font-size: 13px; }
+
 .start-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
 
 /* ---- Game ---- */
@@ -246,7 +256,8 @@ details summary { cursor: pointer; color: var(--blue); margin-top: 14px; }
   cursor: pointer;
 }
 .hcell:hover:not(:disabled) { background: #1a2fc0; }
-.hcell.used { background: #e6e8ef; color: #b3b8c5; cursor: default; font-size: 18px; text-decoration: line-through; }
+.hcell.used { background: #e6e8ef; color: #b3b8c5; font-size: 18px; text-decoration: line-through; }
+.hcell.used:hover { background: #d7dae4; color: #8a90a0; }
 .hcell.empty { background: transparent; }
 
 .dd-badge {

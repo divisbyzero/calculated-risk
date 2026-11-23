@@ -142,7 +142,7 @@ export function parseGame(source) {
       warn('More than one Final Jeopardy found; using the first one.', m.index);
     } else {
       const parts = splitResponse(text, g.end, e, 'Final Jeopardy', m.index, { err, convert });
-      final = { categoryText: nameText, categoryHtml: nameHtml, clueHtml: parts.clueHtml, responseHtml: parts.responseHtml };
+      final = { categoryText: nameText, categoryHtml: nameHtml, ...parts };
     }
     re.lastIndex = e + endTag.length;
   }
@@ -151,8 +151,11 @@ export function parseGame(source) {
   if (categories.length === 0) {
     err('No categories found. Write each category as \\begin{category}{Name} ... \\end{category}.');
   } else if (BOARD.enforceStandardSize) {
-    if (categories.length !== BOARD.categories) {
-      err(`The board needs exactly ${BOARD.categories} categories; this file has ${categories.length}.`);
+    if (categories.length < BOARD.minCategories || categories.length > BOARD.maxCategories) {
+      const need = BOARD.minCategories === BOARD.maxCategories
+        ? `exactly ${BOARD.minCategories}`
+        : `${BOARD.minCategories} to ${BOARD.maxCategories}`;
+      err(`The board needs ${need} categories; this file has ${categories.length}.`);
     }
     for (const c of categories) {
       if (c.clues.length !== BOARD.cluesPerCategory) {
@@ -184,6 +187,9 @@ export function parseGame(source) {
       categories: categories.length,
       clues: categories.reduce((n, c) => n + c.clues.length, 0),
       dailyDoubles,
+      solutions:
+        categories.reduce((n, c) => n + c.clues.filter((x) => x.solutionHtml).length, 0) +
+        (final && final.solutionHtml ? 1 : 0),
     },
   };
 
@@ -245,7 +251,7 @@ function parseClues(text, start, end, label, ctx) {
       else ctx.warn(`Unknown clue option [${opts}] (${where}). The only option is [dailydouble].`, m.index);
     }
 
-    clues.push({ value, dailyDouble, clueHtml: parts.clueHtml, responseHtml: parts.responseHtml });
+    clues.push({ value, dailyDouble, ...parts });
     pos = e + '\\end{clue}'.length;
     re.lastIndex = pos;
   }
@@ -253,23 +259,36 @@ function parseClues(text, start, end, label, ctx) {
   return clues;
 }
 
+// Split a clue into its parts: clue \response response [\solution solution].
+// The solution (worked steps shown on the answer screen) is optional.
 function splitResponse(text, start, end, where, off, ctx) {
   const content = text.slice(start, end);
-  const hits = [...content.matchAll(/\\response(?![A-Za-z])/g)];
-  if (hits.length === 0) {
+  const resp = [...content.matchAll(/\\response(?![A-Za-z])/g)];
+  const sol = [...content.matchAll(/\\solution(?![A-Za-z])/g)];
+  if (resp.length === 0) {
     ctx.err(`No \\response found (${where}). Write the clue, then \\response, then the correct response.`, off);
-    return { clueHtml: ctx.convert(content.trim(), start), responseHtml: '' };
+    return { clueHtml: ctx.convert(content.trim(), start), responseHtml: '', solutionHtml: '' };
   }
-  if (hits.length > 1) ctx.err(`More than one \\response (${where}).`, off);
+  if (resp.length > 1) ctx.err(`More than one \\response (${where}).`, off);
+  if (sol.length > 1) ctx.err(`More than one \\solution (${where}).`, off);
 
-  const k = hits[0].index;
+  const k = resp[0].index;
+  const s = sol.length ? sol[0].index : -1;
+  if (s >= 0 && s < k) {
+    ctx.err(`\\solution must come after \\response (${where}).`, off);
+    return { clueHtml: '', responseHtml: '', solutionHtml: '' };
+  }
+
   const clueSrc = content.slice(0, k).trim();
-  const respSrc = content.slice(k + '\\response'.length).trim();
+  const respSrc = content.slice(k + '\\response'.length, s >= 0 ? s : content.length).trim();
+  const solSrc = s >= 0 ? content.slice(s + '\\solution'.length).trim() : '';
   if (!clueSrc) ctx.err(`The clue is empty (${where}).`, off);
   if (!respSrc) ctx.err(`The response is empty (${where}).`, off);
+  if (s >= 0 && !solSrc) ctx.warn(`\\solution is empty (${where}).`, off);
   return {
     clueHtml: ctx.convert(clueSrc, start),
     responseHtml: ctx.convert(respSrc, start + k),
+    solutionHtml: solSrc ? ctx.convert(solSrc, start + s) : '',
   };
 }
 

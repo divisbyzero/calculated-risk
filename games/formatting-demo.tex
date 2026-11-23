@@ -46,6 +46,13 @@
     \[ \int_0^{\pi} \sin x \, dx \]
   \response
     $2$
+  \solution
+    An antiderivative of $\sin x$ is $-\cos x$, so
+    \begin{align*}
+      \int_0^{\pi} \sin x \, dx &= \Big[-\cos x\Big]_0^{\pi} \\
+        &= -\cos\pi + \cos 0 \\
+        &= 1 + 1 = 2.
+    \end{align*}
   \end{clue}
   \begin{clue}
     Double-dollar display:
@@ -61,11 +68,15 @@
     \end{align*}
   \response
     $x = 3$, $y = 2$
+  \solution
+    Add the equations: $2x = 6$, so $x = 3$. Then $y = 5 - x = 2$.
   \end{clue}
   \begin{clue}[dailydouble]
     A matrix: $A = \begin{pmatrix} 1 & 2 \\ 3 & 4 \end{pmatrix}$. Find $\det A$.
   \response
     $-2$
+  \solution
+    $\det A = (1)(4) - (2)(3) = 4 - 6 = -2$
   \end{clue}
   \begin{clue}
     A piecewise function:
@@ -177,6 +188,9 @@
   It equals $\displaystyle\sum_{n=0}^{\infty} \frac{1}{n!}$.
 \response
   What is $e$?
+\solution
+  The Taylor series of $e^x$ is $\displaystyle\sum_{n=0}^{\infty} \frac{x^n}{n!}$.
+  Setting $x = 1$ gives $e$.
 \end{final}
 
 \end{document}

@@ -1,5 +1,10 @@
 [
   {
+    "file": "math162-jeopardy.tex",
+    "title": "Math 162 Jeopardy",
+    "description": "Integration by parts, limits, improper integrals, applied integration, and more. Converted from the original slides."
+  },
+  {
     "file": "sample-game.tex",
     "title": "Sample Game",
     "description": "Placeholder clues on a full board, with a Daily Double and Final Jeopardy."

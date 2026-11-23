@@ -154,13 +154,27 @@ body.idle { cursor: none; }
   text-shadow: 0.25vh 0.25vh 0 rgba(0, 0, 0, 0.6);
 }
 
-.resp {
-  margin-top: 0.8em;
-  padding-top: 0.6em;
-  border-top: 0.3vh solid rgba(255, 255, 255, 0.35);
+/* Answer screen */
+
+.answer-response {
   color: var(--gold);
   font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.25em;
   line-height: 1.3;
+  text-shadow: 0.25vh 0.25vh 0 rgba(0, 0, 0, 0.6);
+}
+
+/* Worked solution: a left-aligned block, centered on the screen. */
+.answer-solution {
+  display: inline-block;
+  max-width: 100%;
+  margin-top: 0.9em;
+  padding-top: 0.7em;
+  border-top: 0.3vh solid rgba(255, 255, 255, 0.35);
+  text-align: left;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.8em;
+  line-height: 1.4;
 }
 
 .big-word {

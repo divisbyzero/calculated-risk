@@ -7,6 +7,8 @@ import { setMathHTML, setMacros, mathAvailable } from './math.js';
 import { escapeHtml, formatScore } from './util.js';
 
 const STORAGE_KEY = 'classroom-jeopardy.saved.v1';
+const PREFS_KEY = 'classroom-jeopardy.prefs.v1';
+const DEFAULT_SETTINGS = { showAnswerAfterCorrect: true };
 const MAX_HISTORY = 200;
 const $ = (sel) => document.querySelector(sel);
 
@@ -40,6 +42,10 @@ function init() {
   renderTeamInputs();
   loadGameList();
   checkSavedGame();
+
+  const opt = $('#opt-show-answer');
+  opt.checked = readPrefs().showAnswerAfterCorrect;
+  opt.addEventListener('change', () => writePrefs({ showAnswerAfterCorrect: opt.checked }));
 
   $('#btn-open-board').addEventListener('click', openBoard);
   $('#btn-undo').addEventListener('click', undo);
@@ -78,6 +84,12 @@ function init() {
   $('#host-main').addEventListener('click', onMainClick);
   $('#host-main').addEventListener('input', onMainInput);
   $('#host-side').addEventListener('click', onSideClick);
+  $('#host-side').addEventListener('change', (e) => {
+    if (e.target.id !== 'side-show-answer' || !state) return;
+    state.settings.showAnswerAfterCorrect = e.target.checked;
+    writePrefs({ showAnswerAfterCorrect: e.target.checked });
+    save();
+  });
 
   setInterval(renderBoardStatus, 2000);
   broadcast();
@@ -145,7 +157,7 @@ function loadSource(text, source) {
 function renderLoadStatus() {
   const { game, errors, warnings, source } = loaded;
   const s = game.stats;
-  const summary = `${s.categories} categories, ${s.clues} clues, ${s.dailyDoubles} Daily Double${s.dailyDoubles === 1 ? '' : 's'}, ${game.final ? 'Final Jeopardy' : 'no Final Jeopardy'}`;
+  const summary = `${s.categories} categories, ${s.clues} clues, ${s.dailyDoubles} Daily Double${s.dailyDoubles === 1 ? '' : 's'}, ${game.final ? 'Final Jeopardy' : 'no Final Jeopardy'}, ${s.solutions} worked solution${s.solutions === 1 ? '' : 's'}`;
   let html = `
     <div class="${errors.length ? 'load-bad' : 'load-ok'}">
       <strong>${escapeHtml(source)}</strong>: <span class="clue-content">${game.titleHtml}</span>
@@ -170,15 +182,35 @@ function renderPreview() {
   g.categories.forEach((c, ci) => {
     html += `<h3 class="clue-content">${ci + 1}. ${c.nameHtml}</h3><table><tr><th>Value</th><th>Clue</th><th>Response</th></tr>`;
     for (const q of c.clues) {
-      html += `<tr><td>${q.value}${q.dailyDouble ? ' <span class="tag">DD</span>' : ''}</td><td class="clue-content">${q.clueHtml}</td><td class="clue-content">${q.responseHtml}</td></tr>`;
+      html += `<tr><td>${q.value}${q.dailyDouble ? ' <span class="tag">DD</span>' : ''}</td><td class="clue-content">${q.clueHtml}</td><td class="clue-content">${responseCell(q)}</td></tr>`;
     }
     html += '</table>';
   });
   if (g.final) {
     html += `<h3>Final Jeopardy: <span class="clue-content">${g.final.categoryHtml}</span></h3><table><tr><th></th><th>Clue</th><th>Response</th></tr>
-      <tr><td></td><td class="clue-content">${g.final.clueHtml}</td><td class="clue-content">${g.final.responseHtml}</td></tr></table>`;
+      <tr><td></td><td class="clue-content">${g.final.clueHtml}</td><td class="clue-content">${responseCell(g.final)}</td></tr></table>`;
   }
   setMathHTML($('#preview-body'), html);
+}
+
+function responseCell(q) {
+  return q.responseHtml + (q.solutionHtml ? `<div class="sol"><strong>Solution:</strong> ${q.solutionHtml}</div>` : '');
+}
+
+function readPrefs() {
+  try {
+    return { ...DEFAULT_SETTINGS, ...JSON.parse(localStorage.getItem(PREFS_KEY)) };
+  } catch {
+    return { ...DEFAULT_SETTINGS };
+  }
+}
+
+function writePrefs(prefs) {
+  try {
+    localStorage.setItem(PREFS_KEY, JSON.stringify({ ...readPrefs(), ...prefs }));
+  } catch {
+    /* ignore */
+  }
 }
 
 function renderTeamInputs() {
@@ -220,6 +252,7 @@ function startGame() {
     view: 'board',
     active: null,
     final: null,
+    settings: { showAnswerAfterCorrect: $('#opt-show-answer').checked },
   };
   history = [];
   mainKey = null;
@@ -268,6 +301,7 @@ function resumeGame() {
   const saved = readSaved();
   if (!saved) return;
   state = saved.state;
+  state.settings = { ...DEFAULT_SETTINGS, ...state.settings };
   history = saved.history || [];
   mainKey = null;
   commit();
@@ -369,11 +403,14 @@ function publicState() {
     pub.active = {
       category: g.categories[a.c].nameHtml,
       value: ddStarted ? a.wager : q.value,
-      dailyDouble: isDD,
+      dailyDouble: isDD && !a.review,
+      review: !!a.review,
       ddTeam: ddStarted ? state.teams[a.ddTeam].name : null,
       ddTeamIndex: ddStarted ? a.ddTeam : null,
       clue: state.view === 'clue' ? q.clueHtml : null,
+      // When set, the board shows the answer screen instead of the clue.
       response: state.view === 'clue' && a.showResponse ? q.responseHtml : null,
+      solution: state.view === 'clue' && a.showResponse ? q.solutionHtml : null,
     };
   }
   if (state.final && g.final) {
@@ -382,6 +419,7 @@ function publicState() {
       category: g.final.categoryHtml,
       clue: showClue ? g.final.clueHtml : null,
       response: state.final.showResponse ? g.final.responseHtml : null,
+      solution: state.final.showResponse ? g.final.solutionHtml : null,
     };
   }
   return pub;
@@ -459,19 +497,39 @@ function judge(team, right) {
   const amount = a.ddTeam !== null ? a.wager : clueAt(a.c, a.r).value;
   state.teams[team].score += right ? amount : -amount;
   a.judged[team] = right ? 'right' : 'wrong';
-  if (right || a.ddTeam !== null) a.showResponse = true;
+
+  // A correct answer (or any answer to a Daily Double) finishes the clue:
+  // either show the answer screen or go straight back to the board.
+  if (right || a.ddTeam !== null) {
+    if (state.settings.showAnswerAfterCorrect) {
+      a.showResponse = true;
+    } else {
+      state.used[a.c][a.r] = true;
+      state.active = null;
+      state.view = 'board';
+    }
+  }
 }
 
-function revealResponse() {
+// Switch the board between the clue and the answer screen.
+function toggleAnswer() {
   if (state.view === 'clue') {
-    if (state.active.showResponse) return false;
     pushHistory();
-    state.active.showResponse = true;
+    state.active.showResponse = !state.active.showResponse;
   } else if (state.view === 'final-clue') {
-    if (state.final.showResponse) return false;
     pushHistory();
-    state.final.showResponse = true;
+    state.final.showResponse = !state.final.showResponse;
+  } else {
+    return false;
   }
+}
+
+// Show an already-played clue again, for discussion. No scoring.
+function reviewClue(c, r) {
+  if (state.view !== 'board' || !state.used[c][r]) return false;
+  pushHistory();
+  state.active = { c, r, judged: {}, showResponse: false, ddTeam: null, wager: null, ddPick: null, wagerDraft: '', review: true };
+  state.view = 'clue';
 }
 
 function closeClue() {
@@ -567,10 +625,11 @@ function onMainClick(e) {
   const team = Number(d.team);
   switch (d.action) {
     case 'open': return act(openClue, Number(d.c), Number(d.r));
+    case 'review': return act(reviewClue, Number(d.c), Number(d.r));
     case 'dd-pick': return act(pickDDTeam, team);
     case 'dd-start': return act(startDD);
     case 'judge': return act(judge, team, d.right === '1');
-    case 'reveal': return act(revealResponse);
+    case 'reveal': return act(toggleAnswer);
     case 'close': return act(closeClue);
     case 'cancel': return act(cancelClue);
     case 'final': return act(startFinal);
@@ -634,7 +693,13 @@ function renderSide() {
       </div>`
     )
     .join('');
-  $('#host-side').innerHTML = `<h2>Scores</h2>${rows}<div class="side-meta">${remainingClues()} clue${remainingClues() === 1 ? '' : 's'} left on the board</div>`;
+  $('#host-side').innerHTML = `
+    <h2>Scores</h2>${rows}
+    <div class="side-meta">${remainingClues()} clue${remainingClues() === 1 ? '' : 's'} left on the board</div>
+    <label class="check side-option">
+      <input type="checkbox" id="side-show-answer" ${state.settings.showAnswerAfterCorrect ? 'checked' : ''}>
+      <span>Show the answer screen after a correct answer</span>
+    </label>`;
 }
 
 // The main area has a "content" part (with math, rebuilt only when the view
@@ -651,10 +716,16 @@ function renderMain() {
   if (controls) controls.innerHTML = controlsHtml();
 }
 
-function responseBoxes(clueHtml, responseHtml) {
+function responseBoxes(q) {
   return `
-    <div class="box box-clue clue-content"><div class="box-label">Clue</div>${clueHtml}</div>
-    <div class="box box-response clue-content"><div class="box-label">Correct response (only you see this)</div>${responseHtml}</div>`;
+    <div class="box box-clue clue-content"><div class="box-label">Clue</div>${q.clueHtml}</div>
+    <div class="box box-response clue-content"><div class="box-label">Correct response</div>${q.responseHtml}</div>
+    ${q.solutionHtml ? `<div class="box box-solution clue-content"><div class="box-label">Worked solution</div>${q.solutionHtml}</div>` : ''}`;
+}
+
+function boardShows(showingAnswer, q) {
+  const what = showingAnswer ? `the answer screen (response${q.solutionHtml ? ' and worked solution' : ''})` : 'the clue';
+  return `<div class="board-shows">Board shows: <strong>${what}</strong></div>`;
 }
 
 function contentHtml() {
@@ -663,14 +734,14 @@ function contentHtml() {
   switch (state.view) {
     case 'board': {
       const n = g.categories.length;
-      let html = `<div class="hint">Click a clue to show it on the board. <span class="dd-badge">DD</span> marks a Daily Double; only you can see that.</div>`;
+      let html = `<div class="hint">Click a clue to show it on the board. <span class="dd-badge">DD</span> marks a Daily Double; only you can see that. Click a gray square to review a clue that was already played.</div>`;
       html += `<div class="host-grid" style="grid-template-columns: repeat(${n}, minmax(0, 1fr));">`;
       for (const c of g.categories) html += `<div class="hcat clue-content">${c.nameHtml}</div>`;
       for (let r = 0; r < g.rows; r++) {
         for (let c = 0; c < n; c++) {
           const q = g.categories[c].clues[r];
           if (!q) html += `<div class="hcell empty"></div>`;
-          else if (state.used[c][r]) html += `<button class="hcell used" disabled>${q.value}</button>`;
+          else if (state.used[c][r]) html += `<button class="hcell used" data-action="review" data-c="${c}" data-r="${r}" title="Show this clue again (scores won't change)">${q.value}</button>`;
           else html += `<button class="hcell" data-action="open" data-c="${c}" data-r="${r}">${q.value}${q.dailyDouble ? '<span class="dd-badge">DD</span>' : ''}</button>`;
         }
       }
@@ -683,16 +754,18 @@ function contentHtml() {
         <div class="clue-head"><span class="cat-name clue-content">${g.categories[a.c].nameHtml}</span><span class="amount">${q.value} square</span></div>
         <p>The board is showing <strong>DAILY DOUBLE</strong>. Choose the team and enter its wager.</p>
         <div id="controls"></div>
-        <details class="peek"><summary>Peek at the clue and response</summary>${responseBoxes(q.clueHtml, q.responseHtml)}</details>`;
+        <details class="peek"><summary>Peek at the clue and response</summary>${responseBoxes(q)}</details>`;
     }
     case 'clue': {
       const q = clueAt(a.c, a.r);
-      const amount = a.ddTeam !== null
-        ? `<span class="tag">Daily Double</span><span class="amount">${escapeHtml(state.teams[a.ddTeam].name)} wagered ${formatScore(a.wager)}</span>`
-        : `<span class="amount">${q.value}</span>`;
+      const amount = a.review
+        ? `<span class="amount">${q.value}</span><span class="tag" style="background:var(--muted)">Review</span>`
+        : a.ddTeam !== null
+          ? `<span class="tag">Daily Double</span><span class="amount">${escapeHtml(state.teams[a.ddTeam].name)} wagered ${formatScore(a.wager)}</span>`
+          : `<span class="amount">${q.value}</span>`;
       return `
         <div class="clue-head"><span class="cat-name clue-content">${g.categories[a.c].nameHtml}</span>${amount}</div>
-        ${responseBoxes(q.clueHtml, q.responseHtml)}
+        ${responseBoxes(q)}
         <div id="controls"></div>`;
     }
     case 'final-category':
@@ -701,11 +774,11 @@ function contentHtml() {
         <div class="clue-head"><span class="muted">Category:</span><span class="cat-name clue-content">${g.final.categoryHtml}</span></div>
         <p>The board is showing the category. Enter each team’s wager (a team can wager up to its current score).</p>
         <div id="controls"></div>
-        <details class="peek"><summary>Peek at the clue and response</summary>${responseBoxes(g.final.clueHtml, g.final.responseHtml)}</details>`;
+        <details class="peek"><summary>Peek at the clue and response</summary>${responseBoxes(g.final)}</details>`;
     case 'final-clue':
       return `
         <div class="clue-head"><span class="tag" style="background:var(--blue)">Final Jeopardy</span><span class="cat-name clue-content">${g.final.categoryHtml}</span></div>
-        ${responseBoxes(g.final.clueHtml, g.final.responseHtml)}
+        ${responseBoxes(g.final)}
         <div id="controls"></div>`;
     case 'results':
       return `<h2>Final scores</h2><div id="controls"></div>`;
@@ -741,6 +814,15 @@ function controlsHtml() {
 
     case 'clue': {
       const q = clueAt(a.c, a.r);
+      if (a.review) {
+        return `
+          ${boardShows(a.showResponse, q)}
+          <p class="muted small">You're reviewing a clue that was already played, so there's no scoring here. Use Adjust in the score panel if a score needs fixing.</p>
+          <div class="actions">
+            <button class="btn" data-action="reveal">${a.showResponse ? 'Show the clue again' : 'Show answer screen'}</button>
+            <button class="btn primary" data-action="close">Return to board</button>
+          </div>`;
+      }
       const isDD = a.ddTeam !== null;
       const amount = isDD ? a.wager : q.value;
       const someoneRight = Object.values(a.judged).includes('right');
@@ -762,10 +844,10 @@ function controlsHtml() {
         .join('');
       const nothingYet = Object.keys(a.judged).length === 0 && !a.showResponse;
       return `
-        <div class="board-shows">Board shows: <strong>${a.showResponse ? 'the clue and the response' : 'the clue'}</strong></div>
+        ${boardShows(a.showResponse, q)}
         <div class="judge-list">${rows}</div>
         <div class="actions">
-          <button class="btn" data-action="reveal" ${a.showResponse ? 'disabled' : ''}>Show response on board</button>
+          <button class="btn" data-action="reveal">${a.showResponse ? 'Show the clue again' : 'Show answer screen'}</button>
           <button class="btn primary" data-action="close">Return to board</button>
           ${nothingYet && !isDD ? '<button class="btn link" data-action="cancel">Cancel: put this clue back</button>' : ''}
         </div>`;
@@ -806,10 +888,10 @@ function controlsHtml() {
         })
         .join('');
       return `
-        <div class="board-shows">Board shows: <strong>${f.showResponse ? 'the clue and the response' : 'the clue'}</strong></div>
+        ${boardShows(f.showResponse, state.game.final)}
         <div class="judge-list">${rows}</div>
         <div class="actions">
-          <button class="btn" data-action="reveal" ${f.showResponse ? 'disabled' : ''}>Show response on board</button>
+          <button class="btn" data-action="reveal">${f.showResponse ? 'Show the clue again' : 'Show answer screen'}</button>
           <button class="btn primary" data-action="results">Show final scores</button>
         </div>`;
     }

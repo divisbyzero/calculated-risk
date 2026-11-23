@@ -40,7 +40,6 @@ function render() {
   } else if (scoresChanged) {
     fitAll();
   }
-  updateResponse();
 }
 
 function keyFor(p) {
@@ -48,13 +47,13 @@ function keyFor(p) {
     case 'board':
       return JSON.stringify(['board', p.categories, p.cells]);
     case 'clue':
-      return JSON.stringify(['clue', p.active && { ...p.active, response: null }]);
+      return JSON.stringify(['clue', p.active]);
     case 'dd-wager':
       return JSON.stringify(['dd', p.active && p.active.category, p.active && p.active.value]);
     case 'final-category':
       return JSON.stringify(['final-category', p.final && p.final.category]);
     case 'final-clue':
-      return JSON.stringify(['final-clue', p.final && p.final.category, p.final && p.final.clue]);
+      return JSON.stringify(['final-clue', p.final]);
     case 'results':
       return JSON.stringify(['results', p.teams]);
     default:
@@ -96,18 +95,19 @@ function buildMain() {
           </div>
         </div>`;
       break;
-    case 'final-clue':
-      html = `
+    case 'final-clue': {
+      const label = `FINAL JEOPARDY &middot; <span class="clue-content">${pub.final.category}</span>`;
+      html = pub.final.response
+        ? answerHtml(label, pub.final.response, pub.final.solution)
+        : `
         <div class="screen">
-          <div class="screen-label">FINAL JEOPARDY &middot; <span class="clue-content">${pub.final.category}</span></div>
+          <div class="screen-label">${label}</div>
           <div class="screen-body" data-fit-max="0.085" data-fit-min="0.02">
-            <div class="fit-inner clue-content">
-              <div class="clue-text">${pub.final.clue}</div>
-              <div class="resp-slot"></div>
-            </div>
+            <div class="fit-inner clue-content"><div class="clue-text">${pub.final.clue}</div></div>
           </div>
         </div>`;
       break;
+    }
     case 'results':
       html = resultsHtml();
       break;
@@ -144,14 +144,14 @@ function clueHtml() {
   const a = pub.active;
   const label = a.dailyDouble
     ? `DAILY DOUBLE &middot; <span class="clue-content">${a.category}</span>${a.ddTeam ? ` &middot; ${escapeHtml(a.ddTeam)} wagers ${formatScore(a.value)}` : ''}`
-    : `<span class="clue-content">${a.category}</span> &middot; ${a.value}`;
+    : `<span class="clue-content">${a.category}</span> &middot; ${a.value}${a.review ? ' &middot; REVIEW' : ''}`;
+  if (a.response) return answerHtml(label, a.response, a.solution);
   return `
     <div class="screen">
       <div class="screen-label">${label}</div>
       <div class="screen-body" data-fit-max="0.085" data-fit-min="0.02">
         <div class="fit-inner clue-content">
           <div class="clue-text">${a.clue}</div>
-          <div class="resp-slot"></div>
         </div>
       </div>
     </div>`;
@@ -189,15 +189,18 @@ function resultsHtml() {
     </div>`;
 }
 
-// Show or hide the correct response under the clue without redrawing the clue.
-function updateResponse() {
-  const slot = main.querySelector('.resp-slot');
-  if (!slot) return;
-  const resp = (pub.view === 'clue' ? pub.active && pub.active.response : pub.final && pub.final.response) || '';
-  if ((slot.dataset.html || '') === resp) return;
-  slot.dataset.html = resp;
-  setMathHTML(slot, resp ? `<div class="resp">${resp}</div>` : '').then(fitAll);
-  fitAll();
+// The answer screen: the correct response, plus the worked solution if any.
+function answerHtml(label, response, solution) {
+  return `
+    <div class="screen answer-screen">
+      <div class="screen-label">${label} &middot; ANSWER</div>
+      <div class="screen-body" data-fit-max="0.085" data-fit-min="0.016">
+        <div class="fit-inner clue-content">
+          <div class="answer-response">${response}</div>
+          ${solution ? `<div class="answer-solution">${solution}</div>` : ''}
+        </div>
+      </div>
+    </div>`;
 }
 
 // ---------------------------------------------------------------------------

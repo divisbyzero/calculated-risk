@@ -1,0 +1,379 @@
+% Converted from the original powerdot Jeopardy slides (Math 162).
+% The worked solutions from the slides are in \solution; the \response is
+% the final answer.
+\documentclass{article}
+\usepackage{jeopardy}
+
+\gametitle{Math 162 Jeopardy}
+
+\begin{document}
+
+%======================================================================
+\begin{category}{Integration by Parts}
+
+  \begin{clue}
+    \[ \int x e^{x} \; dx \]
+  \response
+    $x e^{x} - e^{x} + c$
+  \solution
+    \[
+    \begin{array}{rcl}
+    {\displaystyle \int x e^{x} \; dx} & = & {\displaystyle x e^{x} - \int e^{x} \; dx} \\
+    \left( \begin{array}{rclcrcl}
+    u & = & x & \qquad & dv & = & e^{x} \; dx \\
+    du & = & dx & \qquad & v & = & e^{x}
+    \end{array} \right)^{\nearrow} & = & {\displaystyle x e^{x} - e^{x} + c}
+    \end{array}
+    \]
+  \end{clue}
+
+  \begin{clue}
+    \[ \int x \ln x \; dx \]
+  \response
+    $\dfrac{x^{2}}{2} \ln x - \dfrac{1}{4} x^{2} + c$
+  \solution
+    \[
+    \begin{array}{rcl}
+    {\displaystyle \int x \ln x \; dx} & = & {\displaystyle \frac{x^{2}}{2} \ln x - \int \frac{x^{2}}{2x} \; dx } \\
+    \left( \begin{array}{rclcrcl}
+    u & = & \ln x & \qquad & dv & = & x \; dx \\
+    du & = & {\displaystyle \frac{1}{x} \; dx} & \qquad & v & = & {\displaystyle \frac{x^{2}}{2} }
+    \end{array} \right)^{\nearrow} & = & {\displaystyle \frac{x^{2}}{2} \ln x - \frac{1}{2} \int x \; dx } \\
+     & = & {\displaystyle \frac{x^{2}}{2} \ln x - \frac{1}{4} x^{2} + c}
+    \end{array}
+    \]
+  \end{clue}
+
+  \begin{clue}
+    \[ \int (x+2) e^{2x+1} \; dx \]
+  \response
+    $\dfrac{1}{2}e^{2x+1}(x+2) - \dfrac{1}{4}e^{2x+1} + c$
+  \solution
+    \[
+    \begin{array}{rcl}
+    {\displaystyle \int (x+2) e^{2x+1} \; dx} & = & {\displaystyle \frac{1}{2}e^{2x+1}(x+2) - \int \frac{1}{2}e^{2x+1} \; dx} \\
+    \left( \begin{array}{rclcrcl}
+    u & = & x+2 & \qquad & dv & = & {\displaystyle e^{2x+1} \; dx} \\
+    du & = & dx & \qquad & v & = & {\displaystyle  \frac{1}{2}e^{2x+1}}
+    \end{array} \right)^{\nearrow} & = & {\displaystyle \frac{1}{2}e^{2x+1}(x+2) - \frac{1}{4}e^{2x+1}  + c}
+    \end{array}
+    \]
+  \end{clue}
+
+  \begin{clue}
+    \[ \int \sin^{-1} x \; dx \]
+  \response
+    $x\sin^{-1} x + \sqrt{1-x^{2}} + c$
+  \solution
+    \[
+    \begin{array}{rcl}
+    {\displaystyle \int \sin^{-1} x \; dx} & = & {\displaystyle x\sin^{-1} x - \int x \frac{1}{\sqrt{1-x^{2}}} \; dx} \\
+    \left( \begin{array}{rclcrcl}
+    u & = & {\displaystyle \sin^{-1} x} & \qquad & dv & = & dx \\
+    du & = & {\displaystyle \frac{1}{\sqrt{1-x^{2}}} \; dx} & \qquad & v & = & x
+    \end{array} \right)^{\nearrow} & = & {\displaystyle x\sin^{-1} x - \int x (1-x^{2})^{-\frac{1}{2}} \; dx} \\
+    \left( \begin{array}{rcl}
+    u & = & {\displaystyle 1-x^{2}} \\
+    du & = & {\displaystyle -2x \; dx}
+    \end{array} \right) \rightarrow
+     & = & {\displaystyle x\sin^{-1} x + \frac{1}{2} \int u^{-\frac{1}{2}} \; du}  \\
+     & = & {\displaystyle x\sin^{-1} x + u^{\frac{1}{2}}  + c} \\
+     & = & {\displaystyle x\sin^{-1} x + \sqrt{1-x^{2}}  + c}
+    \end{array}
+    \]
+  \end{clue}
+
+  \begin{clue}
+    \[ \int x^{2} \sin x \; dx \]
+  \response
+    $-x^{2} \cos x + 2x \sin x + 2 \cos x + c$
+  \solution
+    \[
+    \begin{array}{rcl}
+    {\displaystyle \int x^{2} \sin x \; dx} & = & {\displaystyle -x^{2} \cos x - \int 2x (-\cos x) \; dx} \\
+    \left( \begin{array}{rclcrcl}
+    u & = & {\displaystyle x^{2}} & \qquad & dv & = & \sin x\; dx \\
+    du & = & 2x\; dx & \qquad & v & = & -\cos x
+    \end{array} \right)^{\nearrow} & = & {\displaystyle -x^{2} \cos x + \int 2x \cos x \; dx} \\
+    \left( \begin{array}{rclcrcl}
+    u & = & 2x & \qquad & dv & = & \cos x\; dx \\
+    du & = & 2\; dx & \qquad & v & = & \sin x
+    \end{array} \right) \rightarrow & = & {\displaystyle -x^{2} \cos x + \left( 2x \sin x - \int 2 \sin x \; dx \right)} \\
+     & = & {\displaystyle -x^{2} \cos x + 2x \sin x + 2 \cos x + c}
+    \end{array}
+    \]
+  \end{clue}
+
+\end{category}
+
+%======================================================================
+\begin{category}{Limits}
+
+  \begin{clue}
+    This is the value $\displaystyle\lim_{x\to\infty} e^{-x^2}.$
+  \response
+    What is $0$?
+  \end{clue}
+
+  \begin{clue}
+    This is the value $\displaystyle \lim_{x\to 0}\frac{x-\sin x}{x^2}.$
+  \response
+    What is $0$?
+  \solution
+    \[
+    \begin{array}{rcl}
+    {\displaystyle \lim_{x\to 0}\frac{x-\sin x}{x^2}} & = & {\displaystyle \lim_{x\to 0}\frac{1-\cos x}{2x}} \\
+    & = & {\displaystyle \lim_{x\to 0}\frac{\sin x}{2}}\\
+    & = & 0
+    \end{array}
+    \]
+  \end{clue}
+
+  \begin{clue}
+    This is the value $\displaystyle\lim_{x\to\infty}\frac{\log_5 x}{\log_6 x}.$
+  \response
+    What is $\dfrac{\ln 6}{\ln 5}$?
+  \solution
+    \[
+    \begin{array}{rcl}
+    {\displaystyle\lim_{x\to\infty}\frac{\log_5 x}{\log_6 x}} & = & {\displaystyle\lim_{x\to\infty}\frac{\Big(\frac{1}{x\ln 5}\Big)}{\Big(\frac{1}{x\ln 6}\Big)}} \\
+    & = & {\displaystyle\lim_{x\to\infty}\frac{\ln 6}{\ln 5}}\\
+    & = & {\displaystyle \frac{\ln 6}{\ln 5}}
+    \end{array}
+    \]
+  \end{clue}
+
+  \begin{clue}
+    This is the value $\displaystyle \lim_{x\to 0}(3\csc x-3\cot x).$
+  \response
+    What is $0$?
+  \solution
+    \[
+    \begin{array}{rcl}
+    {\displaystyle \lim_{x\to 0}(3\csc x-3\cot x)} & = & {\displaystyle \lim_{x\to 0}\Big(\frac{3}{\sin x}-\frac{3\cos x}{\sin x}\Big)} \\
+    & = & {\displaystyle \lim_{x\to 0}\Big(\frac{3-3\cos x}{\sin x}\Big)}\\
+    & = & {\displaystyle \lim_{x\to 0}\Big(\frac{3\sin x}{\cos x}\Big)}\\
+    & = & 0
+    \end{array}
+    \]
+  \end{clue}
+
+  \begin{clue}
+    This is the value $\displaystyle\lim_{x\to 0^{+}}x^x.$
+  \response
+    What is $1$?
+  \solution
+    \[
+    \begin{array}{rcl}
+    {\displaystyle \lim_{x\to 0^{+}}\ln (x^{x})} & = & {\displaystyle \lim_{x\to 0^{+}}x\ln x} \\
+    & = & {\displaystyle \lim_{x\to 0^{+}}\frac{\ln x}{x^{-1}}}\\
+    & = & {\displaystyle \lim_{x\to 0^{+}}\frac{x^{-1}}{-x^{-2}}}\\
+    & = & {\displaystyle \lim_{x\to 0^{+}}-x}\\
+    & = & 0\\
+    {\displaystyle \lim_{x\to 0^{+}} x^{x}} & = & e^{0}=1
+    \end{array}
+    \]
+  \end{clue}
+
+\end{category}
+
+%======================================================================
+\begin{category}{Proper or Improper?}
+
+  \begin{clue}
+    \[ \int_{-3}^{\infty} \frac{x^{3}}{7+ \sin^{2} x} \, dx \]
+  \response
+    What is IMPROPER?
+  \end{clue}
+
+  \begin{clue}
+    \[ \int_{-3}^{10} \frac{x^{3}}{(x+5)(x-11)} \, dx \]
+  \response
+    What is PROPER?
+  \end{clue}
+
+  \begin{clue}
+    \[ \int_{-\pi/2}^{\pi/2} \frac{e^{x}}{\cos x} \, dx \]
+  \response
+    What is IMPROPER?
+  \end{clue}
+
+  \begin{clue}
+    \[ \int_{\pi/6}^{\pi/4} \frac{1}{\sec x} \, dx \]
+  \response
+    What is PROPER?
+  \end{clue}
+
+  \begin{clue}
+    Wearing white shoes between Labor Day and Easter
+  \response
+    What is IMPROPER?
+  \end{clue}
+
+\end{category}
+
+%======================================================================
+\begin{category}{Applied Integration}
+
+  \begin{clue}
+    This is the INTEGRAL used to compute the area bounded by the curves
+    $y=x^2+1$, $y=2x$ and $x=0$.
+  \response
+    What is $\displaystyle A=\int_0^1 (x^2+1-2x)\; dx$?
+  \end{clue}
+
+  \begin{clue}
+    This is the INTEGRAL used to compute the volume of the solid obtained by
+    revolving the region bounded by the curves $y=x^2+1$, $y=2x$ and $x=0$
+    about the $x$-axis.
+  \response
+    What is $\displaystyle V=\int_0^1 (\pi(x^2+1)^2-\pi(2x)^2)\; dx$?
+  \end{clue}
+
+  \begin{clue}[dailydouble]
+    This is the INTEGRAL used to compute the volume of the solid obtained by
+    revolving the region bounded by the curves $y=x^2+1$, $y=2x$ and $x=0$
+    about the line $x=-2$.
+  \response
+    What is $\displaystyle V=\int_0^1 2\pi (x+2)(x^2+1-2x)\; dx$?
+  \end{clue}
+
+  \begin{clue}
+    These are the INTEGRALS needed to find the centroid of the region bounded
+    by $y=\sin x$ and the $x$-axis on $0\le x\le \pi$.
+  \response
+    \[\bar x=\frac{1}{A}\int_{0}^{\pi}x\sin x\; dx\]
+    \[\bar y=\frac{1}{2A}\int_{0}^{\pi}\sin^{2}x\;dx\]
+    where $\displaystyle A=\int_{0}^{\pi}\sin x\; dx$
+  \end{clue}
+
+  \begin{clue}
+    This is the INTEGRAL used to compute the arclength of one period of the
+    graph of $y=\sin x$.
+  \response
+    What is $\displaystyle L=\int_0^{2\pi}\sqrt{1+\cos^2 x}\; dx$?
+  \end{clue}
+
+\end{category}
+
+%======================================================================
+\begin{category}{Creative Calculus}
+
+  \begin{clue}
+    \[ \int \left[ \frac{d}{dx} f(x) \right] \; dx \]
+  \response
+    $f(x) + c$
+  \end{clue}
+
+  \begin{clue}
+    \[ \int \cos t \; dx \]
+  \response
+    $(\cos t)x + c$
+  \solution
+    \[
+    \begin{array}{rcl}
+    {\displaystyle \int \cos t \; dx} & = & {\displaystyle \cos t \int  dx} \\
+     & = & {\displaystyle (\cos t)x +   c }
+    \end{array}
+    \]
+  \end{clue}
+
+  \begin{clue}
+    \[ \frac{d}{dr} \int_{3}^{r} \sin (x^{2}) \; dx \]
+  \response
+    $\sin (r^{2})$
+  \end{clue}
+
+  \begin{clue}
+    \[ \int \frac{\cos x}{1 + \sin^{2} x} \; dx \]
+  \response
+    $\tan^{-1} (\sin x) + c$
+  \solution
+    \[
+    \begin{array}{rcl}
+    {\displaystyle \int \frac{\cos x}{1 + \sin^{2} x} \; dx} & = & {\displaystyle \int \frac{du}{1+u^{2}}} \\
+    \left( \begin{array}{rcl}
+    u & = & \sin x \\
+    du & = & \cos x \; dx
+    \end{array} \right)^{\nearrow} & = & {\displaystyle \tan^{-1} u + c} \\
+     & = & {\displaystyle \tan^{-1} (\sin x) + c}
+    \end{array}
+    \]
+  \end{clue}
+
+  \begin{clue}
+    \[ \int e^{x+e^{x}} \; dx \]
+  \response
+    $e^{e^{x}} + c$
+  \solution
+    \[
+    \begin{array}{rcl}
+    {\displaystyle \int e^{x+e^{x}} \; dx} & = & {\displaystyle \int e^{x}e^{e^{x}} \; dx} \\
+    \left( \begin{array}{rcl}
+    u & = & e^{x} \\
+    du & = & e^{x} \; dx
+    \end{array} \right) \rightarrow & = & {\displaystyle \int e^{u} \; du} \\
+     & = & {\displaystyle e^{u} + c} \\
+     & = & {\displaystyle e^{e^{x}} + c }
+    \end{array}
+    \]
+  \end{clue}
+
+\end{category}
+
+%======================================================================
+\begin{category}{Potpourri}
+
+  \begin{clue}
+    An important player in the creation of calculus other than Newton and Leibniz.
+  \response
+    Many possible questions.
+  \end{clue}
+
+  \begin{clue}
+    This is the name of the new science complex.
+  \response
+    What is the Rector Science Complex?
+  \end{clue}
+
+  \begin{clue}
+    The smallest of the irrational numbers $\pi$, $e$, and $\sqrt{2}$.
+  \response
+    What is $\sqrt{2}$?
+  \end{clue}
+
+  \begin{clue}
+    The second full moon in a single month
+  \response
+    What is a blue moon?
+  \end{clue}
+
+  \begin{clue}
+    A ``mathematical'' car from Acura
+
+    (at least the ``LS'' model)
+  \response
+    What is the ``INTEGRA LS''?
+  \end{clue}
+
+\end{category}
+
+%======================================================================
+\begin{final}{Musical instruments}
+  This is the volume of \emph{Gabriel's horn}, i.e., the solid obtained by
+  revolving $\displaystyle y=\frac{1}{x}$ (for $1\le x<\infty$) about the
+  $x$-axis.
+\response
+  What is $\pi$?
+\solution
+  \[
+  \begin{array}{rcl}
+  {\displaystyle \int_{1}^{\infty}\pi\Big(\frac{1}{x}\Big)^{2}\; dx} & = & {\displaystyle \lim_{b\to \infty} \int_{1}^{b}\frac{\pi}{x^{2}}\; dx} \\
+  & = & {\displaystyle \lim_{b\to \infty}\Big(-\frac{\pi}{x}\Big)\Big]_{1}^{b}}\\
+  & = & {\displaystyle \lim_{b\to \infty}\Big(-\frac{\pi}{b}+\frac{\pi}{1}\Big)}\\
+  & = & \pi
+  \end{array}
+  \]
+\end{final}
+
+\end{document}

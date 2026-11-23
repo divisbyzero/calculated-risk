@@ -40,11 +40,19 @@ During the game:
 
 - Click a value on your board to show that clue on the projector.
 - Mark each team that answers **Correct** or **Incorrect**. The app adds or
-  subtracts the value. A team can only be marked once per clue, and a correct
-  answer shows the response on the board.
-- **Show response on board** reveals the response if nobody gets it.
+  subtracts the value. A team can only be marked once per clue.
+- After a correct answer, the board switches to the **answer screen**: the
+  response, plus the worked solution if the clue has one. If you'd rather go
+  straight back to the board, turn off **Show the answer screen after a
+  correct answer**. It's on the setup screen and in the score panel during the
+  game, and the app remembers your choice.
+- **Show answer screen** shows it at any time, for example when nobody gets
+  the clue. **Show the clue again** switches back.
 - **Return to board** closes the clue. **Cancel** puts a clue back if you
   opened it by mistake.
+- To revisit a clue that's already been played (say, a student has a
+  question), click its gray square. The board shows it marked "REVIEW". You
+  can switch to the answer screen, and no scoring happens.
 - **Daily Double** squares are marked "DD" on your screen only. Choose the team
   and enter the wager (up to the team's score or the board's top value,
   whichever is larger).
@@ -71,6 +79,8 @@ Copy [`latex/template.tex`](latex/template.tex) and fill it in:
     $\dd{x}\left(x^3\right)$
   \response
     $3x^2$
+  \solution                           % optional worked solution
+    By the power rule, $\dd{x} x^n = n x^{n-1}$, so the derivative is $3x^2$.
   \end{clue}
 
   \begin{clue}[dailydouble]
@@ -81,7 +91,7 @@ Copy [`latex/template.tex`](latex/template.tex) and fill it in:
   % ... 5 clues per category
 \end{category}
 
-% ... 5 categories
+% ... 5 or 6 categories
 
 \begin{final}{Series}
   Does $\sum_{n=1}^\infty \frac{1}{n^2}$ converge?
@@ -92,7 +102,12 @@ Copy [`latex/template.tex`](latex/template.tex) and fill it in:
 \end{document}
 ```
 
-- The board is 5 categories × 5 clues. Clues are worth 100–500 **by
+- `\solution` is optional. Use it for worked steps (`align*` works well). It
+  appears on the answer screen and on your host screen.
+- MathJax doesn't support `@{...}` in array column specs and silently drops
+  it. Write `\begin{array}{rcl} u & = & x \end{array}` instead of
+  `\begin{array}{r@{=}l} u & x \end{array}`.
+- The board has 5 or 6 categories with 5 clues each. Clues are worth 100–500 **by
   position**, so you can reorder them by moving blocks around.
 - Math works in `$...$`, `\(...\)`, `\[...\]`, `$$...$$` and environments
   like `align*`. Your `\newcommand` and `\DeclareMathOperator` macros work
@@ -105,7 +120,7 @@ Copy [`latex/template.tex`](latex/template.tex) and fill it in:
 
 **Printable answer key:** with [`latex/jeopardy.sty`](latex/jeopardy.sty) in the
 same folder as your game, `pdflatex mygame.tex` produces a PDF listing every
-clue and response.
+clue, response and solution.
 
 **Built-in games:** put a `.tex` file in `games/` and add it to
 [`games/index.json`](games/index.json).
@@ -117,7 +132,7 @@ clue and response.
 | `index.html`, `js/host.js` | Host window: setup, game flow, scoring, undo |
 | `board.html`, `js/board.js` | Projector window: display only |
 | `js/texparser.js` | Reads `.tex` game files and reports errors |
-| `js/config.js` | Board size and values (5×5 is enforced here; set `enforceStandardSize` to `false` to allow other sizes) |
+| `js/config.js` | Board size and values (5 or 6 categories of 5 clues; set `enforceStandardSize` to `false` to allow other sizes) |
 | `js/sync.js` | Connects the two windows (BroadcastChannel) |
 | `js/math.js`, `js/mathjax-config.js` | MathJax setup and typesetting |
 | `latex/` | `jeopardy.sty` and a blank template |
