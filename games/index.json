@@ -5,6 +5,11 @@
     "description": "Integration by parts, limits, improper integrals, applied integration, and more. Converted from the original slides."
   },
   {
+    "file": "multivariable-calculus.tex",
+    "title": "Multivariable Calculus",
+    "description": "Vectors, curves, partial derivatives, optimization, multiple integrals, and potpourri. Built from the Lab 11 final review; some cells are still placeholders."
+  },
+  {
     "file": "sample-game.tex",
     "title": "Sample Game",
     "description": "Placeholder clues on a full board, with a Daily Double and Final Jeopardy."

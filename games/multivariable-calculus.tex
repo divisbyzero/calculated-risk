@@ -1,0 +1,442 @@
+% Multivariable Calculus review game, built from the Lab 11 final review.
+% Clues marked "Placeholder" hold topic ideas still to be written.
+\documentclass{article}
+% Which PDF to make (the web game ignores this):
+%   questions  clues only, e.g. a study sheet for students
+%   answers    clues and responses
+%   solutions  clues, responses, and worked solutions
+\usepackage[solutions]{jeopardy}
+
+\gametitle{Multivariable Calculus}
+
+% Notation used in the course notes
+\newcommand{\bvec}[1]{\vec{\mathbf{#1}}}
+\newcommand{\uveci}{\boldsymbol{\hat{\imath}}}
+\newcommand{\uvecj}{\boldsymbol{\hat{\jmath}}}
+\newcommand{\uveck}{\boldsymbol{\hat{k}}}
+\newcommand{\dotprod}{\cdot}
+
+\begin{document}
+
+%======================================================================
+\begin{category}{Vectors and Surfaces}
+
+  \begin{clue}
+    Find the length of the vector $\bvec{a}-\bvec{b}$, where $\bvec{a} = \langle1,3\rangle$ and $\bvec{b} = \langle5,2\rangle$.
+  \response
+    What is $\sqrt{17}$?
+  \solution
+    We compute
+    \[
+    \bvec{a}-\bvec{b}=\langle 4,\,-1\rangle.
+    \]
+    So,
+    \[
+    \left|\bvec{a}-\bvec{b}\right|=\sqrt{4^2+(-1)^2}=\sqrt{17}.
+    \]
+  \end{clue}
+
+  \begin{clue}
+    For what value of $x$ will the two vectors $\langle x,3\rangle$ and $\langle4,5\rangle$ be orthogonal?
+  \response
+    What is $x=-\frac{15}{4}$?
+  \solution
+    We use orthogonality,
+    $\langle x,\,3\rangle \dotprod \langle 4,\,5\rangle = 4x+15=0.$ So, $x=-\frac{15}{4}$.
+  \end{clue}
+
+  \begin{clue}
+    Find a unit vector that is perpendicular to the plane $x+2y+2z=10$.
+  \response
+    What is $\left\langle \frac{1}{3}, \frac{2}{3}, \frac{2}{3}\right\rangle$ (or its negative)?
+  \solution
+    A normal vector is
+    \[
+    \langle 1,\,2,\,2\rangle.
+    \]
+    Its magnitude is
+    \[
+    \left|\langle 1,\,2,\,2\rangle\right|=\sqrt{1^2+2^2+2^2}=3.
+    \]
+    So, a unit normal vector is
+    \[
+    \left\langle \frac{1}{3},\,\frac{2}{3},\,\frac{2}{3}\right\rangle.
+    \]
+  \end{clue}
+
+  \begin{clue}
+    Find a unit vector that is orthogonal to both of the vectors $\langle1, -1, 0\rangle$ and $\langle1,2,3\rangle$.
+  \response
+    What is $\left\langle \frac{1}{\sqrt{3}}, \frac{1}{\sqrt{3}}, \frac{-1}{\sqrt{3}}\right\rangle$ (or its negative)?
+  \solution
+    The cross product, $\langle 1,\,-1,\,0\rangle\times\langle 1,\,2,\,3\rangle=\langle -3,\,-3,\,3\rangle,$ is orthogonal to both vectors.
+
+    So, the unit vector in the same direction is
+    $\frac{1}{\sqrt{27}}\langle -3,\,-3,\,3\rangle=
+    \left\langle \frac{-1}{\sqrt{3}},\,\frac{-1}{\sqrt{3}},\,\frac{1}{\sqrt{3}}\right\rangle.$
+
+    The opposite direction,
+    $\left\langle \frac{1}{\sqrt{3}},\,\frac{1}{\sqrt{3}},\,\frac{-1}{\sqrt{3}}\right\rangle,$ is also a unit vector orthogonal to both vectors.
+  \end{clue}
+
+  \begin{clue}
+    \textbf{Placeholder.} Topic idea: identify a quadric surface from its equation, such as telling a hyperboloid of one sheet from a hyperboloid of two sheets (Section 4.3).
+  \response
+    To be written.
+  \end{clue}
+
+\end{category}
+
+%======================================================================
+\begin{category}{Curves and Motion}
+
+  \begin{clue}
+    Find the tangent vector to $\bvec{r}(t) = \sin t \uveci - \cos t \uvecj$ when $t = \frac{\pi}{3}$.
+  \response
+    What is $\displaystyle \frac{1}{2} \uveci + \frac{\sqrt{3}}{2}\uvecj$?
+  \solution
+    \[
+    \bvec{v}(t)=\cos t\,\uveci+\sin t\,\uvecj.
+    \]
+    \[
+    \bvec{v}\!\left(\tfrac{\pi}{3}\right)=\cos\!\left(\tfrac{\pi}{3}\right)\uveci+\sin\!\left(\tfrac{\pi}{3}\right)\uvecj
+    =\tfrac{1}{2}\,\uveci+\tfrac{\sqrt{3}}{2}\,\uvecj.
+    \]
+  \end{clue}
+
+  \begin{clue}
+    Find the length of the curve $\bvec{r}(t) = \langle t, 2t, 2t\rangle$ when $0 \leq t \leq 2$.
+  \response
+    What is $6$?
+  \solution
+    \begin{align*}
+    L
+    &=\int_0^2 \left|\bvec{r}\,'(t)\right|\,dt \\
+    &=\int_0^2 \left|\langle 1,\,2,\,2\rangle\right|\,dt \\
+    &=\int_0^2 \sqrt{1^2+2^2+2^2}\,dt \\
+    &=\int_0^2 3\,dt \\
+    &=\left.3t\right|_0^2 \\
+    &=6.
+    \end{align*}
+  \end{clue}
+
+  \begin{clue}
+    Let $\bvec{v}(t) = \uveci + t \uvecj$ be the velocity of a particle at time $t$. Suppose its position at time $t=0$ is $\bvec{r}(0) = \uvecj + 2\uveck$. Find its position when $t=2$.
+  \response
+    What is $2 \uveci + 3 \uvecj + 2 \uveck$?
+  \solution
+    \begin{align*}
+    \bvec{r}(t)
+    &=\int \bvec{v}(t)\,dt \\
+    &=\int (\uveci+t\,\uvecj)\,dt \\
+    &=t\,\uveci+\frac{1}{2}t^2\,\uvecj+\bvec{c}.
+    \end{align*}
+    Using $\bvec{r}(0)=\uvecj+2\,\uveck$, we get $\bvec{c}=\uvecj+2\,\uveck$. So,
+    \[
+    \bvec{r}(t)=t\,\uveci+\left(1+\frac{1}{2}t^2\right)\uvecj+2\,\uveck.
+    \]
+    \[
+    \bvec{r}(2)=2\,\uveci+3\,\uvecj+2\,\uveck.
+    \]
+  \end{clue}
+
+  \begin{clue}
+    \textbf{Placeholder.} Topic idea: the slope of the tangent line to a parametric or polar curve at a given point (Sections 3.2 and 3.4.1).
+  \response
+    To be written.
+  \end{clue}
+
+  \begin{clue}
+    \textbf{Placeholder.} Topic idea: the area enclosed by a polar curve, such as one petal of a rose curve (Section 3.4.2).
+  \response
+    To be written.
+  \end{clue}
+
+\end{category}
+
+%======================================================================
+\begin{category}{Partial Derivatives}
+
+  \begin{clue}
+    \textbf{Placeholder.} Topic idea: describe the level curves of a simple function of two variables (Section 5.2).
+  \response
+    To be written.
+  \end{clue}
+
+  \begin{clue}
+    Let $\displaystyle f(x,y) = (x^3 + x)y^2$.
+    Find the value of $f_{xy}(0,1)$.
+  \response
+    What is $2$?
+  \solution
+    \[
+    f(x,y)=x^3y^2+xy^2.
+    \]
+    \[
+    f_x(x,y)=3x^2y^2+y^2.
+    \]
+    \[
+    f_{xy}(x,y)=6x^2y+2y.
+    \]
+    \[
+    f_{xy}(0,1)=2.
+    \]
+  \end{clue}
+
+  \begin{clue}
+    Let $\displaystyle f(x,y) = \frac{xy}{x^2 + y^2}$, and let $C_m$ be the curve with equation $y = mx$, where $m$ is a constant. Find the limit of $f(x,y)$ as $(x,y)$ approaches $(0,0)$ along $C_m$.
+  \response
+    What is $\displaystyle \frac{m}{1+m^2}$?
+  \solution
+    Along $C_m$, we have $y=mx$, so
+    \[
+    \lim_{x\to 0}\frac{x(mx)}{x^2+(mx)^2}
+    =\lim_{x\to 0}\frac{mx^2}{x^2+m^2x^2}
+    =\lim_{x\to 0}\frac{m}{1+m^2}
+    =\frac{m}{1+m^2}.
+    \]
+  \end{clue}
+
+  \begin{clue}
+    Find the equation of the tangent plane to the surface $z = e^{x+y}$ at the point $(0,0,1)$.
+  \response
+    What is $z=x+y+1$?
+  \solution
+    \[
+    \frac{\partial z}{\partial x}=e^{x+y},\qquad \frac{\partial z}{\partial y}=e^{x+y}.
+    \]
+    \[
+    \frac{\partial z}{\partial x}(0,0)=1,\qquad \frac{\partial z}{\partial y}(0,0)=1.
+    \]
+    A normal vector is $\bvec{n}=\langle \tfrac{\partial z}{\partial x}, \tfrac{\partial z}{\partial y}, -1\rangle=\langle 1,\,1,\,-1\rangle$. So, the tangent plane is
+    \[
+    1(x-0)+1(y-0)-1(z-1)=0,\qquad\text{or}\qquad z=x+y+1.
+    \]
+  \end{clue}
+
+  \begin{clue}
+    Find the directional derivative of the function $\displaystyle f(x,y,z) = xe^{\frac{xy}{z}}$ in the direction $\bvec{u} = \left\langle\frac{-1}{3}, \frac{2}{3}, \frac{2}{3}\right\rangle$ at the point $(3,0,1)$.
+  \response
+    What is $\frac{17}{3}$?
+  \solution
+    \[
+    \nabla f(x,y,z)=\left\langle e^{xy/z}+\frac{xy}{z}e^{xy/z},\,\frac{x^2}{z}e^{xy/z},\,-\frac{x^2y}{z^2}e^{xy/z}\right\rangle.
+    \]
+    \[
+    \nabla f(3,0,1)=\langle 1,\,9,\,0\rangle.
+    \]
+    \[
+    D_{\bvec{u}}f(3,0,1)=\nabla f(3,0,1)\dotprod\left\langle\tfrac{-1}{3},\,\tfrac{2}{3},\,\tfrac{2}{3}\right\rangle
+    =-\tfrac{1}{3}+\tfrac{18}{3}+0=\tfrac{17}{3}.
+    \]
+  \end{clue}
+
+\end{category}
+
+%======================================================================
+\begin{category}{Optimization}
+
+  \begin{clue}
+    \textbf{Placeholder.} Topic idea: find the critical point of a simple function of two variables, such as a sum of squares (Section 5.10).
+  \response
+    To be written.
+  \end{clue}
+
+  \begin{clue}
+    \textbf{Placeholder.} Topic idea: use the Second Derivatives Test to classify a critical point, given the values of the second partial derivatives there (Section 5.10.1).
+  \response
+    To be written.
+  \end{clue}
+
+  \begin{clue}
+    The function $f(x,y) = x^2 + y^2 + xy + x$ has one critical point. Determine its location and type.
+  \response
+    What is a local minimum at $\left(\frac{-2}{3},\frac{1}{3}\right)$?
+  \solution
+    Set the first derivatives equal to zero,
+    \[
+    \tfrac{\partial f}{\partial x}=2x+y+1=0,\qquad \tfrac{\partial f}{\partial y}=2y+x=0.
+    \]
+    Solving this system of equations gives $x=-\frac{2}{3}$ and $y=\frac{1}{3}$, so the critical point is $\left(-\frac{2}{3},\,\frac{1}{3}\right)$.
+    \[
+    f_{xx}\left(-\tfrac{2}{3},\,\tfrac{1}{3}\right)=2,\qquad f_{yy}\left(-\tfrac{2}{3},\,\tfrac{1}{3}\right)=2,\qquad f_{xy}\left(-\tfrac{2}{3},\,\tfrac{1}{3}\right)=1.
+    \]
+    Hence,
+    \[
+    D=f_{xx}\left(-\tfrac{2}{3},\,\tfrac{1}{3}\right)f_{yy}\left(-\tfrac{2}{3},\,\tfrac{1}{3}\right)-(f_{xy}\left(-\tfrac{2}{3},\,\tfrac{1}{3}\right))^2=2\cdot 2-1^2=3>0,
+    \]
+    and $f_{xx}\left(-\tfrac{2}{3},\,\tfrac{1}{3}\right)>0$. So, the critical point is a local minimum.
+  \end{clue}
+
+  \begin{clue}[dailydouble]
+    Find the minimum value of the function $f(x,y) = xy$ subject to the constraint $4x^2 + y^2=8$.
+  \response
+    What is $-2$?
+  \solution
+    Let $f(x,y)=xy$ and $g(x,y)=4x^2+y^2=8$. The gradients are
+    \[
+    \nabla f(x,y)=\langle y,\,x\rangle,\qquad \nabla g(x,y)=\langle 8x,\,2y\rangle.
+    \]
+    So, by the method of Lagrange multipliers, we must solve
+    \[
+    y=8\lambda x,\qquad x=2\lambda y, \qquad 4x^2+y^2=8.
+    \]
+    The first two equations give $y^2=4x^2$. Substituting this into the constraint equation gives $4x^2+4x^2=8.$ So, $x^2=1.$
+    Hence, $x=\pm 1$ and $y=\pm 2$. Evaluating,
+    \[
+    f(1,2)=2,\quad f(1,-2)=-2,\quad f(-1,2)=-2,\quad f(-1,-2)=2,
+    \]
+    we find that the minimum value is $-2$.
+  \end{clue}
+
+  \begin{clue}
+    Find the minimum value of the function $f(x,y) = x^2 - y^2+x^2y+4$ on the square with vertices at $(0,0),(1,0),(0,1),(1,1)$.
+  \response
+    What is $3$?
+  \solution
+    First we compute the first partial derivatives, and then we set them equal to 0:
+    \[
+    f_x(x,y)=2x+2xy=2x(1+y)=0,\qquad f_y(x,y)=-2y+x^2=0.
+    \]
+    The first equation gives either $x=0$ or $y=-1$. Since $y=-1$ is outside the region, $x=0$. Substituting this into the second equation gives $-2y=0$. So, $y=0$. Critical point: $(0,0)$.
+
+    \begin{itemize}
+    \item Along $x=0$: $f(0,y)=4-y^2$, so $f'(y)=-2y=0$ gives $(0,0)$.
+    \item Along $y=0$: $f(x,0)=x^2+4$, so $f'(x)=2x=0$ gives $(0,0)$.
+    \item Along $x=1$: $f(1,y)=5+y-y^2$, so $f'(y)=1-2y=0$ gives $y=\frac{1}{2}$. So, $(1,\tfrac{1}{2})$ is a candidate.
+    \item Along $y=1$: $f(x,1)=2x^2+3$, so $f'(x)=4x=0$ gives $(0,1)$.
+    \end{itemize}
+
+    We must also check the corners, $(0,0)$, $(1,0)$, $(0,1)$, and $(1,1)$.
+
+    Evaluating at all candidates,
+    \[
+    f(0,0)=4,\quad f(1,0)=5,\quad f(0,1)=3,\quad f(1,1)=5,\quad f\left(1,\tfrac{1}{2}\right)=\tfrac{21}{4}.
+    \]
+    So, the minimum value is $3$.
+  \end{clue}
+
+\end{category}
+
+%======================================================================
+\begin{category}{Multiple Integrals}
+
+  \begin{clue}
+    Let $f(x,y) = xy+1$ and let $R = [0,1] \times [0,1]$. Let $R$ be partitioned into four subrectangles by the lines $x=1/2$ and $y=1/2$. Calculate the Riemann sum of $f$ using the lower left corner of each rectangle as the sample point.
+  \response
+    What is $\frac{17}{16}$?
+  \solution
+    We have $\Delta x=\frac{1}{2}$ and $\Delta y=\frac{1}{2}$. The lower-left sample points are
+    $(0,0)$, $(\frac{1}{2},0)$, $(0,\frac{1}{2})$, $(\frac{1}{2},\frac{1}{2})$. So,
+    \begin{align*}
+    \left(f(0,0)+f\!\left(\tfrac{1}{2},0\right)+f\!\left(0,\tfrac{1}{2}\right)+f\!\left(\tfrac{1}{2},\tfrac{1}{2}\right)\right)\cdot\tfrac{1}{2}\cdot\tfrac{1}{2}
+    &=\left(1+1+1+\tfrac{5}{4}\right)\cdot\tfrac{1}{4} \\
+    &=\frac{17}{4}\cdot\frac{1}{4}\\
+    &=\frac{17}{16}.
+    \end{align*}
+  \end{clue}
+
+  \begin{clue}
+    Evaluate $\displaystyle \iint_R (x + \sin y) \; dA$, where $R = [0,2] \times [0, \pi]$.
+  \response
+    What is $4+2\pi$?
+  \solution
+    \begin{align*}
+    \int_0^2\int_0^{\pi}(x+\sin y)\,dy\,dx
+    &=\int_0^2\left[xy-\cos y\right]_0^{\pi}\,dx \\
+    &=\int_0^2\bigl((\pi x-\cos\pi)-(0-\cos 0)\bigr)\,dx \\
+    &=\int_0^2(\pi x+2)\,dx \\
+    &=\left.\left(\frac{\pi}{2}x^2+2x\right)\right|_0^2 \\
+    &=2\pi+4.
+    \end{align*}
+  \end{clue}
+
+  \begin{clue}
+    Evaluate $\displaystyle \iiint_E (x^2 + 2y) \; dV$ where $E = \{(x,y,z) \colon 0 \leq x \leq 1, 0 \leq y \leq 1, 0 \leq z \leq 1\}.$
+  \response
+    What is $\frac{4}{3}$?
+  \solution
+    \begin{align*}
+    \int_0^1\int_0^1\int_0^1(x^2+2y)\,dx\,dy\,dz
+    &=\int_0^1\int_0^1\left[\frac{x^3}{3}+2xy\right]_0^1\,dy\,dz \\
+    &=\int_0^1\int_0^1\left(\frac{1}{3}+2y\right)dy\,dz \\
+    &=\int_0^1\left[\frac{y}{3}+y^2\right]_0^1\,dz \\
+    &=\int_0^1\left(\frac{1}{3}+1\right)dz \\
+    &=\left.\frac{4}{3}z\right|_0^1=\frac{4}{3}.
+    \end{align*}
+  \end{clue}
+
+  \begin{clue}
+    Rewrite $\displaystyle \int_0^1 \int_0^x F(x,y) \; dy\, dx$ with the order of integration reversed.
+  \response
+    What is $\displaystyle \int_0^1 \int_y^1 F(x,y) \; dx\, dy$?
+  \solution
+    The region of integration is $\{(x,y)\colon 0\le y\le x\le 1\}$, the triangle below $y=x$.
+    Switching the order: $x$ ranges from $y$ to $1$, and $y$ from $0$ to $1$, so
+    \[
+    \int_0^1\int_0^x F(x,y)\,dy\,dx=\int_0^1\int_y^1 F(x,y)\,dx\,dy.
+    \]
+  \end{clue}
+
+  \begin{clue}
+    \textbf{Placeholder.} Topic idea: a double integral over a region that is not a rectangle, such as a triangle bounded by two lines and an axis (Section 6.2).
+  \response
+    To be written.
+  \end{clue}
+
+\end{category}
+
+%======================================================================
+\begin{category}{Potpourri}
+
+  \begin{clue}
+    The smallest of the irrational numbers $\pi$, $e$, and $\sqrt{2}$.
+  \response
+    What is $\sqrt{2}$?
+  \end{clue}
+
+  \begin{clue}
+    The second full moon in a single month
+  \response
+    What is a blue moon?
+  \end{clue}
+
+  \begin{clue}
+    Evaluate $\displaystyle \int xe^x \, dx$.
+  \response
+    What is $xe^x-e^x+C$?
+  \solution
+    Use integration by parts with $u=x$ and $dv=e^x\,dx$. Then $du=dx$ and $v=e^x$,
+    \begin{align*}
+    \int xe^x\,dx
+    &=xe^x-\int e^x\,dx \\
+    &=xe^x-e^x+c.
+    \end{align*}
+  \end{clue}
+
+  \begin{clue}
+    A ``mathematical'' car from Acura
+
+    (at least the ``LS'' model)
+  \response
+    What is the ``INTEGRA LS''?
+  \end{clue}
+
+  \begin{clue}
+    Suppose an ant is at one corner of a $1\times 1\times 1$ cube. What's the shortest distance it must walk (on the outside of the cube) to reach the opposite corner?
+  \response
+    What is $\sqrt{5}$?
+  \solution
+    When we unfold the faces of the cube, we see that the ant must walk across a $1\times 2$ rectangle. The ant's shortest path is the straight-line diagonal across this rectangle, which has length $\sqrt{1^2+2^2}=\sqrt{5}$.
+  \end{clue}
+
+\end{category}
+
+%======================================================================
+\begin{final}{To be chosen}
+  \textbf{Placeholder.} Topic idea: a problem that ties several chapters together, such as the volume of the solid under a tangent plane and above a rectangle.
+\response
+  To be written.
+\end{final}
+
+\end{document}
