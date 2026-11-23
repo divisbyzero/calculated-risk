@@ -118,9 +118,19 @@ Copy [`latex/template.tex`](latex/template.tex) and fill it in:
 - When you load a file, the app lists problems with line numbers, and
   **Preview every clue and response** shows everything rendered.
 
-**Printable answer key:** with [`latex/jeopardy.sty`](latex/jeopardy.sty) in the
-same folder as your game, `pdflatex mygame.tex` produces a PDF listing every
-clue, response and solution.
+**Your macros:** games can `\usepackage{MyMathMacros}`. The app reads macros
+from any `.sty` file in `latex/`, so `\R`, `\ep`, `\proj`, `\bvec` and the rest
+work on screen. [`latex/MyMathMacros.sty`](latex/MyMathMacros.sty) is a copy
+of the one in LaTeX-templates-and-masters; copy it over again when that one
+changes. A few macros that MathJax can't run (`\dotprod`, `\uveci`, `\uvecj`,
+`\ndv`, and esvect's `\vv`) have screen versions in `MATHJAX_MACROS` in
+[`js/config.js`](js/config.js).
+
+**Printable answer key:** open a game in VS Code and save it. The workspace
+settings use the same LaTeX Workshop setup as LaTeX-templates-and-masters
+(xelatex through latexmk, output in `tempfiles/`, latexindent on save) and
+also find `jeopardy.sty` and `MyMathMacros.sty` in `latex/`. The PDF lists
+every clue, response and solution.
 
 **Built-in games:** put a `.tex` file in `games/` and add it to
 [`games/index.json`](games/index.json).
@@ -135,5 +145,6 @@ clue, response and solution.
 | `js/config.js` | Board size and values (5 or 6 categories of 5 clues; set `enforceStandardSize` to `false` to allow other sizes) |
 | `js/sync.js` | Connects the two windows (BroadcastChannel) |
 | `js/math.js`, `js/mathjax-config.js` | MathJax setup and typesetting |
-| `latex/` | `jeopardy.sty` and a blank template |
+| `latex/` | `jeopardy.sty`, a copy of `MyMathMacros.sty`, and a blank template |
+| `.vscode/settings.json`, `localSettings.yaml` | LaTeX Workshop and latexindent settings, copied from LaTeX-templates-and-masters |
 | `games/` | Built-in games and their list |

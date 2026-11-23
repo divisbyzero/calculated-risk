@@ -1,7 +1,7 @@
 // The host (professor) window. It owns the game state and sends the board
 // window what it should display.
 
-import { parseGame } from './texparser.js';
+import { parseGame, packagesUsed } from './texparser.js';
 import { openChannel, syncSupported } from './sync.js';
 import { setMathHTML, setMacros, mathAvailable } from './math.js';
 import { escapeHtml, formatScore } from './util.js';
@@ -128,7 +128,7 @@ async function onGameListClick(e) {
   try {
     const res = await fetch(`games/${btn.dataset.file}`, { cache: 'no-cache' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    loadSource(await res.text(), btn.dataset.file);
+    await loadSource(await res.text(), btn.dataset.file);
     markSelected(btn);
   } catch (err) {
     alert(`Couldn’t load ${btn.dataset.file}: ${err.message}`);
@@ -138,7 +138,7 @@ async function onGameListClick(e) {
 async function onFileChosen(e) {
   const file = e.target.files[0];
   if (!file) return;
-  loadSource(await file.text(), file.name);
+  await loadSource(await file.text(), file.name);
   markSelected(null);
   e.target.value = ''; // so choosing the same file again reloads it
 }
@@ -147,8 +147,25 @@ function markSelected(btn) {
   document.querySelectorAll('.game-option').forEach((b) => b.classList.toggle('selected', b === btn));
 }
 
-function loadSource(text, source) {
-  loaded = { ...parseGame(text), source };
+// Fetch latex/<name>.sty for each package the game uses, when it exists, so
+// the game's macros from those packages work on screen.
+async function fetchPackages(text) {
+  const packages = {};
+  for (const name of packagesUsed(text)) {
+    if (name === 'jeopardy' || !/^[A-Za-z0-9_-]+$/.test(name)) continue;
+    try {
+      const res = await fetch(`latex/${name}.sty`, { cache: 'no-cache' });
+      if (res.ok) packages[name] = await res.text();
+    } catch {
+      /* not available */
+    }
+  }
+  return packages;
+}
+
+async function loadSource(text, source) {
+  const packages = await fetchPackages(text);
+  loaded = { ...parseGame(text, { packages }), source };
   setMacros(loaded.game.macros);
   renderLoadStatus();
   updateStartButton();
@@ -162,10 +179,10 @@ function renderLoadStatus() {
     <div class="${errors.length ? 'load-bad' : 'load-ok'}">
       <strong>${escapeHtml(source)}</strong>: <span class="clue-content">${game.titleHtml}</span>
       <div class="small">${summary}</div>
-      ${errors.length ? `<div><strong>${errors.length} problem${errors.length === 1 ? '' : 's'} to fix before playing:</strong></div><ul class="msg-list msg-errors">${errors.map((m) => `<li>${escapeHtml(m)}</li>`).join('')}</ul>` : ''}
+      ${errors.length ? `<div><strong>${errors.length} problem${errors.length === 1 ? '' : 's'} to fix before playing:</strong></div><ul class="msg-list msg-errors mathjax_ignore">${errors.map((m) => `<li>${escapeHtml(m)}</li>`).join('')}</ul>` : ''}
     </div>`;
   if (warnings.length) {
-    html += `<ul class="msg-list msg-warnings">${warnings.map((m) => `<li>${escapeHtml(m)}</li>`).join('')}</ul>`;
+    html += `<ul class="msg-list msg-warnings mathjax_ignore">${warnings.map((m) => `<li>${escapeHtml(m)}</li>`).join('')}</ul>`;
   }
   setMathHTML($('#load-status'), html);
 

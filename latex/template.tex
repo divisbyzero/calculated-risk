@@ -13,17 +13,19 @@
 %     After a correct answer, the board can show the response and solution.
 %   * Mark a Daily Double with \begin{clue}[dailydouble].
 %   * Math works inside $...$, \(...\), \[...\], and environments like align*.
-%   * \newcommand macros defined below work inside math.
+%   * Macros from MyMathMacros.sty (\R, \ep, \proj, \bvec, ...) and any
+%     \newcommand macros defined below work inside math.
 %   * In text you can use \textbf, \emph, \textit, itemize, enumerate, \\,
 %     and \$ for a dollar sign.
 
 \documentclass{article}
 \usepackage{jeopardy}
+\usepackage{MyMathMacros}
 
 \gametitle{My Game Title}
 
-% Your macros (optional):
-% \newcommand{\R}{\mathbb{R}}
+% Game-specific macros (optional):
+% \newcommand{\avg}[1]{\overline{#1}}
 
 \begin{document}
 

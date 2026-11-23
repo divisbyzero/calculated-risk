@@ -6,7 +6,7 @@
 //
 // Errors stop a game from starting; warnings are shown but don't.
 
-import { BOARD, clueValue } from './config.js';
+import { BOARD, clueValue, MATHJAX_MACROS } from './config.js';
 import { escapeHtml } from './util.js';
 
 const MATH_ENVS = new Set([
@@ -23,7 +23,35 @@ const PAR = '';
 // ---------------------------------------------------------------------------
 // Top level
 
-export function parseGame(source) {
+// Names of the packages a game file loads with \usepackage.
+export function packagesUsed(source) {
+  const text = stripComments(String(source));
+  const names = [];
+  const re = /\\usepackage\s*(?:\[[^\]]*\])?\s*\{([^}]*)\}/g;
+  let m;
+  while ((m = re.exec(text))) {
+    for (const n of m[1].split(',')) {
+      const name = n.trim();
+      if (name && !names.includes(name)) names.push(name);
+    }
+  }
+  return names;
+}
+
+// Packages whose features MathJax already has (or that don't matter on
+// screen), so a missing .sty file isn't worth a warning.
+const KNOWN_PACKAGES = new Set([
+  'jeopardy', 'amsmath', 'amssymb', 'amsthm', 'amsfonts', 'mathtools',
+  'mathrsfs', 'bm', 'graphicx', 'xcolor', 'color', 'geometry', 'enumitem',
+  'enumerate', 'hyperref', 'cleveref', 'booktabs', 'array', 'multicol',
+  'todonotes', 'tikz', 'pgfplots', 'fullpage', 'fontspec', 'inputenc',
+  'fontenc', 'lmodern', 'stmaryrd', 'esvect', 'accents', 'cancel',
+]);
+
+// options.packages: { name: contents of name.sty } for packages the app
+// could load. Their macros are made available to MathJax.
+export function parseGame(source, options = {}) {
+  const packages = options.packages || {};
   const errors = [];
   const warnings = [];
   const seenWarnings = new Set();
@@ -63,7 +91,21 @@ export function parseGame(source) {
     bodyEnd = text.length;
   }
 
-  const { defs, names: macroNames } = parseMacros(text.slice(0, preEnd), err);
+  // Macros: first from loaded packages, then the file's own (which win).
+  const macros = new Map();
+  for (const name of packagesUsed(text.slice(0, preEnd))) {
+    if (packages[name] !== undefined) {
+      parseMacros(stripComments(packages[name]), null).forEach(({ name: n, def }) => macros.set(n, def));
+    } else if (!KNOWN_PACKAGES.has(name)) {
+      warn(`The app can't read the package ${name}, so its macros won't work on screen. To fix this, put a copy of ${name}.sty in the app's latex/ folder.`);
+    }
+  }
+  parseMacros(text.slice(0, preEnd), err).forEach(({ name: n, def }) => macros.set(n, def));
+  for (const [n, def] of Object.entries(MATHJAX_MACROS)) {
+    if (n === 'vv' || macros.has(n)) macros.set(n, def);
+  }
+  const macroNames = new Set(macros.keys());
+  const defs = [...macros.values()];
 
   const convert = (src, off) =>
     convertTex(src, {
@@ -293,12 +335,19 @@ function splitResponse(text, start, end, where, off, ctx) {
 }
 
 // ---------------------------------------------------------------------------
-// Macros from the preamble: \newcommand, \renewcommand, \providecommand,
-// \DeclareMathOperator. They are handed to MathJax, so they work in math.
+// Macros from the preamble or a package: \newcommand, \renewcommand,
+// \providecommand, \DeclareMathOperator. They are handed to MathJax, so they
+// work in math. Returns [{ name, def }].
+//
+// With err = null (reading a .sty file), anything that can't be read, and
+// internal macros with @ in their names, are skipped silently.
 
 function parseMacros(pre, err) {
-  const defs = [];
-  const names = new Set();
+  const lenient = err === null;
+  const fail = (msg, off) => {
+    if (!lenient) err(msg, off);
+  };
+  const out = [];
   const re = /\\(newcommand|renewcommand|providecommand|DeclareMathOperator)(\*?)/g;
   let m;
   while ((m = re.exec(pre))) {
@@ -307,33 +356,35 @@ function parseMacros(pre, err) {
     if (pre[i] === '{') {
       const g = readGroup(pre, i);
       if (!g) {
-        err(`Couldn't read the macro name after \\${m[1]}.`, m.index);
+        fail(`Couldn't read the macro name after \\${m[1]}.`, m.index);
         continue;
       }
       name = g.content.trim();
       i = g.end;
     } else {
-      const nm = /^\\([A-Za-z]+|.)/.exec(pre.slice(i));
+      const nm = /^\\([A-Za-z@]+|.)/.exec(pre.slice(i));
       if (!nm) {
-        err(`Couldn't read the macro name after \\${m[1]}.`, m.index);
+        fail(`Couldn't read the macro name after \\${m[1]}.`, m.index);
         continue;
       }
       name = nm[0];
       i += nm[0].length;
     }
-    if (!/^\\([A-Za-z]+|.)$/.test(name)) {
-      err(`"${name}" isn't a valid macro name.`, m.index);
+    const internal = lenient && name.includes('@');
+    if (!internal && !/^\\([A-Za-z]+|.)$/.test(name)) {
+      fail(`"${name}" isn't a valid macro name.`, m.index);
       continue;
     }
 
+    let def;
     i = skipWs(pre, i);
     if (m[1] === 'DeclareMathOperator') {
       const g = readGroup(pre, i);
       if (!g) {
-        err(`Couldn't read the definition of ${name}.`, m.index);
+        fail(`Couldn't read the definition of ${name}.`, m.index);
         continue;
       }
-      defs.push(`\\newcommand{${name}}{\\operatorname${m[2]}{${g.content}}}`);
+      def = `\\newcommand{${name}}{\\operatorname${m[2]}{${g.content}}}`;
       i = g.end;
     } else {
       let nargs = '';
@@ -341,7 +392,7 @@ function parseMacros(pre, err) {
       if (pre[i] === '[') {
         const b = readBracket(pre, i);
         if (!b) {
-          err(`Couldn't read the number of arguments for ${name}.`, m.index);
+          fail(`Couldn't read the number of arguments for ${name}.`, m.index);
           continue;
         }
         nargs = `[${b.content.trim()}]`;
@@ -356,16 +407,16 @@ function parseMacros(pre, err) {
       }
       const g = readGroup(pre, i);
       if (!g) {
-        err(`Couldn't read the definition of ${name} (missing braces?).`, m.index);
+        fail(`Couldn't read the definition of ${name} (missing braces?).`, m.index);
         continue;
       }
-      defs.push(`\\newcommand{${name}}${nargs}${optDefault}{${g.content}}`);
+      def = `\\newcommand{${name}}${nargs}${optDefault}{${g.content}}`;
       i = g.end;
     }
-    names.add(name.slice(1));
+    if (!internal) out.push({ name: name.slice(1), def });
     re.lastIndex = i;
   }
-  return { defs, names };
+  return out;
 }
 
 // ---------------------------------------------------------------------------

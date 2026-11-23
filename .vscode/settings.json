@@ -1,0 +1,381 @@
+{
+  "latex-workshop.latex.recipes": [
+    {
+      "name": "latexmk",
+      "tools": [
+        "latexmk"
+      ]
+    }
+  ],
+  "latex-workshop.latex.tools": [
+    {
+      "name": "latexmk",
+      "command": "latexmk",
+      "args": [
+        "-shell-escape",
+        // Find jeopardy.sty and MyMathMacros.sty in latex/ from any folder
+        "-e",
+        "ensure_path('TEXINPUTS', '%WORKSPACE_FOLDER%/latex//')",
+        "-pdf",
+        "-pdflatex=xelatex -interaction=nonstopmode -synctex=1",
+        "-file-line-error",
+        "-outdir=tempfiles",
+        "%DOC%"
+      ]
+    }
+  ],
+  "latex-workshop.latex.autoBuild.run": "onSave", // Options: "never", "onFileChange", "onSave"
+  "latex-workshop.latex.rootFile.useSubFile": false,
+  "latex-workshop.latex.rootFile.doNotPrompt": true,
+  "latex-workshop.latex.autoClean.run": "never", // Options: "never", "onSave", "onBuild"
+  "latex-workshop.latex.clean.method": "glob",
+  "latex-workshop.latex.clean.subfolder.enabled": true,
+  // Turn off the CSS invert filter regardless of theme
+  "latex-workshop.view.pdf.invertMode.enabled": "never",
+  "latex-workshop.view.pdf.invert": 0,
+  // Make sure no forced "page colors" are applied in dark mode
+  "latex-workshop.view.pdf.color.dark.pageColorsForeground": "",
+  "latex-workshop.view.pdf.color.dark.pageColorsBackground": "",
+  // (Optional) leave the viewer chrome light even in dark OS theme
+  "latex-workshop.view.pdf.color.dark.backgroundColor": "#ffffff",
+  "latex-workshop.view.pdf.color.dark.pageBorderColor": "lightgrey",
+  "latex-workshop.latex.clean.fileTypes": [
+    "*.aux",
+    "*.auxlock",
+    "*.bbl",
+    "*.blg",
+    "*.idx",
+    "*.ilg",
+    "*.ind",
+    "*.lof",
+    "*.lot",
+    "*.out",
+    "*.toc",
+    "*.acn",
+    "*.acr",
+    "*.alg",
+    "*.glg",
+    "*.glo",
+    "*.gls",
+    "*.fls",
+    "*.log",
+    "*.fdb_latexmk",
+    "*.xdv",
+    "*.ent",
+    "*.nav",
+    "*.snm",
+    "*.bcf",
+    "*.vrb",
+    "*.run.xml"
+  ],
+  "latex-workshop.formatting.latex": "latexindent",
+  "latex-workshop.formatting.latexindent.path": "/Library/TeX/texbin/latexindent",
+  "latex-workshop.formatting.latexindent.args": [
+    "-c",
+    "%DIR%/",
+    "-l",
+    "%TMPFILE%",
+    "-y=defaultIndent: '%INDENT%'"
+  ],
+  "files.watcherExclude": {
+    "**/tempfiles/**": true
+  },
+  "search.exclude": {
+    "**/tempfiles/**": true
+  },
+  "[latex]": {
+    "editor.defaultFormatter": "James-Yu.latex-workshop",
+    "editor.formatOnSave": true
+  },
+  // ==========================================
+  // BETTER COMMENTS CONFIGURATION
+  // ==========================================
+  "better-comments.languages": [
+    {
+      "id": "latex",
+      "singleLineComment": "%"
+    },
+    {
+      "id": "tex",
+      "singleLineComment": "%"
+    },
+    {
+      "id": "bibtex",
+      "singleLineComment": "%"
+    }
+  ],
+  "better-comments.tags": [
+    // Standard Alert / Alert Modifiers
+    {
+      "tag": "!",
+      "color": "#FF2D00",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": true,
+      "italic": false
+    },
+    {
+      "tag": "?",
+      "color": "#3498DB",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": true,
+      "italic": false
+    },
+    {
+      "tag": "//",
+      "color": "#474747",
+      "strikethrough": true,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": false,
+      "italic": true
+    },
+    {
+      "tag": "*",
+      "color": "#98C379",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": false,
+      "italic": false
+    },
+    // Research & Validation
+    {
+      "tag": "READ",
+      "color": "#00BFFF",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": true,
+      "italic": false
+    },
+    {
+      "tag": "VERIFY",
+      "color": "#E67E22",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": true,
+      "italic": false
+    },
+    // Content to Add
+    {
+      "tag": "ADDCITATION",
+      "color": "#9B59B6",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": true,
+      "italic": false
+    },
+    {
+      "tag": "ADDFIGURE",
+      "color": "#1ABC9C",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": true,
+      "italic": false
+    },
+    {
+      "tag": "ADDPROOF",
+      "color": "#5B8DB8",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": true,
+      "italic": false
+    },
+    {
+      "tag": "ADDEXAMPLE",
+      "color": "#C9A227",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": true,
+      "italic": false
+    },
+    {
+      "tag": "ADDCAPTION",
+      "color": "#48C9B0",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": true,
+      "italic": false
+    },
+    // Structural Planning
+    {
+      "tag": "MOVE",
+      "color": "#F1C40F",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": true,
+      "italic": false
+    },
+    // Editorial / Prose Refinement
+    {
+      "tag": "REWRITE",
+      "color": "#E74C3C",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": true,
+      "italic": false
+    },
+    {
+      "tag": "EXPAND",
+      "color": "#2ECC71",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": true,
+      "italic": false
+    },
+    {
+      "tag": "TRIM",
+      "color": "#95A5A6",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": true,
+      "italic": false
+    },
+    // Task Management
+    {
+      "tag": "TODO",
+      "color": "#FF8C00",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": true,
+      "italic": false
+    },
+    {
+      "tag": "FIX",
+      "color": "#FF007F",
+      "strikethrough": false,
+      "underline": false,
+      "backgroundColor": "transparent",
+      "bold": true,
+      "italic": false
+    }
+  ],
+  // ==========================================
+  // COMPLETE TODO TREE CONFIGURATION WITH ICONS & COLORS
+  // ==========================================
+  "better-todo-tree.general.tags": [
+    "!",
+    "?",
+    "*",
+    "READ",
+    "VERIFY",
+    "ADDCITATION",
+    "ADDFIGURE",
+    "ADDPROOF",
+    "ADDEXAMPLE",
+    "ADDCAPTION",
+    "MOVE",
+    "REWRITE",
+    "EXPAND",
+    "TRIM",
+    "TODO",
+    "FIX"
+  ],
+  "better-todo-tree.general.groupBy": "tag",
+  "better-todo-tree.regex.regex": "(?<=%)\\s*(?:([!\\?\\*])|($TAGS))",
+  "better-todo-tree.highlights.useColorScheme": false, // False allows us to enforce exact matching colors below
+  // Individual styling rules for colors and icons in the Tree view and editor
+  "better-todo-tree.highlights.customHighlight": {
+    // Special Symbols
+    "!": {
+      "foreground": "#FF2D00",
+      "icon": "alert",
+      "iconColor": "#FF2D00"
+    },
+    "?": {
+      "foreground": "#3498DB",
+      "icon": "question",
+      "iconColor": "#3498DB"
+    },
+    "*": {
+      "foreground": "#98C379",
+      "icon": "star",
+      "iconColor": "#98C379"
+    },
+    // Research & Validation
+    "READ": {
+      "foreground": "#00BFFF",
+      "icon": "book",
+      "iconColor": "#00BFFF"
+    },
+    "VERIFY": {
+      "foreground": "#E67E22",
+      "icon": "checklist",
+      "iconColor": "#E67E22"
+    },
+    // Content to Add
+    "ADDCITATION": {
+      "foreground": "#9B59B6",
+      "icon": "quote",
+      "iconColor": "#9B59B6"
+    },
+    "ADDFIGURE": {
+      "foreground": "#1ABC9C",
+      "icon": "file-media",
+      "iconColor": "#1ABC9C"
+    },
+    "ADDPROOF": {
+      "foreground": "#5B8DB8",
+      "icon": "beaker",
+      "iconColor": "#5B8DB8"
+    },
+    "ADDEXAMPLE": {
+      "foreground": "#C9A227",
+      "icon": "light-bulb",
+      "iconColor": "#C9A227"
+    },
+    "ADDCAPTION": {
+      "foreground": "#48C9B0",
+      "icon": "comment",
+      "iconColor": "#48C9B0"
+    },
+    // Structural Planning
+    "MOVE": {
+      "foreground": "#F1C40F",
+      "icon": "arrow-both",
+      "iconColor": "#F1C40F"
+    },
+    // Editorial / Prose Refinement
+    "REWRITE": {
+      "foreground": "#E74C3C",
+      "icon": "pencil",
+      "iconColor": "#E74C3C"
+    },
+    "EXPAND": {
+      "foreground": "#2ECC71",
+      "icon": "diff-added",
+      "iconColor": "#2ECC71"
+    },
+    "TRIM": {
+      "foreground": "#95A5A6",
+      "icon": "fold",
+      "iconColor": "#95A5A6"
+    },
+    // Task Management
+    "TODO": {
+      "foreground": "#FF8C00",
+      "icon": "check",
+      "iconColor": "#FF8C00"
+    },
+    "FIX": {
+      "foreground": "#FF007F",
+      "icon": "flame",
+      "iconColor": "#FF007F"
+    }
+  }
+}

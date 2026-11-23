@@ -1,0 +1,73 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{MyMathMacros}
+
+% Personal math macro library.
+
+\RequirePackage{amsmath}   % \DeclareMathOperator, \bmod, \boldsymbol
+\RequirePackage{amssymb}   % \mathbb, \mathcal
+\RequirePackage{esvect}    % \vv  (used in \bvec)
+\RequirePackage{graphicx}  % \scalebox  (used in \dotprod)
+
+
+% ============================================================
+% NUMBER SYSTEMS
+% ============================================================
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\ep}{\varepsilon}
+\newcommand{\grad}{\nabla}
+\newcommand{\powerset}{\mathcal{P}}  
+\DeclareMathOperator{\Int}{int}
+\DeclareMathOperator{\proj}{proj}
+\DeclareMathOperator{\orth}{orth}
+\DeclareMathOperator{\comp}{comp}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\dom}{Dom}
+\DeclareMathOperator{\codom}{Codom}
+\DeclareMathOperator{\range}{Range}
+\DeclareMathOperator{\dv}{div}
+\newcommand{\ndv}{\hspace{-4pt}\not|\hspace{2pt}}
+\DeclareMathOperator{\cl}{cl}
+\renewcommand{\iff}{\leftrightarrow}
+\renewcommand{\implies}{\to}
+\renewcommand{\neg}{\sim}
+\renewcommand{\mod}{\bmod}
+\newcommand{\bvec}[1]{\vv{\mathbf{#1}}}
+\newcommand{\uvec}[1]{\boldsymbol{\hat{\textbf{#1}}}}
+\newcommand{\uveci}{\uvec{\i}}
+\newcommand{\uvecj}{\uvec{\j}}
+\newcommand{\uveck}{\uvec{k}}
+
+
+% ============================================================
+% DOT PRODUCT
+% ============================================================
+% Custom scaled-bullet dot product symbol.
+% Requires \usepackage{graphicx} for \scalebox.
+
+\makeatletter
+\newcommand*{\dotprod}{}
+\DeclareRobustCommand*{\dotprod}{%
+  \mathbin{\mathpalette\dotprod@{}}%
+}
+\newcommand*{\dotprod@scalefactor}{.6}
+\newcommand*{\dotprod@widthfactor}{1.15}
+\newcommand*{\dotprod@}[2]{%
+  \sbox0{$#1\vcenter{}$}%
+  \sbox2{$#1\cdot\m@th$}%
+  \hbox to \dotprod@widthfactor\wd2{%
+    \hfil
+    \raise\ht0\hbox{%
+      \scalebox{\dotprod@scalefactor}{%
+        \lower\ht0\hbox{$#1\bullet\m@th$}%
+      }%
+    }%
+    \hfil
+  }%
+}
+\makeatother

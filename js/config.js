@@ -13,6 +13,18 @@ export const BOARD = {
   enforceStandardSize: true,
 };
 
+// MathJax versions of macros whose LaTeX definitions MathJax can't run
+// (they rely on other packages or low-level TeX). One of these replaces a
+// macro of the same name when a game or package defines it; \vv (from
+// esvect) is always available.
+export const MATHJAX_MACROS = {
+  vv: '\\newcommand{\\vv}[1]{\\overrightarrow{#1}}',
+  dotprod: '\\newcommand{\\dotprod}{\\mathbin{\\scriptstyle\\bullet}}',
+  uveci: '\\newcommand{\\uveci}{\\boldsymbol{\\hat{\\imath}}}',
+  uvecj: '\\newcommand{\\uvecj}{\\boldsymbol{\\hat{\\jmath}}}',
+  ndv: '\\newcommand{\\ndv}{\\nmid}',
+};
+
 export function clueValue(row) {
   return (row + 1) * BOARD.valueStep;
 }
