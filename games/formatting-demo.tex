@@ -1,0 +1,182 @@
+% A game that shows what you can write in clues and responses.
+\documentclass{article}
+\usepackage{jeopardy}
+
+\gametitle{Formatting Demo}
+
+% Macros defined here work inside math in every clue.
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\dd}[1]{\frac{d}{d#1}}
+\newcommand{\abs}[1]{\left|#1\right|}
+\DeclareMathOperator{\Span}{span}
+
+\begin{document}
+
+\begin{category}{Inline math}
+  \begin{clue}
+    Inline math with dollar signs: $f(x) = x^3 - 2x$.
+  \response
+    $f'(x) = 3x^2 - 2$
+  \end{clue}
+  \begin{clue}
+    Inline math with parentheses: \(\sin^2\theta + \cos^2\theta\).
+  \response
+    \(1\)
+  \end{clue}
+  \begin{clue}
+    A macro from the preamble: $\dd{x}\left(e^{x}\right)$
+  \response
+    $e^x$
+  \end{clue}
+  \begin{clue}
+    Another macro: $\abs{-7}$ and the reals $\R$.
+  \response
+    $7$
+  \end{clue}
+  \begin{clue}
+    A declared operator: $\Span\{v_1, v_2\}$
+  \response
+    All linear combinations $a v_1 + b v_2$
+  \end{clue}
+\end{category}
+
+\begin{category}{Display math}
+  \begin{clue}
+    Display math on its own line:
+    \[ \int_0^{\pi} \sin x \, dx \]
+  \response
+    $2$
+  \end{clue}
+  \begin{clue}
+    Double-dollar display:
+    $$ \lim_{n \to \infty} \left(1 + \frac{1}{n}\right)^n $$
+  \response
+    $e$
+  \end{clue}
+  \begin{clue}
+    An \texttt{align*} environment:
+    \begin{align*}
+      x + y &= 5 \\
+      x - y &= 1
+    \end{align*}
+  \response
+    $x = 3$, $y = 2$
+  \end{clue}
+  \begin{clue}[dailydouble]
+    A matrix: $A = \begin{pmatrix} 1 & 2 \\ 3 & 4 \end{pmatrix}$. Find $\det A$.
+  \response
+    $-2$
+  \end{clue}
+  \begin{clue}
+    A piecewise function:
+    \[ f(x) = \begin{cases} x^2 & x \ge 0 \\ -x & x < 0 \end{cases} \]
+  \response
+    $f(-3) = 3$
+  \end{clue}
+\end{category}
+
+\begin{category}{Text formatting}
+  \begin{clue}
+    \textbf{Bold}, \emph{emphasis}, and \textit{italics}.
+  \response
+    Formatting works.
+  \end{clue}
+  \begin{clue}
+    A dollar sign in text: it costs \$5.
+  \response
+    \$5
+  \end{clue}
+  \begin{clue}
+    Line breaks:\\ second line\\ third line
+  \response
+    Three lines
+  \end{clue}
+  \begin{clue}
+    Quotes and dashes: ``quoted'' text, pages 3--5, and a pause---like this.
+  \response
+    Typographic quotes and dashes
+  \end{clue}
+  \begin{clue}
+    Accents: Poincar\'e, Erd\H{o}s, G\"odel.
+  \response
+    Names with accents
+  \end{clue}
+\end{category}
+
+\begin{category}{Lists}
+  \begin{clue}
+    Which of these is prime?
+    \begin{itemize}
+      \item $21$
+      \item $23$
+      \item $25$
+    \end{itemize}
+  \response
+    $23$
+  \end{clue}
+  \begin{clue}
+    Put in order:
+    \begin{enumerate}
+      \item Differentiate
+      \item Set equal to zero
+      \item Solve
+    \end{enumerate}
+  \response
+    Finding critical points
+  \end{clue}
+  \begin{clue}
+    Short clue.
+  \response
+    Short response.
+  \end{clue}
+  \begin{clue}
+    A longer clue to show how the board shrinks text to fit. Let
+    $f:\R \to \R$ be continuous on $[a,b]$ and differentiable on $(a,b)$.
+    Then there is some $c \in (a,b)$ where the tangent line is parallel
+    to the secant line through the endpoints, that is,
+    \[ f'(c) = \frac{f(b) - f(a)}{b - a}. \]
+  \response
+    The Mean Value Theorem
+  \end{clue}
+  \begin{clue}
+    Comments are ignored. % This comment won't appear.
+  \response
+    Nothing after the percent sign shows.
+  \end{clue}
+\end{category}
+
+\begin{category}{Math in a name $\Sigma$}
+  \begin{clue}
+    Category names can contain math.
+  \response
+    Response
+  \end{clue}
+  \begin{clue}
+    Greek: $\alpha, \beta, \gamma, \delta, \varepsilon$
+  \response
+    Response
+  \end{clue}
+  \begin{clue}
+    Sets: $A \cup B$, $A \cap B$, $A \setminus B$
+  \response
+    Response
+  \end{clue}
+  \begin{clue}
+    Logic: $\forall x\, \exists y : y > x$
+  \response
+    Response
+  \end{clue}
+  \begin{clue}
+    Blackboard bold: $\mathbb{N} \subset \mathbb{Z} \subset \mathbb{Q} \subset \R$
+  \response
+    Response
+  \end{clue}
+\end{category}
+
+\begin{final}{Famous Constants}
+  It equals $\displaystyle\sum_{n=0}^{\infty} \frac{1}{n!}$.
+\response
+  What is $e$?
+\end{final}
+
+\end{document}

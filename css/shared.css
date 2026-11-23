@@ -1,0 +1,26 @@
+/* Styles for clue content, used by both the host and the board. */
+
+.tex-sc { font-variant: small-caps; }
+.tex-sf { font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; }
+.tex-center { text-align: center; }
+.tex-left { text-align: left; }
+.tex-right { text-align: right; }
+
+.clue-content ul,
+.clue-content ol {
+  display: inline-block;
+  text-align: left;
+  margin: 0.3em 0;
+  padding-left: 1.4em;
+}
+
+.clue-content li { margin: 0.15em 0; }
+
+.clue-content code {
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.9em;
+}
+
+.clue-content mjx-container[display="true"] {
+  margin: 0.5em 0 !important;
+}

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jeopardy Host</title>
+  <link rel="stylesheet" href="css/shared.css">
+  <link rel="stylesheet" href="css/host.css">
+  <script src="js/mathjax-config.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+  <script type="module" src="js/host.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-title" id="topbar-title">Jeopardy! <span class="muted">Host</span></div>
+    <div class="topbar-actions">
+      <span id="board-status" class="status-chip">Board window: not open</span>
+      <button id="btn-open-board" class="btn">Open board window</button>
+      <button id="btn-undo" class="btn" hidden>Undo</button>
+      <button id="btn-final" class="btn" hidden>Final Jeopardy</button>
+      <button id="btn-new" class="btn" hidden>End game</button>
+    </div>
+  </header>
+
+  <div id="notices"></div>
+
+  <!-- Setup -->
+  <main id="setup-screen" class="setup">
+    <section class="card" id="resume-card" hidden>
+      <h2>Saved game</h2>
+      <p id="resume-text"></p>
+      <div class="row">
+        <button id="btn-resume" class="btn primary">Resume</button>
+        <button id="btn-discard" class="btn">Discard</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2><span class="step">1</span> Choose a game</h2>
+      <div id="game-list" class="game-list"></div>
+      <div class="row">
+        <label class="btn file-btn">
+          Load a .tex file&hellip;
+          <input type="file" id="file-input" accept=".tex,text/x-tex,application/x-tex,text/plain">
+        </label>
+        <span class="muted small">Your file stays on this computer. Start from <a href="latex/template.tex" download>template.tex</a>.</span>
+      </div>
+      <div id="load-status"></div>
+      <details id="preview" hidden>
+        <summary>Preview every clue and response</summary>
+        <div id="preview-body" class="preview"></div>
+      </details>
+    </section>
+
+    <section class="card">
+      <h2><span class="step">2</span> Teams</h2>
+      <div id="team-list" class="team-list"></div>
+      <button id="btn-add-team" class="btn">Add team</button>
+    </section>
+
+    <section class="card">
+      <h2><span class="step">3</span> Board window</h2>
+      <p class="muted">
+        Set your display to <strong>extend</strong> (not mirror) onto the projector.
+        Click <strong>Open board window</strong> at the top, drag the new window to the projector,
+        then click inside it or press <kbd>F</kbd> to make it full screen.
+      </p>
+    </section>
+
+    <div class="start-row">
+      <button id="btn-start" class="btn primary big" disabled>Start game</button>
+      <span id="start-hint" class="muted small">Choose a game first.</span>
+    </div>
+  </main>
+
+  <!-- Game -->
+  <div id="game-screen" class="game" hidden>
+    <main id="host-main" class="host-main"></main>
+    <aside id="host-side" class="host-side"></aside>
+  </div>
+</body>
+</html>

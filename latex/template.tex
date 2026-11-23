@@ -1,0 +1,194 @@
+% Jeopardy game template.
+%
+% Copy this file, fill in the clues, and load it in the app with
+% "Load a .tex file". Keep jeopardy.sty in the same folder if you also want
+% to compile it with pdflatex to get a printable answer key.
+%
+% Rules:
+%   * Exactly 5 categories, each with exactly 5 clues.
+%   * Clues are worth 100, 200, 300, 400, 500 in the order they appear.
+%     To reorder, just move the \begin{clue} ... \end{clue} blocks.
+%   * Each clue is: the clue, then \response, then the correct response.
+%   * Mark a Daily Double with \begin{clue}[dailydouble].
+%   * Math works inside $...$, \(...\), \[...\], and environments like align*.
+%   * \newcommand macros defined below work inside math.
+%   * In text you can use \textbf, \emph, \textit, itemize, enumerate, \\,
+%     and \$ for a dollar sign.
+
+\documentclass{article}
+\usepackage{jeopardy}
+
+\gametitle{My Game Title}
+
+% Your macros (optional):
+% \newcommand{\R}{\mathbb{R}}
+
+\begin{document}
+
+\begin{category}{First Category}
+  \begin{clue}
+    Clue
+  \response
+    Response
+  \end{clue}
+
+  \begin{clue}
+    Clue
+  \response
+    Response
+  \end{clue}
+
+  \begin{clue}
+    Clue
+  \response
+    Response
+  \end{clue}
+
+  \begin{clue}
+    Clue
+  \response
+    Response
+  \end{clue}
+
+  \begin{clue}
+    Clue
+  \response
+    Response
+  \end{clue}
+\end{category}
+
+\begin{category}{Second Category}
+  \begin{clue}
+    Clue
+  \response
+    Response
+  \end{clue}
+
+  \begin{clue}
+    Clue
+  \response
+    Response
+  \end{clue}
+
+  \begin{clue}[dailydouble]
+    Clue
+  \response
+    Response
+  \end{clue}
+
+  \begin{clue}
+    Clue
+  \response
+    Response
+  \end{clue}
+
+  \begin{clue}
+    Clue
+  \response
+    Response
+  \end{clue}
+\end{category}
+
+\begin{category}{Third Category}
+  \begin{clue}
+    Clue
+  \response
+    Response
+  \end{clue}
+
+  \begin{clue}
+    Clue
+  \response
+    Response
+  \end{clue}
+
+  \begin{clue}
+    Clue
+  \response
+    Response
+  \end{clue}
+
+  \begin{clue}
+    Clue
+  \response
+    Response
+  \end{clue}
+
+  \begin{clue}
+    Clue
+  \response
+    Response
+  \end{clue}
+\end{category}
+
+\begin{category}{Fourth Category}
+  \begin{clue}
+    Clue
+  \response
+    Response
+  \end{clue}
+
+  \begin{clue}
+    Clue
+  \response
+    Response
+  \end{clue}
+
+  \begin{clue}
+    Clue
+  \response
+    Response
+  \end{clue}
+
+  \begin{clue}
+    Clue
+  \response
+    Response
+  \end{clue}
+
+  \begin{clue}
+    Clue
+  \response
+    Response
+  \end{clue}
+\end{category}
+
+\begin{category}{Fifth Category}
+  \begin{clue}
+    Clue
+  \response
+    Response
+  \end{clue}
+
+  \begin{clue}
+    Clue
+  \response
+    Response
+  \end{clue}
+
+  \begin{clue}
+    Clue
+  \response
+    Response
+  \end{clue}
+
+  \begin{clue}
+    Clue
+  \response
+    Response
+  \end{clue}
+
+  \begin{clue}
+    Clue
+  \response
+    Response
+  \end{clue}
+\end{category}
+
+\begin{final}{Final Category}
+  Final Jeopardy clue
+\response
+  Final Jeopardy response
+\end{final}
+
+\end{document}

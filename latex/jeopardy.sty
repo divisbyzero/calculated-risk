@@ -1,0 +1,64 @@
+% jeopardy.sty -- lets a Jeopardy game file compile as a printable answer key.
+%
+% The web app reads the same .tex file directly. Commands provided:
+%   \gametitle{...}                        (preamble)
+%   \begin{category}{Name} ... \end{category}
+%   \begin{clue} ... \response ... \end{clue}
+%   \begin{clue}[dailydouble] ... \response ... \end{clue}
+%   \begin{final}{Category} ... \response ... \end{final}
+%
+% Clue values are assigned by position: 100, 200, 300, ...
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{jeopardy}[2026/11/23 Jeopardy game files]
+
+\RequirePackage{amsmath}
+\RequirePackage{amssymb}
+
+\newcommand*{\jeo@title}{Jeopardy!}
+\newcommand{\gametitle}[1]{\renewcommand*{\jeo@title}{#1}}
+
+\AtBeginDocument{%
+  \begin{center}
+    {\LARGE\bfseries \jeo@title\par}
+    \medskip
+    {\large Answer key\par}
+  \end{center}
+  \bigskip
+}
+
+\newcounter{jeocategory}
+\newcounter{jeoclue}[jeocategory]
+
+\def\jeo@dailydouble{dailydouble}
+
+\newenvironment{category}[1]{%
+  \stepcounter{jeocategory}%
+  \section*{Category \thejeocategory: #1}%
+}{}
+
+\newenvironment{clue}[1][]{%
+  \stepcounter{jeoclue}%
+  \def\jeo@opt{#1}%
+  \par\addvspace{\medskipamount}\noindent
+  \textbf{\the\numexpr 100*\value{jeoclue}\relax}%
+  \ifx\jeo@opt\jeo@dailydouble
+    \hspace{1em}\fbox{\scriptsize DAILY DOUBLE}%
+  \fi
+  \par\nopagebreak
+  \begin{list}{}{\setlength{\leftmargin}{2em}\setlength{\itemsep}{2pt}}%
+  \item[] \textit{Clue:}\enspace
+}{%
+  \end{list}%
+}
+
+\newenvironment{final}[1]{%
+  \section*{Final Jeopardy: #1}%
+  \begin{list}{}{\setlength{\leftmargin}{2em}\setlength{\itemsep}{2pt}}%
+  \item[] \textit{Clue:}\enspace
+}{%
+  \end{list}%
+}
+
+\newcommand{\response}{\item[] \textit{Response:}\enspace}
+
+\endinput

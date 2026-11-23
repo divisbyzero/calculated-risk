@@ -1,0 +1,10 @@
+.DS_Store
+
+# LaTeX build files
+*.aux
+*.log
+*.out
+*.pdf
+*.fls
+*.fdb_latexmk
+*.synctex.gz

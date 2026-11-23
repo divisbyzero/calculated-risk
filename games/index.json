@@ -1,0 +1,12 @@
+[
+  {
+    "file": "sample-game.tex",
+    "title": "Sample Game",
+    "description": "Placeholder clues on a full board, with a Daily Double and Final Jeopardy."
+  },
+  {
+    "file": "formatting-demo.tex",
+    "title": "Formatting Demo",
+    "description": "Shows the LaTeX you can use: inline and display math, macros, lists, bold and italics."
+  }
+]
