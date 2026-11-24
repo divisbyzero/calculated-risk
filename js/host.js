@@ -3,7 +3,7 @@
 
 import { parseGame, packagesUsed, imagesUsed } from './texparser.js';
 import { openChannel, syncSupported } from './sync.js';
-import { setMathHTML, setMacros, mathAvailable } from './math.js';
+import { setMathHTML, setMacros, mathAvailable, fitWideMath } from './math.js';
 import { escapeHtml, formatScore } from './util.js';
 
 const STORAGE_KEY = 'classroom-jeopardy.saved.v1';
@@ -55,6 +55,10 @@ function init() {
   $('#game-list').addEventListener('click', onGameListClick);
   $('#file-input').addEventListener('change', onFileChosen);
   $('#preview').addEventListener('toggle', renderPreview);
+  window.addEventListener('resize', () => {
+    fitWideMath($('#preview-body'));
+    fitWideMath($('#host-main'));
+  });
 
   $('#team-list').addEventListener('input', (e) => {
     const i = Number(e.target.dataset.index);
@@ -304,18 +308,22 @@ function renderPreview() {
   const g = loaded.game;
   let html = '';
   g.categories.forEach((c, ci) => {
-    html += `<h3 class="clue-content">${ci + 1}. ${c.nameHtml}</h3><table><tr><th>Value</th><th>Clue</th><th>Response</th></tr>`;
+    html += `<h3 class="clue-content">${ci + 1}. ${c.nameHtml}</h3><table>${PREVIEW_COLS}<tr><th>Value</th><th>Clue</th><th>Response</th></tr>`;
     for (const q of c.clues) {
       html += `<tr><td>${q.value}${q.dailyDouble ? ' <span class="tag">DD</span>' : ''}${modeTag(q)}</td><td class="clue-content">${q.clueHtml}</td><td class="clue-content">${responseCell(q)}</td></tr>`;
     }
     html += '</table>';
   });
   if (g.final) {
-    html += `<h3>Final Jeopardy: <span class="clue-content">${g.final.categoryHtml}</span></h3><table><tr><th></th><th>Clue</th><th>Response</th></tr>
+    html += `<h3>Final Jeopardy: <span class="clue-content">${g.final.categoryHtml}</span></h3><table>${PREVIEW_COLS}<tr><th></th><th>Clue</th><th>Response</th></tr>
       <tr><td>${modeTag(g.final)}</td><td class="clue-content">${g.final.clueHtml}</td><td class="clue-content">${responseCell(g.final)}</td></tr></table>`;
   }
-  setMathHTML($('#preview-body'), html);
+  const body = $('#preview-body');
+  setMathHTML(body, html).then(() => fitWideMath(body));
 }
+
+// Fixed column widths, so a wide equation can't stretch the table past the card.
+const PREVIEW_COLS = '<colgroup><col class="col-value"><col class="col-clue"><col class="col-response"></colgroup>';
 
 // Players must write (✍️) or may just say (🗣️) their response.
 const MODE_LABEL = { write: '✍️ Write', say: '🗣️ Say' };
@@ -842,7 +850,7 @@ function renderMain() {
   const main = $('#host-main');
   if (key !== mainKey) {
     mainKey = key;
-    setMathHTML(main, contentHtml());
+    setMathHTML(main, contentHtml()).then(() => fitWideMath(main));
   }
   const controls = $('#controls');
   if (controls) controls.innerHTML = controlsHtml();

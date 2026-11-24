@@ -23,6 +23,9 @@
 
 .clue-content mjx-container[display="true"] {
   margin: 0.5em 0 !important;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 /* Pictures on the host screen (the board lays them out itself). */

@@ -163,11 +163,13 @@ kbd { border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 4p
 
 details summary { cursor: pointer; color: var(--blue); margin-top: 14px; }
 
-.preview table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.preview table { width: 100%; table-layout: fixed; border-collapse: collapse; font-size: 14px; }
+.preview col.col-value { width: 120px; }
+.preview col.col-clue { width: 38%; }
 .preview th, .preview td { border-bottom: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: top; }
 .preview th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
-.preview td:first-child { width: 70px; white-space: nowrap; font-weight: 600; }
-.preview td:nth-child(2) { width: 55%; }
+.preview td:first-child { font-weight: 600; }
+.preview td { overflow-wrap: break-word; }
 
 .team-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
 .team-input-row { display: flex; gap: 8px; align-items: center; }

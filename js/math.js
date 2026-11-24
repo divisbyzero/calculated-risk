@@ -51,3 +51,21 @@ export function setMathHTML(el, html) {
   el.innerHTML = html;
   return typeset(el);
 }
+
+// MathJax 3 cannot line-break display math, so a long equation can be wider
+// than its box. Shrink each one that is too wide (down to MIN_SCALE); any
+// that still don't fit scroll sideways (see shared.css).
+const MIN_SCALE = 0.6;
+
+export function fitWideMath(el) {
+  for (const box of el.querySelectorAll('mjx-container[display="true"]')) {
+    box.style.fontSize = '';
+    const math = box.firstElementChild;
+    if (!math) continue;
+    const avail = box.clientWidth;
+    const need = math.getBoundingClientRect().width;
+    if (avail > 0 && need > avail) {
+      box.style.fontSize = `${Math.max(MIN_SCALE, (avail - 2) / need) * 100}%`;
+    }
+  }
+}
