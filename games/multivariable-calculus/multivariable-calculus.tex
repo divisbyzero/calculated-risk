@@ -3,8 +3,8 @@
 % Marked with "% NEW" (written by Claude, not from Lab 11):
 %   Vectors and Surfaces 500, Curves and Motion 400 and 500,
 %   Partial Derivatives 100, Optimization 100 and 200,
-%   Multiple Integrals 500, and Final Jeopardy.
-% Potpourri 100, 200, and 400 come from the Calculus II game.
+%   Multiple Integrals 500, Potpourri 300 and 400, and Final Jeopardy.
+% Potpourri 100 and 200 come from the Calculus II game.
 %
 % Figures from Lab 11 are in the solutions of Optimization 500, Multiple
 % Integrals 100 and 400, and Potpourri 500. Their TikZ sources are in
@@ -39,7 +39,7 @@
 \begin{category}{Vectors and Surfaces}
 
   \begin{clue}[say]
-    It is the length of the vector $\bvec{a}-\bvec{b}$, where $\bvec{a} = \langle1,3\rangle$ and $\bvec{b} = \langle5,2\rangle$.
+    It is the length of the vector $\bvec{a}-\bvec{b},$ where $\bvec{a} = \langle1,3\rangle$ and $\bvec{b} = \langle5,2\rangle.$
   \response
     What is $\sqrt{17}$?
   \solution
@@ -59,11 +59,11 @@
     What is $x=-\frac{15}{4}$?
   \solution
     We use orthogonality,
-    $\langle x,\,3\rangle \dotprod \langle 4,\,5\rangle = 4x+15=0.$ So, $x=-\frac{15}{4}$.
+    $\langle x,\,3\rangle \dotprod \langle 4,\,5\rangle = 4x+15=0.$ So, $x=-\frac{15}{4}.$
   \end{clue}
 
   \begin{clue}[write]
-    It is a unit vector perpendicular to the plane $x+2y+2z=10$.
+    It is a unit vector perpendicular to the plane $x+2y+2z=10.$
   \response
     What is $\left\langle \frac{1}{3}, \frac{2}{3}, \frac{2}{3}\right\rangle$ (or its negative)?
   \solution
@@ -82,7 +82,7 @@
   \end{clue}
 
   \begin{clue}[write]
-    It is a unit vector orthogonal to both $\langle1, -1, 0\rangle$ and $\langle1,2,3\rangle$.
+    It is a unit vector orthogonal to both $\langle1, -1, 0\rangle$ and $\langle1,2,3\rangle.$
   \response
     What is $\left\langle \frac{1}{\sqrt{3}}, \frac{1}{\sqrt{3}}, \frac{-1}{\sqrt{3}}\right\rangle$ (or its negative)?
   \solution
@@ -99,7 +99,7 @@
   % NEW: written by Claude, not from Lab 11.
   % PICTURE: the hyperboloid of two sheets, with the y-axis through both pieces.
   \begin{clue}[say]
-    It is the name of the surface $y^2-x^2-z^2=4$.
+    It is the name of the surface $y^2-x^2-z^2=4.$
   \response
     What is a hyperboloid of two sheets?
   \solution
@@ -107,7 +107,7 @@
     \[
     x^2+z^2=k^2-4.
     \]
-    These are empty when $|k|<2$, a single point when $|k|=2$, and circles when $|k|>2$. The traces in the planes $x=k$ are the hyperbolas $y^2-z^2=4+k^2$. So, the surface comes in two pieces, and it is a hyperboloid of two sheets with axis the $y$-axis.
+    These are empty when $|k|<2,$ a single point when $|k|=2,$ and circles when $|k|>2.$ The traces in the planes $x=k$ are the hyperbolas $y^2-z^2=4+k^2.$ So, the surface comes in two pieces, and it is a hyperboloid of two sheets with axis the $y$-axis.
   \end{clue}
 
 \end{category}
@@ -116,7 +116,7 @@
 \begin{category}{Curves and Motion}
 
   \begin{clue}[write]
-    It is the tangent vector to $\bvec{r}(t) = \sin t \uveci - \cos t \uvecj$ when $t = \frac{\pi}{3}$.
+    It is the tangent vector to $\bvec{r}(t) = \sin t \uveci - \cos t \uvecj$ when $t = \frac{\pi}{3}.$
   \response
     What is $\displaystyle \frac{1}{2} \uveci + \frac{\sqrt{3}}{2}\uvecj$?
   \solution
@@ -130,7 +130,7 @@
   \end{clue}
 
   \begin{clue}[say]
-    It is the length of the curve $\bvec{r}(t) = \langle t, 2t, 2t\rangle$ for $0 \leq t \leq 2$.
+    It is the length of the curve $\bvec{r}(t) = \langle t, 2t, 2t\rangle$ for $0 \leq t \leq 2.$
   \response
     What is $6$?
   \solution
@@ -146,7 +146,7 @@
   \end{clue}
 
   \begin{clue}[write]
-    A particle has velocity $\bvec{v}(t) = \uveci + t \uvecj$ and starts at $\bvec{r}(0) = \uvecj + 2\uveck$. It is the particle's position at time $t=2$.
+    A particle has velocity $\bvec{v}(t) = \uveci + t \uvecj$ and starts at $\bvec{r}(0) = \uvecj + 2\uveck.$ It is the particle's position at time $t=2.$
   \response
     What is $2 \uveci + 3 \uvecj + 2 \uveck$?
   \solution
@@ -156,7 +156,7 @@
     &=\int (\uveci+t\,\uvecj)\,dt \\
     &=t\,\uveci+\frac{1}{2}t^2\,\uvecj+\bvec{c}.
     \end{align*}
-    Using $\bvec{r}(0)=\uvecj+2\,\uveck$, we get $\bvec{c}=\uvecj+2\,\uveck$. So,
+    Using $\bvec{r}(0)=\uvecj+2\,\uveck,$ we get $\bvec{c}=\uvecj+2\,\uveck.$ So,
     \[
     \bvec{r}(t)=t\,\uveci+\left(1+\frac{1}{2}t^2\right)\uvecj+2\,\uveck.
     \]
@@ -167,14 +167,14 @@
 
   % NEW: written by Claude, not from Lab 11.
   \begin{clue}[say]
-    It is the slope of the tangent line to the parametric curve $x=t^2$, $y=t^3-3t$ at the point where $t=2$.
+    It is the slope of the tangent line to the parametric curve $x=t^2,$ $y=t^3-3t$ at the point where $t=2.$
   \response
     What is $\frac{9}{4}$?
   \solution
     \[
     \frac{dy}{dx}=\frac{dy/dt}{dx/dt}=\frac{3t^2-3}{2t}.
     \]
-    So, when $t=2$,
+    So, when $t=2,$
     \[
     \frac{dy}{dx}=\frac{3(2)^2-3}{2(2)}=\frac{9}{4}.
     \]
@@ -183,11 +183,11 @@
   % NEW: written by Claude, not from Lab 11.
   % PICTURE: the four-petal rose r = cos(2 theta), with the right petal shaded.
   \begin{clue}[say]
-    It is the area enclosed by one petal of the rose $r=\cos 2\theta$.
+    It is the area enclosed by one petal of the rose $r=\cos 2\theta.$
   \response
     What is $\frac{\pi}{8}$?
   \solution
-    One petal is traced out as $\theta$ goes from $-\frac{\pi}{4}$ to $\frac{\pi}{4}$. So,
+    One petal is traced out as $\theta$ goes from $-\frac{\pi}{4}$ to $\frac{\pi}{4}.$ So,
     \begin{align*}
     A
     &=\frac{1}{2}\int_{-\pi/4}^{\pi/4}\cos^2 2\theta\,d\theta \\
@@ -206,15 +206,15 @@
   % NEW: written by Claude, not from Lab 11.
   % PICTURE (optional): a contour map of f(x,y) = x^2 + y^2.
   \begin{clue}[say]
-    They are the level curves of $f(x,y)=x^2+y^2$.
+    They are the level curves of $f(x,y)=x^2+y^2.$
   \response
     What are circles centered at the origin?
   \solution
-    The level curve $f(x,y)=k$ is $x^2+y^2=k$. For $k>0$, this is the circle of radius $\sqrt{k}$ centered at the origin. (For $k=0$, it is the single point $(0,0)$, and for $k<0$, it is empty.)
+    The level curve $f(x,y)=k$ is $x^2+y^2=k.$ For $k>0,$ this is the circle of radius $\sqrt{k}$ centered at the origin. (For $k=0,$ it is the single point $(0,0),$ and for $k<0,$ it is empty.)
   \end{clue}
 
   \begin{clue}[say]
-    It is the value of $f_{xy}(0,1)$ when $\displaystyle f(x,y) = (x^3 + x)y^2$.
+    It is the value of $f_{xy}(0,1)$ when $\displaystyle f(x,y) = (x^3 + x)y^2.$
   \response
     What is $2$?
   \solution
@@ -233,11 +233,11 @@
   \end{clue}
 
   \begin{clue}[write]
-    It is the limit of $\displaystyle f(x,y) = \frac{xy}{x^2 + y^2}$ as $(x,y)$ approaches $(0,0)$ along the line $y = mx$, where $m$ is a constant.
+    It is the limit of $\displaystyle f(x,y) = \frac{xy}{x^2 + y^2}$ as $(x,y)$ approaches $(0,0)$ along the line $y = mx,$ where $m$ is a constant.
   \response
     What is $\displaystyle \frac{m}{1+m^2}$?
   \solution
-    Along $C_m$, we have $y=mx$, so
+    Along $C_m,$ we have $y=mx,$ so
     \[
     \lim_{x\to 0}\frac{x(mx)}{x^2+(mx)^2}
     =\lim_{x\to 0}\frac{mx^2}{x^2+m^2x^2}
@@ -247,7 +247,7 @@
   \end{clue}
 
   \begin{clue}[write]
-    It is the equation of the tangent plane to the surface $z = e^{x+y}$ at the point $(0,0,1)$.
+    It is the equation of the tangent plane to the surface $z = e^{x+y}$ at the point $(0,0,1).$
   \response
     What is $z=x+y+1$?
   \solution
@@ -257,14 +257,14 @@
     \[
     \frac{\partial z}{\partial x}(0,0)=1,\qquad \frac{\partial z}{\partial y}(0,0)=1.
     \]
-    A normal vector is $\bvec{n}=\langle \tfrac{\partial z}{\partial x}, \tfrac{\partial z}{\partial y}, -1\rangle=\langle 1,\,1,\,-1\rangle$. So, the tangent plane is
+    A normal vector is $\bvec{n}=\langle \tfrac{\partial z}{\partial x}, \tfrac{\partial z}{\partial y}, -1\rangle=\langle 1,\,1,\,-1\rangle.$ So, the tangent plane is
     \[
     1(x-0)+1(y-0)-1(z-1)=0,\qquad\text{or}\qquad z=x+y+1.
     \]
   \end{clue}
 
   \begin{clue}[say]
-    It is the directional derivative of the function $\displaystyle f(x,y,z) = xe^{\frac{xy}{z}}$ in the direction $\bvec{u} = \left\langle\frac{-1}{3}, \frac{2}{3}, \frac{2}{3}\right\rangle$ at the point $(3,0,1)$.
+    It is the directional derivative of the function $\displaystyle f(x,y,z) = xe^{\frac{xy}{z}}$ in the direction $\bvec{u} = \left\langle\frac{-1}{3}, \frac{2}{3}, \frac{2}{3}\right\rangle$ at the point $(3,0,1).$
   \response
     What is $\frac{17}{3}$?
   \solution
@@ -287,7 +287,7 @@
 
   % NEW: written by Claude, not from Lab 11.
   \begin{clue}[say]
-    It is the critical point of $f(x,y)=x^2+y^2-4x+6y$.
+    It is the critical point of $f(x,y)=x^2+y^2-4x+6y.$
   \response
     What is $(2,-3)$?
   \solution
@@ -295,12 +295,12 @@
     \[
     f_x(x,y)=2x-4=0,\qquad f_y(x,y)=2y+6=0.
     \]
-    So, $x=2$ and $y=-3$, and the critical point is $(2,-3)$.
+    So, $x=2$ and $y=-3,$ and the critical point is $(2,-3).$
   \end{clue}
 
   % NEW: written by Claude, not from Lab 11.
   \begin{clue}[say]
-    It is the type of critical point $(a,b)$ of $f$ when $f_{xx}(a,b)=1$, $f_{yy}(a,b)=4$, and $f_{xy}(a,b)=3$.
+    It is the type of critical point $(a,b)$ of $f$ when $f_{xx}(a,b)=1,$ $f_{yy}(a,b)=4,$ and $f_{xy}(a,b)=3.$
   \response
     What is a saddle point?
   \solution
@@ -319,7 +319,7 @@
     \[
     \tfrac{\partial f}{\partial x}=2x+y+1=0,\qquad \tfrac{\partial f}{\partial y}=2y+x=0.
     \]
-    Solving this system of equations gives $x=-\frac{2}{3}$ and $y=\frac{1}{3}$, so the critical point is $\left(-\frac{2}{3},\,\frac{1}{3}\right)$.
+    Solving this system of equations gives $x=-\frac{2}{3}$ and $y=\frac{1}{3},$ so the critical point is $\left(-\frac{2}{3},\,\frac{1}{3}\right).$
     \[
     f_{xx}\left(-\tfrac{2}{3},\,\tfrac{1}{3}\right)=2,\qquad f_{yy}\left(-\tfrac{2}{3},\,\tfrac{1}{3}\right)=2,\qquad f_{xy}\left(-\tfrac{2}{3},\,\tfrac{1}{3}\right)=1.
     \]
@@ -327,15 +327,15 @@
     \[
     D=f_{xx}\left(-\tfrac{2}{3},\,\tfrac{1}{3}\right)f_{yy}\left(-\tfrac{2}{3},\,\tfrac{1}{3}\right)-(f_{xy}\left(-\tfrac{2}{3},\,\tfrac{1}{3}\right))^2=2\cdot 2-1^2=3>0,
     \]
-    and $f_{xx}\left(-\tfrac{2}{3},\,\tfrac{1}{3}\right)>0$. So, the critical point is a local minimum.
+    and $f_{xx}\left(-\tfrac{2}{3},\,\tfrac{1}{3}\right)>0.$ So, the critical point is a local minimum.
   \end{clue}
 
   \begin{clue}[dailydouble, say]
-    It is the minimum value of $f(x,y) = xy$ subject to the constraint $4x^2 + y^2=8$.
+    It is the minimum value of $f(x,y) = xy$ subject to the constraint $4x^2 + y^2=8.$
   \response
     What is $-2$?
   \solution
-    Let $f(x,y)=xy$ and $g(x,y)=4x^2+y^2=8$. The gradients are
+    Let $f(x,y)=xy$ and $g(x,y)=4x^2+y^2=8.$ The gradients are
     \[
     \nabla f(x,y)=\langle y,\,x\rangle,\qquad \nabla g(x,y)=\langle 8x,\,2y\rangle.
     \]
@@ -343,17 +343,17 @@
     \[
     y=8\lambda x,\qquad x=2\lambda y, \qquad 4x^2+y^2=8.
     \]
-    The first two equations give $y^2=4x^2$. Substituting this into the constraint equation gives $4x^2+4x^2=8.$ So, $x^2=1.$
-    Hence, $x=\pm 1$ and $y=\pm 2$. Evaluating,
+    The first two equations give $y^2=4x^2.$ Substituting this into the constraint equation gives $4x^2+4x^2=8.$ So, $x^2=1.$
+    Hence, $x=\pm 1$ and $y=\pm 2.$ Evaluating,
     \[
     f(1,2)=2,\quad f(1,-2)=-2,\quad f(-1,2)=-2,\quad f(-1,-2)=2,
     \]
-    we find that the minimum value is $-2$.
+    we find that the minimum value is $-2.$
   \end{clue}
 
   % Figure from Lab 11 (source in figures/square-candidates.tex).
   \begin{clue}[say]
-    It is the minimum value of $f(x,y) = x^2 - y^2+x^2y+4$ on the square with vertices at $(0,0),(1,0),(0,1),(1,1)$.
+    It is the minimum value of $f(x,y) = x^2 - y^2+x^2y+4$ on the square with vertices at $(0,0),(1,0),(0,1),(1,1).$
   \response
     What is $3$?
   \solution
@@ -361,22 +361,22 @@
     \[
     f_x(x,y)=2x+2xy=2x(1+y)=0,\qquad f_y(x,y)=-2y+x^2=0.
     \]
-    The first equation gives either $x=0$ or $y=-1$. Since $y=-1$ is outside the region, $x=0$. Substituting this into the second equation gives $-2y=0$. So, $y=0$. Critical point: $(0,0)$.
+    The first equation gives either $x=0$ or $y=-1.$ Since $y=-1$ is outside the region, $x=0.$ Substituting this into the second equation gives $-2y=0.$ So, $y=0.$ Critical point: $(0,0).$
 
     \begin{itemize}
-    \item Along $x=0$: $f(0,y)=4-y^2$, so $f'(y)=-2y=0$ gives $(0,0)$.
-    \item Along $y=0$: $f(x,0)=x^2+4$, so $f'(x)=2x=0$ gives $(0,0)$.
-    \item Along $x=1$: $f(1,y)=5+y-y^2$, so $f'(y)=1-2y=0$ gives $y=\frac{1}{2}$. So, $(1,\tfrac{1}{2})$ is a candidate.
-    \item Along $y=1$: $f(x,1)=2x^2+3$, so $f'(x)=4x=0$ gives $(0,1)$.
+    \item Along $x=0$: $f(0,y)=4-y^2,$ so $f'(y)=-2y=0$ gives $(0,0).$
+    \item Along $y=0$: $f(x,0)=x^2+4,$ so $f'(x)=2x=0$ gives $(0,0).$
+    \item Along $x=1$: $f(1,y)=5+y-y^2,$ so $f'(y)=1-2y=0$ gives $y=\frac{1}{2}.$ So, $(1,\tfrac{1}{2})$ is a candidate.
+    \item Along $y=1$: $f(x,1)=2x^2+3,$ so $f'(x)=4x=0$ gives $(0,1).$
     \end{itemize}
 
-    We must also check the corners, $(0,0)$, $(1,0)$, $(0,1)$, and $(1,1)$.
+    We must also check the corners, $(0,0),$ $(1,0),$ $(0,1),$ and $(1,1).$
 
     Evaluating at all candidates,
     \[
     f(0,0)=4,\quad f(1,0)=5,\quad f(0,1)=3,\quad f(1,1)=5,\quad f\left(1,\tfrac{1}{2}\right)=\tfrac{21}{4}.
     \]
-    So, the minimum value is $3$.
+    So, the minimum value is $3.$
 
     \begin{center}
       \includegraphics[width=3.9cm]{square-candidates.png}
@@ -386,16 +386,16 @@
 \end{category}
 
 %======================================================================
-\begin{category}{Multiple Integrals}
+\begin{category}{Integrals}
 
   % Figure from Lab 11 (source in figures/riemann-sum.tex).
   \begin{clue}[say]
-    The lines $x=1/2$ and $y=1/2$ split $R = [0,1] \times [0,1]$ into four subrectangles. It is the Riemann sum of $f(x,y) = xy+1$ over $R$, using the lower left corner of each subrectangle as the sample point.
+    The lines $x=1/2$ and $y=1/2$ split $R = [0,1] \times [0,1]$ into four subrectangles. It is the Riemann sum of $f(x,y) = xy+1$ over $R,$ using the lower left corner of each subrectangle as the sample point.
   \response
     What is $\frac{17}{16}$?
   \solution
-    We have $\Delta x=\frac{1}{2}$ and $\Delta y=\frac{1}{2}$. The lower-left sample points are
-    $(0,0)$, $(\frac{1}{2},0)$, $(0,\frac{1}{2})$, $(\frac{1}{2},\frac{1}{2})$. So,
+    We have $\Delta x=\frac{1}{2}$ and $\Delta y=\frac{1}{2}.$ The lower-left sample points are
+    $(0,0),$ $(\frac{1}{2},0),$ $(0,\frac{1}{2}),$ $(\frac{1}{2},\frac{1}{2}).$ So,
     \begin{align*}
     \left(f(0,0)+f\!\left(\tfrac{1}{2},0\right)+f\!\left(0,\tfrac{1}{2}\right)+f\!\left(\tfrac{1}{2},\tfrac{1}{2}\right)\right)\cdot\tfrac{1}{2}\cdot\tfrac{1}{2}
     &=\left(1+1+1+\tfrac{5}{4}\right)\cdot\tfrac{1}{4} \\
@@ -408,23 +408,39 @@
     \end{center}
   \end{clue}
 
-  \begin{clue}[say]
-    It is the value of $\displaystyle \iint_R (x + \sin y) \; dA$, where $R = [0,2] \times [0, \pi]$.
+
+
+  \begin{clue}[write]
+    It is the indefinite integral $\displaystyle \int xe^x \, dx.$
   \response
-    What is $4+2\pi$?
+    What is $xe^x-e^x+C$?
   \solution
+    Use integration by parts with $u=x$ and $dv=e^x\,dx.$ Then $du=dx$ and $v=e^x,$
     \begin{align*}
-    \int_0^2\int_0^{\pi}(x+\sin y)\,dy\,dx
-    &=\int_0^2\left[xy-\cos y\right]_0^{\pi}\,dx \\
-    &=\int_0^2\bigl((\pi x-\cos\pi)-(0-\cos 0)\bigr)\,dx \\
-    &=\int_0^2(\pi x+2)\,dx \\
-    &=\left.\left(\frac{\pi}{2}x^2+2x\right)\right|_0^2 \\
-    &=2\pi+4.
+    \int xe^x\,dx
+    &=xe^x-\int e^x\,dx \\
+    &=xe^x-e^x+c.
     \end{align*}
   \end{clue}
 
+
+  % \begin{clue}[say]
+  %   It is the value of $\displaystyle \iint_R (x + \sin y) \; dA,$ where $R = [0,2] \times [0, \pi].$
+  % \response
+  %   What is $4+2\pi$?
+  % \solution
+  %   \begin{align*}
+  %   \int_0^2\int_0^{\pi}(x+\sin y)\,dy\,dx
+  %   &=\int_0^2\left[xy-\cos y\right]_0^{\pi}\,dx \\
+  %   &=\int_0^2\bigl((\pi x-\cos\pi)-(0-\cos 0)\bigr)\,dx \\
+  %   &=\int_0^2(\pi x+2)\,dx \\
+  %   &=\left.\left(\frac{\pi}{2}x^2+2x\right)\right|_0^2 \\
+  %   &=2\pi+4.
+  %   \end{align*}
+  % \end{clue}
+
   \begin{clue}[say]
-    It is the value of $\displaystyle \iiint_E (x^2 + 2y) \; dV$, where $E = \{(x,y,z) \colon 0 \leq x \leq 1, 0 \leq y \leq 1, 0 \leq z \leq 1\}.$
+    It is the value of $\displaystyle \iiint_E (x^2 + 2y) \; dV,$ where $E = \{(x,y,z) \colon 0 \leq x \leq 1, 0 \leq y \leq 1, 0 \leq z \leq 1\}.$
   \response
     What is $\frac{4}{3}$?
   \solution
@@ -444,8 +460,8 @@
   \response
     What is $\displaystyle \int_0^1 \int_y^1 F(x,y) \; dx\, dy$?
   \solution
-    The region of integration is $\{(x,y)\colon 0\le y\le x\le 1\}$, the triangle below $y=x$.
-    Switching the order: $x$ ranges from $y$ to $1$, and $y$ from $0$ to $1$, so
+    The region of integration is $\{(x,y)\colon 0\le y\le x\le 1\},$ the triangle below $y=x.$
+    Switching the order: $x$ ranges from $y$ to $1,$ and $y$ from $0$ to $1,$ so
     \[
     \int_0^1\int_0^x F(x,y)\,dy\,dx=\int_0^1\int_y^1 F(x,y)\,dx\,dy.
     \]
@@ -458,11 +474,11 @@
   % NEW: written by Claude, not from Lab 11.
   % PICTURE: the region between y = x^2 (below) and y = x (above) for 0 <= x <= 1.
   \begin{clue}[say]
-    It is the value of $\displaystyle \iint_D x\,dA$, where $D$ is the region bounded by $y=x$ and $y=x^2$.
+    It is the value of $\displaystyle \iint_D x\,dA,$ where $D$ is the region bounded by $y=x$ and $y=x^2.$
   \response
     What is $\frac{1}{12}$?
   \solution
-    The curves meet at $x=0$ and $x=1$, and $x^2\le x$ for $0\le x\le 1$. So,
+    The curves meet at $x=0$ and $x=1,$ and $x^2\le x$ for $0\le x\le 1.$ So,
     \begin{align*}
     \iint_D x\,dA
     &=\int_0^1\int_{x^2}^{x}x\,dy\,dx \\
@@ -479,7 +495,7 @@
 \begin{category}{Potpourri}
 
   \begin{clue}[say]
-    It is the smallest of the irrational numbers $\pi$, $e$, and $\sqrt{2}$.
+    It is the smallest of the irrational numbers $\pi,$ $e,$ and $\sqrt{2}.$
   \response
     What is $\sqrt{2}$?
   \end{clue}
@@ -490,34 +506,41 @@
     What is a blue moon?
   \end{clue}
 
-  \begin{clue}[write]
-    It is the indefinite integral $\displaystyle \int xe^x \, dx$.
-  \response
-    What is $xe^x-e^x+C$?
-  \solution
-    Use integration by parts with $u=x$ and $dv=e^x\,dx$. Then $du=dx$ and $v=e^x$,
-    \begin{align*}
-    \int xe^x\,dx
-    &=xe^x-\int e^x\,dx \\
-    &=xe^x-e^x+c.
-    \end{align*}
-  \end{clue}
-
+  % NEW: written by Claude, not from Lab 11.
   \begin{clue}[say]
-    It is a ``mathematical'' car from Acura
-
-    (at least the ``LS'' model)
+    It is the volume of a pizza with radius $z$ and thickness $a.$
   \response
-    What is the ``INTEGRA LS''?
+    What is $\text{pi}\cdot z\cdot z\cdot a\quad (=\pi z^2 a)$?
+
   \end{clue}
+
+  % NEW: written by Claude, not from Lab 11.
+  \begin{clue}[say]
+    This quadric surface, $z=x^2-y^2,$ gives a Pringles chip its shape.
+  \response
+    What is a hyperbolic paraboloid?
+
+  \end{clue}
+
+  % Retired clue:
+  % \begin{clue}[say]
+  %   It is a ``mathematical'' car from Acura
+  %
+  %   (at least the ``LS'' model)
+  % \response
+  %   What is the ``INTEGRA LS''?
+  % \end{clue}
 
   % Figures from Lab 11 (sources in figures/ant-cube.tex and figures/ant-net.tex).
   \begin{clue}[say]
     An ant sits at one corner of a $1\times 1\times 1$ cube. It is the shortest distance the ant can walk, on the outside of the cube, to reach the opposite corner.
+    \begin{center}
+      \includegraphics[width=2.5cm]{ant-cube.png}
+    \end{center}
   \response
     What is $\sqrt{5}$?
   \solution
-    When we unfold the faces of the cube, we see that the ant must walk across a $1\times 2$ rectangle. The ant's shortest path is the straight-line diagonal across this rectangle, which has length $\sqrt{1^2+2^2}=\sqrt{5}$.
+    When we unfold the faces of the cube, we see that the ant must walk across a $1\times 2$ rectangle. The ant's shortest path is the straight-line diagonal across this rectangle, which has length $\sqrt{1^2+2^2}=\sqrt{5}.$
 
     \begin{center}
       \raisebox{-0.5\height}{\includegraphics[width=2.5cm]{ant-cube.png}}\hspace{1.5cm}%
@@ -531,15 +554,15 @@
 % NEW: written by Claude, not from Lab 11.
 % PICTURE (optional): the tangent plane above the square R.
 \begin{final}{Planes and Volume}
-  It is the volume of the solid that lies under the tangent plane to $z=x^2+y^2$ at the point $(1,1,2)$ and above the square $R=[1,2]\times[1,2]$.
+  It is the volume of the solid that lies under the tangent plane to $z=x^2+y^2$ at the point $(1,1,2)$ and above the square $R=[1,2]\times[1,2].$
 \response
   What is $4$?
 \solution
-  We have $f_x(x,y)=2x$ and $f_y(x,y)=2y$. So, $f_x(1,1)=2$ and $f_y(1,1)=2$, and the tangent plane is
+  We have $f_x(x,y)=2x$ and $f_y(x,y)=2y.$ So, $f_x(1,1)=2$ and $f_y(1,1)=2,$ and the tangent plane is
   \[
   z=2+2(x-1)+2(y-1)=2x+2y-2.
   \]
-  This plane is above the $xy$-plane on $R$. So, the volume is
+  This plane is above the $xy$-plane on $R.$ So, the volume is
   \begin{align*}
   \int_1^2\int_1^2(2x+2y-2)\,dy\,dx
   &=\int_1^2\left[2xy+y^2-2y\right]_1^2\,dx \\
