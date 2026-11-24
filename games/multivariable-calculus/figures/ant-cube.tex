@@ -1,0 +1,15 @@
+% Potpourri 500: the cube with the ant's start and end corners (from Lab 11).
+\documentclass[border=4pt]{standalone}
+\usepackage{tikz}
+\begin{document}
+\begin{tikzpicture}[scale=1.6]
+  \draw (0,0) -- (1,0) -- (1,1) -- (0,1) -- cycle;
+  \draw (0.35,0.35) -- (1.35,0.35) -- (1.35,1.35) -- (0.35,1.35) -- cycle;
+  \draw (0,0) -- (0.35,0.35);
+  \draw (1,0) -- (1.35,0.35);
+  \draw (1,1) -- (1.35,1.35);
+  \draw (0,1) -- (0.35,1.35);
+  \filldraw[red] (0,0) circle (.8pt);
+  \filldraw[red] (1.35,1.35) circle (.8pt);
+\end{tikzpicture}
+\end{document}

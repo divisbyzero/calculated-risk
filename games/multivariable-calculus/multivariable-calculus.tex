@@ -6,10 +6,13 @@
 %   Multiple Integrals 500, and Final Jeopardy.
 % Potpourri 100, 200, and 400 come from the Calculus II game.
 %
+% Figures from Lab 11 are in the solutions of Optimization 500, Multiple
+% Integrals 100 and 400, and Potpourri 500. Their TikZ sources are in
+% figures/; run figures/build.sh to remake the PNGs after editing one.
+%
 % Marked with "% PICTURE" (would benefit from a figure):
 %   Vectors and Surfaces 500, Curves and Motion 500,
-%   Partial Derivatives 100, Optimization 500, Multiple Integrals 100,
-%   400, and 500, Potpourri 500, and Final Jeopardy.
+%   Partial Derivatives 100, Multiple Integrals 500, and Final Jeopardy.
 %
 % Each clue is marked [write] or [say]: whether players must write their
 % response before ringing in, or can just say it. The game board shows
@@ -348,7 +351,7 @@
     we find that the minimum value is $-2$.
   \end{clue}
 
-  % PICTURE: the unit square with the candidate points marked (Lab 11 had one).
+  % Figure from Lab 11 (source in figures/square-candidates.tex).
   \begin{clue}[say]
     It is the minimum value of $f(x,y) = x^2 - y^2+x^2y+4$ on the square with vertices at $(0,0),(1,0),(0,1),(1,1)$.
   \response
@@ -374,6 +377,10 @@
     f(0,0)=4,\quad f(1,0)=5,\quad f(0,1)=3,\quad f(1,1)=5,\quad f\left(1,\tfrac{1}{2}\right)=\tfrac{21}{4}.
     \]
     So, the minimum value is $3$.
+
+    \begin{center}
+      \includegraphics[width=3.9cm]{square-candidates.png}
+    \end{center}
   \end{clue}
 
 \end{category}
@@ -381,7 +388,7 @@
 %======================================================================
 \begin{category}{Multiple Integrals}
 
-  % PICTURE: the unit square split into four subrectangles, lower-left corners marked (Lab 11 had one).
+  % Figure from Lab 11 (source in figures/riemann-sum.tex).
   \begin{clue}[say]
     The lines $x=1/2$ and $y=1/2$ split $R = [0,1] \times [0,1]$ into four subrectangles. It is the Riemann sum of $f(x,y) = xy+1$ over $R$, using the lower left corner of each subrectangle as the sample point.
   \response
@@ -395,6 +402,10 @@
     &=\frac{17}{4}\cdot\frac{1}{4}\\
     &=\frac{17}{16}.
     \end{align*}
+
+    \begin{center}
+      \includegraphics[width=3.9cm]{riemann-sum.png}
+    \end{center}
   \end{clue}
 
   \begin{clue}[say]
@@ -427,7 +438,7 @@
     \end{align*}
   \end{clue}
 
-  % PICTURE: the triangle below y = x on 0 <= x <= 1 (Lab 11 had one).
+  % Figure from Lab 11 (source in figures/reverse-order.tex).
   \begin{clue}[write]
     It is $\displaystyle \int_0^1 \int_0^x F(x,y) \; dy\, dx$ with the order of integration reversed.
   \response
@@ -438,6 +449,10 @@
     \[
     \int_0^1\int_0^x F(x,y)\,dy\,dx=\int_0^1\int_y^1 F(x,y)\,dx\,dy.
     \]
+
+    \begin{center}
+      \includegraphics[width=3.6cm]{reverse-order.png}
+    \end{center}
   \end{clue}
 
   % NEW: written by Claude, not from Lab 11.
@@ -496,13 +511,18 @@
     What is the ``INTEGRA LS''?
   \end{clue}
 
-  % PICTURE: the cube and its unfolded net with the diagonal path (Lab 11 had both).
+  % Figures from Lab 11 (sources in figures/ant-cube.tex and figures/ant-net.tex).
   \begin{clue}[say]
     An ant sits at one corner of a $1\times 1\times 1$ cube. It is the shortest distance the ant can walk, on the outside of the cube, to reach the opposite corner.
   \response
     What is $\sqrt{5}$?
   \solution
     When we unfold the faces of the cube, we see that the ant must walk across a $1\times 2$ rectangle. The ant's shortest path is the straight-line diagonal across this rectangle, which has length $\sqrt{1^2+2^2}=\sqrt{5}$.
+
+    \begin{center}
+      \raisebox{-0.5\height}{\includegraphics[width=2.5cm]{ant-cube.png}}\hspace{1.5cm}%
+      \raisebox{-0.5\height}{\includegraphics[width=6.2cm]{ant-net.png}}
+    \end{center}
   \end{clue}
 
 \end{category}

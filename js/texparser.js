@@ -724,6 +724,19 @@ class TextConverter {
       return body;
     }
     if (name === 'url') return `<code>${escapeHtml(this.rawArg())}</code>`;
+    if (name === 'raisebox') {
+      // \raisebox{shift}[height][depth]{content}: only the content matters
+      // on screen (it's often used to line up pictures in the PDF).
+      this.rawArg();
+      for (let k = 0; k < 2; k++) {
+        this.skipSpaces();
+        if (this.s[this.i] !== '[') break;
+        const b = readBracket(this.s, this.i);
+        if (!b) break;
+        this.i = b.end;
+      }
+      return this.arg();
+    }
     if (name === 'includegraphics' || name === 'includegraphics*') {
       // Size options are for the PDF; the board sizes pictures to fit.
       if (this.s[this.i] === '[') {
