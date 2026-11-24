@@ -103,9 +103,7 @@ function buildMain() {
         <div class="screen">
           <div class="screen-label">${label}</div>
           ${modeBadge(pub.final.mode)}
-          <div class="screen-body" data-fit-max="0.085" data-fit-min="0.02">
-            <div class="fit-inner clue-content"><div class="clue-text">${pub.final.clue}</div></div>
-          </div>
+          ${clueBody(pub.final.clue)}
         </div>`;
       break;
     }
@@ -120,6 +118,9 @@ function buildMain() {
         </div>`;
   }
   setMathHTML(main, html).then(fitAll);
+  main.querySelectorAll('img.tex-img').forEach((img) => {
+    if (!img.complete) img.addEventListener('load', fitAll, { once: true });
+  });
   // Fit right away too, so text is sized sensibly before math is ready.
   fitAll();
 }
@@ -151,11 +152,7 @@ function clueHtml() {
     <div class="screen">
       <div class="screen-label">${label}</div>
       ${modeBadge(a.mode)}
-      <div class="screen-body" data-fit-max="0.085" data-fit-min="0.02">
-        <div class="fit-inner clue-content">
-          <div class="clue-text">${a.clue}</div>
-        </div>
-      </div>
+      ${clueBody(a.clue)}
     </div>`;
 }
 
@@ -201,22 +198,89 @@ function resultsHtml() {
 
 // The answer screen: the correct response, plus the worked solution if any.
 function answerHtml(label, response, solution) {
+  const r = takeFigures(response);
+  const s = takeFigures(solution || '');
+  const inner = `
+    ${r.text ? `<div class="answer-response">${r.text}</div>` : ''}
+    ${s.text ? `<div class="answer-solution${r.text ? '' : ' alone'}">${s.text}</div>` : ''}`;
   return `
     <div class="screen answer-screen">
       <div class="screen-label">${label} &middot; ANSWER</div>
-      <div class="screen-body" data-fit-max="0.085" data-fit-min="0.016">
-        <div class="fit-inner clue-content">
-          <div class="answer-response">${response}</div>
-          ${solution ? `<div class="answer-solution">${solution}</div>` : ''}
-        </div>
-      </div>
+      ${screenBody(inner, r.figures + s.figures, 0.085, 0.016)}
     </div>`;
+}
+
+function clueBody(clue) {
+  const c = takeFigures(clue);
+  return screenBody(c.text ? `<div class="clue-text">${c.text}</div>` : '', c.figures, 0.085, 0.02);
+}
+
+// ---------------------------------------------------------------------------
+// Pictures. A screen with pictures puts the text on the left and the
+// pictures on the right, each picture scaled to fill its share of the space.
+
+// Pull the pictures out of some clue HTML.
+function takeFigures(html) {
+  const t = document.createElement('template');
+  t.innerHTML = html;
+  const imgs = [...t.content.querySelectorAll('img.tex-img')];
+  if (!imgs.length) return { text: html, figures: '' };
+  imgs.forEach((img) => img.remove());
+  // Drop wrappers (like a center environment) that only held a picture.
+  t.content.querySelectorAll('div, span').forEach((el) => {
+    if (!el.textContent.trim()) el.remove();
+  });
+  const text = t.innerHTML.trim().replace(/^(\s*<br>\s*)+|(\s*<br>\s*)+$/g, '').trim();
+  return { text, figures: imgs.map((img) => img.outerHTML).join('') };
+}
+
+function screenBody(inner, figures, fitMax, fitMin) {
+  const textBox = (cls) => `
+    <div class="${cls}" data-fit-max="${fitMax}" data-fit-min="${fitMin}">
+      <div class="fit-inner clue-content">${inner}</div>
+    </div>`;
+  if (!figures) return textBox('screen-body');
+  if (!inner.trim()) return `<div class="screen-body"><div class="split-figure">${figures}</div></div>`;
+  return `
+    <div class="screen-body split">
+      ${textBox('split-text')}
+      <div class="split-figure">${figures}</div>
+    </div>`;
+}
+
+// Size each picture as large as fits in its column (pictures stack).
+function fitFigures() {
+  main.querySelectorAll('.split-figure').forEach((col) => {
+    const imgs = [...col.querySelectorAll('img.tex-img')];
+    if (!imgs.length) return;
+    const gap = parseFloat(getComputedStyle(col).rowGap) || 0;
+    const W = col.clientWidth;
+    const slot = (col.clientHeight - gap * (imgs.length - 1)) / imgs.length;
+    for (const img of imgs) {
+      const cs = getComputedStyle(img);
+      const padX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+      const padY = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+      const w = W - padX;
+      const h = slot - padY;
+      if (w <= 0 || h <= 0) continue;
+      if (!img.naturalWidth || !img.naturalHeight) {
+        // Not loaded yet, or an SVG with no size of its own.
+        img.style.width = w + 'px';
+        img.style.height = h + 'px';
+        continue;
+      }
+      const k = Math.min(w / img.naturalWidth, h / img.naturalHeight);
+      img.style.width = img.naturalWidth * k + 'px';
+      img.style.height = img.naturalHeight * k + 'px';
+    }
+  });
 }
 
 // ---------------------------------------------------------------------------
 // Shrink text until it fits its box.
 
 function fitAll() {
+  fitFigures();
   main.querySelectorAll('[data-fit-max]').forEach(fitBox);
 }
 

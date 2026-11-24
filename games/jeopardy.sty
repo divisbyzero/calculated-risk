@@ -13,6 +13,8 @@
 %     commas: \begin{clue}[dailydouble, write])
 %   \begin{final}{Category} ... \response ... \solution ... \end{final}
 %   \begin{final}[write]{Category} ...   (same write/say option)
+%   \includegraphics[width=...]{file.png}  anywhere in a clue,
+%     response or solution. Use PNG or JPG so the web game can show it too.
 %
 % Clue values are assigned by position: 100, 200, 300, ...
 %
@@ -41,6 +43,7 @@
 
 \RequirePackage{amsmath}
 \RequirePackage{amssymb}
+\RequirePackage{graphicx} % \includegraphics in clues, responses and solutions
 \PassOptionsToPackage{dvipsnames,table,xcdraw}{xcolor} % same as the usual templates
 \RequirePackage{xcolor}
 \RequirePackage{geometry}

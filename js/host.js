@@ -1,7 +1,7 @@
 // The host (professor) window. It owns the game state and sends the board
 // window what it should display.
 
-import { parseGame, packagesUsed } from './texparser.js';
+import { parseGame, packagesUsed, imagesUsed } from './texparser.js';
 import { openChannel, syncSupported } from './sync.js';
 import { setMathHTML, setMacros, mathAvailable } from './math.js';
 import { escapeHtml, formatScore } from './util.js';
@@ -128,44 +128,151 @@ async function onGameListClick(e) {
   try {
     const res = await fetch(`games/${btn.dataset.file}`, { cache: 'no-cache' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    await loadSource(await res.text(), btn.dataset.file);
+    const text = await res.text();
+    const images = await findImagesOnServer(text, `games/${btn.dataset.file}`);
+    await loadSource(text, btn.dataset.file, images, `games/${btn.dataset.file}`);
     markSelected(btn);
   } catch (err) {
     alert(`Couldn’t load ${btn.dataset.file}: ${err.message}`);
   }
 }
 
+// The .tex file can be chosen together with its images (⌘-click or
+// Ctrl-click to choose several files).
 async function onFileChosen(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  await loadSource(await file.text(), file.name);
-  markSelected(null);
+  const files = [...e.target.files];
   e.target.value = ''; // so choosing the same file again reloads it
+  if (!files.length) return;
+  const texFiles = files.filter((f) => /\.tex$/i.test(f.name));
+  if (texFiles.length !== 1) {
+    alert(texFiles.length
+      ? 'Choose just one .tex file at a time (plus its images).'
+      : 'Choose a .tex file too. To add its images, select them together with the .tex file.');
+    return;
+  }
+  const text = await texFiles[0].text();
+  const images = await findImagesInFiles(text, files.filter((f) => f !== texFiles[0]));
+  await loadSource(text, texFiles[0].name, images);
+  markSelected(null);
+}
+
+// ---------------------------------------------------------------------------
+// Images. Each \includegraphics path maps to { url } or { error }. A path
+// without an extension tries these, in order (like pdflatex does).
+
+const IMAGE_EXTS = ['png', 'jpg', 'jpeg', 'svg', 'gif', 'webp'];
+const IMAGE_ACCEPT = /\.(png|jpe?g|svg|gif|webp)$/i;
+
+function imageCandidates(path) {
+  if (/\.[A-Za-z0-9]+$/.test(path)) return [path];
+  return IMAGE_EXTS.map((x) => `${path}.${x}`);
+}
+
+function imageFormatError(path) {
+  if (/\.pdf$/i.test(path)) {
+    return `${path} is a PDF. Browsers can't show PDF images; save a PNG copy and use that (pdflatex can use the PNG too).`;
+  }
+  if (/\.(eps|ps)$/i.test(path)) return `${path} can't be shown in a browser; save a PNG copy and use that.`;
+  return null;
+}
+
+// Built-in games: images live next to the game file on the server.
+async function findImagesOnServer(text, gamePath) {
+  const dir = gamePath.slice(0, gamePath.lastIndexOf('/') + 1);
+  const images = new Map();
+  await Promise.all(imagesUsed(text).map(async (path) => {
+    const bad = imageFormatError(path);
+    if (bad) return images.set(path, { error: bad });
+    for (const c of imageCandidates(path)) {
+      try {
+        const res = await fetch(dir + c, { method: 'HEAD', cache: 'no-cache' });
+        if (res.ok) return images.set(path, { url: dir + c });
+      } catch {
+        /* try the next one */
+      }
+    }
+    images.set(path, { error: `Image not found: ${dir}${path}${/\.[A-Za-z0-9]+$/.test(path) ? '' : ' (tried .png, .jpg, .svg, .gif and .webp)'}.` });
+  }));
+  return images;
+}
+
+// A loaded .tex file: match images by file name among the chosen files, and
+// keep them in the page as data URLs (so they reach the board window).
+async function findImagesInFiles(text, files) {
+  const byName = new Map(files.map((f) => [f.name.toLowerCase(), f]));
+  const images = new Map();
+  const used = new Set();
+  for (const path of imagesUsed(text)) {
+    const bad = imageFormatError(path);
+    if (bad) {
+      images.set(path, { error: bad });
+      continue;
+    }
+    const file = imageCandidates(path)
+      .map((c) => byName.get(c.slice(c.lastIndexOf('/') + 1).toLowerCase()))
+      .find(Boolean);
+    if (file) {
+      used.add(file);
+      images.set(path, { url: await readAsDataURL(file) });
+    } else {
+      const name = path.slice(path.lastIndexOf('/') + 1);
+      images.set(path, {
+        error: `Image ${name} wasn't loaded. Choose it together with the .tex file (⌘-click or Ctrl-click to select several files).`,
+      });
+    }
+  }
+  for (const f of files) {
+    if (!used.has(f) && !IMAGE_ACCEPT.test(f.name)) {
+      notice(`Ignored ${f.name}: only .tex files and images can be loaded.`);
+    }
+  }
+  return images;
+}
+
+function readAsDataURL(file) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = () => resolve(r.result);
+    r.onerror = () => reject(r.error);
+    r.readAsDataURL(file);
+  });
 }
 
 function markSelected(btn) {
   document.querySelectorAll('.game-option').forEach((b) => b.classList.toggle('selected', b === btn));
 }
 
-// Fetch games/<name>.sty for each package the game uses, when it exists, so
-// the game's macros from those packages work on screen.
-async function fetchPackages(text) {
+// Fetch the .sty file for each package the game uses, when it exists, so
+// the game's macros from those packages work on screen. A package is looked
+// for where LaTeX would find it (relative to a built-in game's folder, as in
+// \usepackage{../mymacros}), then in games/.
+async function fetchPackages(text, gamePath) {
   const packages = {};
   for (const name of packagesUsed(text)) {
-    if (name === 'jeopardy' || !/^[A-Za-z0-9_-]+$/.test(name)) continue;
-    try {
-      const res = await fetch(`games/${name}.sty`, { cache: 'no-cache' });
-      if (res.ok) packages[name] = await res.text();
-    } catch {
-      /* not available */
+    const base = name.replace(/^.*\//, '');
+    if (base === 'jeopardy' || !/^[A-Za-z0-9_.\/-]+$/.test(name)) continue;
+    const places = [];
+    if (gamePath) places.push(new URL(`${name}.sty`, new URL(gamePath, location.href)).href);
+    places.push(`games/${base}.sty`);
+    for (const url of places) {
+      try {
+        const res = await fetch(url, { cache: 'no-cache' });
+        if (res.ok) {
+          packages[name] = await res.text();
+          break;
+        }
+      } catch {
+        /* try the next place */
+      }
     }
   }
   return packages;
 }
 
-async function loadSource(text, source) {
-  const packages = await fetchPackages(text);
-  loaded = { ...parseGame(text, { packages }), source };
+// gamePath: where a built-in game's .tex file is on the server.
+async function loadSource(text, source, images, gamePath) {
+  const packages = await fetchPackages(text, gamePath);
+  loaded = { ...parseGame(text, { packages, images }), source };
   setMacros(loaded.game.macros);
   renderLoadStatus();
   updateStartButton();

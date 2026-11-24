@@ -64,12 +64,28 @@ During the game:
 
 ## Writing a game
 
-Copy [`games/template.tex`](games/template.tex) and fill it in. Keep
-[`jeopardy.sty`](games/jeopardy.sty) in the same folder as your game.
+Each game has its own folder inside `games/`, holding the `.tex` file and
+its pictures. The shared [`jeopardy.sty`](games/jeopardy.sty) sits one level
+up, in `games/` itself:
+
+```
+games/
+  index.json                      the list of built-in games
+  jeopardy.sty                    shared by every game
+  template/template.tex
+  multivariable-calculus/
+    multivariable-calculus.tex
+    rose.png
+```
+
+To start a game, copy the [`template`](games/template/template.tex) folder,
+rename the folder and the file, and fill it in. Each game loads the shared
+style with `\usepackage{../jeopardy}`. pdflatex then warns that you asked
+for `../jeopardy` but the package provides `jeopardy`; that's harmless.
 
 ```latex
 \documentclass{article}
-\usepackage[solutions]{jeopardy}     % or questions, or answers (see below)
+\usepackage[solutions]{../jeopardy}  % or questions, or answers (see below)
 \gametitle{Calculus I Review}
 \newcommand{\dd}[1]{\frac{d}{d#1}}   % macros work inside math
 
@@ -111,6 +127,22 @@ Copy [`games/template.tex`](games/template.tex) and fill it in. Keep
   `\begin{clue}[dailydouble, write]`. A clue with neither shows no banner,
   which suits Final Jeopardy, where every team writes anyway. The PDFs
   don't show it.
+- **Pictures:** use `\includegraphics{rose.png}` anywhere in a clue,
+  response or solution, and put the image file in the game's folder. On the
+  board, a screen with a picture shows the text on the left and the picture
+  on the right, scaled to fill its half. The `width=`/`height=` options only
+  affect the PDF. Use **PNG** or JPG: browsers can't show PDF images, and
+  pdflatex can't use SVG. A name without an extension (`rose`) finds
+  `rose.png`.
+  To load your own game with pictures, select the `.tex` file **and** its
+  images together in the file dialog (⌘-click or Ctrl-click). Images are
+  matched by file name. A game with many large images may be too big for
+  the browser to save for **Resume**, so keep picture-heavy games as
+  built-in games.
+  To make a PNG from a TikZ drawing, compile it with
+  `\documentclass[border=4pt]{standalone}` and convert it at 300 dpi:
+  `gs -dSAFER -dBATCH -dNOPAUSE -sDEVICE=pngalpha -r300 -o rose.png rose.pdf`
+  (`gs` comes with MacTeX).
 - `\solution` is optional. Use it for worked steps (`align*` works well). It
   appears on the answer screen and on your host screen.
 - MathJax doesn't support `@{...}` in array column specs and silently drops
@@ -129,12 +161,13 @@ Copy [`games/template.tex`](games/template.tex) and fill it in. Keep
 
 **Macros:** define them in the game's preamble with `\newcommand` or
 `\DeclareMathOperator`; they work in the app and in the PDF. A game can also
-`\usepackage{...}` a style file you put in `games/`; the app reads its macros
-too.
+`\usepackage{...}` a style file of your own, in its folder or in `games/`; the
+app reads its macros too.
 
 **Printing:** compile the game file with LaTeX as usual (pdflatex, xelatex
 or Overleaf all work). The option on `\usepackage[...]{jeopardy}` at the top
-of the file chooses the PDF:
+of the file chooses the PDF (on Overleaf, upload `jeopardy.sty` one folder
+above the game, as in `games/`):
 
 | Option | The PDF contains |
 | --- | --- |
@@ -145,8 +178,8 @@ of the file chooses the PDF:
 To make another version, change the option and compile again. The web game
 ignores this option, and the PDFs never mention the Daily Double.
 
-**Built-in games:** put a `.tex` file in `games/` and add it to
-[`games/index.json`](games/index.json).
+**Built-in games:** put the game's folder in `games/` and add its path
+(like `my-game/my-game.tex`) to [`games/index.json`](games/index.json).
 
 ## Files
 
@@ -158,4 +191,4 @@ ignores this option, and the PDFs never mention the Daily Double.
 | `js/config.js` | Board size and values (5 or 6 categories of 5 clues; set `enforceStandardSize` to `false` to allow other sizes) |
 | `js/sync.js` | Connects the two windows (BroadcastChannel) |
 | `js/math.js`, `js/mathjax-config.js` | MathJax setup and typesetting |
-| `games/` | Built-in games, their list, `template.tex`, and `jeopardy.sty` |
+| `games/` | One folder per built-in game (its `.tex` file and pictures), plus the list `index.json`, the shared `jeopardy.sty`, and the `template` folder |

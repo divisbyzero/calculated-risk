@@ -1,4 +1,4 @@
-// Reads a game written as a .tex file (see games/template.tex) and turns it
+// Reads a game written as a .tex file (see games/template/template.tex) and turns it
 // into a game object whose clue and response fields are HTML with the math
 // left as LaTeX for MathJax to typeset.
 //
@@ -50,6 +50,15 @@ const KNOWN_PACKAGES = new Set([
 
 // options.packages: { name: contents of name.sty } for packages the app
 // could load. Their macros are made available to MathJax.
+// The image paths used by \includegraphics in a game file, in order.
+export function imagesUsed(source) {
+  const text = stripComments(String(source));
+  const re = /\\includegraphics\*?\s*(?:\[[^\]]*\])?\s*\{([^}]*)\}/g;
+  return [...new Set([...text.matchAll(re)].map((m) => m[1].trim()))];
+}
+
+// options.images: a Map from each \includegraphics path to { url } or
+// { error }. Without it, paths are used as written.
 export function parseGame(source, options = {}) {
   const packages = options.packages || {};
   const errors = [];
@@ -96,8 +105,8 @@ export function parseGame(source, options = {}) {
   for (const name of packagesUsed(text.slice(0, preEnd))) {
     if (packages[name] !== undefined) {
       parseMacros(stripComments(packages[name]), null).forEach(({ name: n, def }) => macros.set(n, def));
-    } else if (!KNOWN_PACKAGES.has(name)) {
-      warn(`The app can't read the package ${name}, so its macros won't work on screen. To fix this, put a copy of ${name}.sty in the app's games/ folder.`);
+    } else if (!KNOWN_PACKAGES.has(name.replace(/^.*\//, ''))) {
+      warn(`The app can't read the package ${name}, so its macros won't work on screen. To fix this, put ${name}.sty in the game's folder or in the app's games/ folder.`);
     }
   }
   parseMacros(text.slice(0, preEnd), err).forEach(({ name: n, def }) => macros.set(n, def));
@@ -112,6 +121,13 @@ export function parseGame(source, options = {}) {
       macroNames,
       error: (m) => err(m, off),
       warn: (m) => warn(m, off),
+      image: (path) => {
+        if (!options.images) return path;
+        const found = options.images.get(path);
+        if (found && found.url) return found.url;
+        err(found && found.error ? found.error : `Image not found: ${path}.`, off);
+        return '';
+      },
     });
 
   // Title
@@ -708,6 +724,20 @@ class TextConverter {
       return body;
     }
     if (name === 'url') return `<code>${escapeHtml(this.rawArg())}</code>`;
+    if (name === 'includegraphics' || name === 'includegraphics*') {
+      // Size options are for the PDF; the board sizes pictures to fit.
+      if (this.s[this.i] === '[') {
+        const b = readBracket(this.s, this.i);
+        if (b) this.i = b.end;
+      }
+      const path = this.rawArg().trim();
+      if (!path) {
+        this.ctx.error('\\includegraphics needs a file name in braces.');
+        return '';
+      }
+      const url = this.ctx.image ? this.ctx.image(path) : path;
+      return url ? `<img class="tex-img" src="${escapeHtml(url)}" alt="">` : '';
+    }
     if (name === 'begin') return this.environment();
     if (name === 'end') {
       this.ctx.warn(`Unexpected \\end{${this.rawArg()}}.`);

@@ -1,21 +1,21 @@
 [
   {
-    "file": "calculus2-jeopardy.tex",
+    "file": "calculus2-jeopardy/calculus2-jeopardy.tex",
     "title": "Calculus II Jeopardy",
     "description": "Integration by parts, limits, improper integrals, applied integration, and more. Converted from the original slides."
   },
   {
-    "file": "multivariable-calculus.tex",
+    "file": "multivariable-calculus/multivariable-calculus.tex",
     "title": "Multivariable Calculus",
     "description": "Vectors, curves, partial derivatives, optimization, multiple integrals, and potpourri. Built from the Lab 11 final review."
   },
   {
-    "file": "sample-game.tex",
+    "file": "sample-game/sample-game.tex",
     "title": "Sample Game",
     "description": "Placeholder clues on a full board, with a Daily Double and Final Jeopardy."
   },
   {
-    "file": "formatting-demo.tex",
+    "file": "formatting-demo/formatting-demo.tex",
     "title": "Formatting Demo",
     "description": "Shows the LaTeX you can use: inline and display math, macros, lists, bold and italics."
   }
