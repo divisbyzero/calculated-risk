@@ -119,7 +119,8 @@ body.idle { cursor: none; }
 
 .screen {
   position: absolute;
-  inset: 0;
+  inset: var(--gap); /* same black gap as the board, so it's separate from the scores */
+  border-radius: var(--radius);
   background: var(--blue);
   display: flex;
   flex-direction: column;
