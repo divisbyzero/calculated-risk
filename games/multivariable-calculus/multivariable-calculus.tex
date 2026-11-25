@@ -42,7 +42,7 @@
     What is $-15$?
   \solution
     We use the dot product:
-    $\langle a,\,12\rangle \dotprod \langle 4,\,5\rangle = 4a+60=0.$ So, $a=-\frac{60}{4}=-15$.
+    $\langle a,\,12\rangle \dotprod \langle 4,\,5\rangle = 4a+60=0.$ So, $a=-\frac{60}{4}=-15.$
   \end{clue}
 
   \begin{clue}[write]
@@ -83,19 +83,35 @@
 %======================================================================
 \begin{category}{Curves and Motion}
 
-  \begin{clue}[say]
-    It is the tangent vector to $\bvec{r}(t) = \sin t \uveci - \cos t \uvecj$ when $t = \frac{\pi}{2}.$
+  % NEW: written by Claude, not from Lab 11.
+  \begin{clue}[write]
+    They are parametric equations for the line through the point $(1,-2,3)$ that is orthogonal to the plane $2x-y+4z=7.$
   \response
-    What is $\uvecj$?
+    What are $x=1+2t,$ $y=-2-t,$ $z=3+4t$?
   \solution
-    \[
-    \bvec{v}(t)=\cos t\,\uveci+\sin t\,\uvecj.
-    \]
-    \[
-    \bvec{v}\!\left(\tfrac{\pi}{2}\right)=\cos\!\left(\tfrac{\pi}{2}\right)\uveci+\sin\!\left(\tfrac{\pi}{2}\right)\uvecj
-    =0\,\uveci+1\,\uvecj.
-    \]
+    A line orthogonal to the plane points in the direction of the plane's normal vector, $\bvec{n}=\langle 2,-1,4\rangle.$ So, the line through $(1,-2,3)$ with direction $\langle 2,-1,4\rangle$ is
+    \begin{align*}
+    x&=1+2t, \\
+    y&=-2-t, \\
+    z&=3+4t.
+    \end{align*}
+    (Any nonzero multiple of $\langle 2,-1,4\rangle$ also works as the direction.)
   \end{clue}
+
+  % Retired (replaced by the line question above):
+  % \begin{clue}[say]
+  %   It is the tangent vector to $\bvec{r}(t) = \sin t \uveci - \cos t \uvecj$ when $t = \frac{\pi}{2}.$
+  % \response
+  %   What is $\uvecj$?
+  % \solution
+  %   \[
+  %   \bvec{r}\,'(t)=\cos t\,\uveci+\sin t\,\uvecj.
+  %   \]
+  %   \[
+  %   \bvec{r}\,'\!\left(\tfrac{\pi}{2}\right)=\cos\!\left(\tfrac{\pi}{2}\right)\uveci+\sin\!\left(\tfrac{\pi}{2}\right)\uvecj
+  %   =0\,\uveci+1\,\uvecj.
+  %   \]
+  % \end{clue}
 
   \begin{clue}[say]
     It is the length of the curve $\bvec{r}(t) = \langle t, 2t, 2t\rangle$ for $0 \leq t \leq 2.$
@@ -111,26 +127,6 @@
     &=\left.3t\right|_0^2 \\
     &=6.
     \end{align*}
-  \end{clue}
-
-  \begin{clue}[write]
-    This is a particle's position at $t=2$ provided that it has velocity $\bvec{v}(t) = \uveci + t \uvecj$ and starts at $\bvec{r}(0) = \uvecj + 2\uveck.$ 
-  \response
-    What is $2 \uveci + 3 \uvecj + 2 \uveck$?
-  \solution
-    \begin{align*}
-    \bvec{r}(t)
-    &=\int \bvec{v}(t)\,dt \\
-    &=\int (\uveci+t\,\uvecj)\,dt \\
-    &=t\,\uveci+\frac{1}{2}t^2\,\uvecj+\bvec{C}.
-    \end{align*}
-    Using $\bvec{r}(0)=\uvecj+2\,\uveck,$ we get $\bvec{C}=\uvecj+2\,\uveck.$ So,
-    \[
-    \bvec{r}(t)=t\,\uveci+\left(1+\frac{1}{2}t^2\right)\uvecj+2\,\uveck.
-    \]
-    \[
-    \bvec{r}(2)=2\,\uveci+3\,\uvecj+2\,\uveck=\langle 2, 3, 2 \rangle.
-    \]
   \end{clue}
 
   % NEW: written by Claude, not from Lab 11.
@@ -150,6 +146,26 @@
     When $t=2,$
     \[
     \frac{dy}{dx}=\frac{12(4)-8}{4}=10.
+    \]
+  \end{clue}
+
+  \begin{clue}[write]
+    This is a particle's position at $t=2$ provided that it has velocity $\bvec{v}(t) = \uveci + t \uvecj$ and starts at $\bvec{r}(0) = \uvecj + 2\uveck.$ 
+  \response
+    What is $2 \uveci + 3 \uvecj + 2 \uveck$?
+  \solution
+    \begin{align*}
+    \bvec{r}(t)
+    &=\int \bvec{v}(t)\,dt \\
+    &=\int (\uveci+t\,\uvecj)\,dt \\
+    &=t\,\uveci+\frac{1}{2}t^2\,\uvecj+\bvec{C}.
+    \end{align*}
+    Using $\bvec{r}(0)=\uvecj+2\,\uveck,$ we get $\bvec{C}=\uvecj+2\,\uveck.$ So,
+    \[
+    \bvec{r}(t)=t\,\uveci+\left(1+\frac{1}{2}t^2\right)\uvecj+2\,\uveck.
+    \]
+    \[
+    \bvec{r}(2)=2\,\uveci+3\,\uvecj+2\,\uveck=\langle 2, 3, 2 \rangle.
     \]
   \end{clue}
 
@@ -208,7 +224,7 @@
   \end{clue}
 
   \begin{clue}[write]
-    It is the limit of $\displaystyle f(x,y) = \frac{xy}{x^2 + y^2}$ as $(x,y)$ approaches $(0,0)$ along the line.
+    It is the limit of $\displaystyle f(x,y) = \frac{xy}{x^2 + y^2}$ as $(x,y)$ approaches $(0,0)$ along the line $y=mx,$ where $m$ is a constant.
   \response
     What is $\displaystyle \frac{m}{1+m^2}$?
   \solution
@@ -270,9 +286,8 @@
   \end{clue}
 
   % NEW: written by Claude, not from Lab 11.
-  % NEW: written by Claude, not from Lab 11.
   \begin{clue}[say]
-    It is the direction a bug should crawl to warm up as quickly as possible if it is standing on a metal plate at $(1,1)$ where the temperature is $T(x,y)=100-x^2-2y^2.$ 
+    It is the direction a bug should crawl to warm up as quickly as possible if it is standing at $(1,1)$ on a metal plate whose temperature at $(x,y)$ is $T(x,y)=100-x^2-2y^2.$
   \response
     What is $\langle -2,-4\rangle$ (or any positive multiple)?
   \solution
@@ -280,7 +295,7 @@
     \[
     \nabla T(1,1)=\langle -2,\,-4\rangle
     \]
-is the direction to crawl.
+    is the direction to crawl.
   \end{clue}
 
   % Retired (tests the same thing as another clue in this category):
@@ -412,6 +427,15 @@ is the direction to crawl.
 %======================================================================
 \begin{category}{Integrals}
 
+  \begin{clue}[write]
+    These are the best choices for $u$ and $dv$ to find $\displaystyle \int x^2\ln x \, dx$ using integration by parts.
+  \response
+    What are $u=\ln x$ and $dv=x^2\,dx$?
+
+  \end{clue}
+
+
+
   % Figure from Lab 11 (source in figures/riemann-sum.tex).
   \begin{clue}[say]
 This is the value of the Riemann sum of $f(x,y) = xy+1$ over $R = [0,1] \times [0,1],$ when $R$ is split into four equal subrectangles and we use the lower left corner of each subrectangle as the sample point.
@@ -429,15 +453,6 @@ This is the value of the Riemann sum of $f(x,y) = xy+1$ over $R = [0,1] \times [
     \begin{center}
       \includegraphics[width=3.9cm]{riemann-sum.png}
     \end{center}
-  \end{clue}
-
-
-
-  \begin{clue}[write]
-    These are the best choices for $u$ and $dv$ to find $\displaystyle \int x^2\ln x \, dx$ using integration by parts.
-  \response
-    What are $u=\ln x$ and $dv=x^2\,dx$?
-
   \end{clue}
 
 
@@ -538,11 +553,28 @@ This is the value of the Riemann sum of $f(x,y) = xy+1$ over $R = [0,1] \times [
 
   % NEW: written by Claude, not from Lab 11.
   \begin{clue}[say]
-    This quadric surface, $z=x^2-y^2,$ gives a Pringles chip its shape.
+    Your roommate fell asleep on a sled, and the dining hall stops serving breakfast in five minutes. You drag the sled $100$ meters to the dining hall, pulling on its rope with a force of $40$ newtons at an angle of $60^\circ$ above the ground. It is the work you do, in joules.
   \response
-    What is a hyperbolic paraboloid?
-
+    What is $2000$?
+  \solution
+    The work done by a constant force $\bvec{F}$ moving an object along a displacement $\bvec{D}$ is
+    \begin{align*}
+    W&=\bvec{F}\dotprod\bvec{D} \\
+    &=|\bvec{F}|\,|\bvec{D}|\cos\theta \\
+    &=(40)(100)\cos 60^\circ \\
+    &=(40)(100)\left(\tfrac{1}{2}\right) \\
+    &=2000.
+    \end{align*}
+    So, you do $2000$ joules of work. (Only the horizontal part of your pull, $40\cos 60^\circ=20$ newtons, moves the sled forward.)
   \end{clue}
+
+  % Retired (replaced by the work question above):
+  % \begin{clue}[say]
+  %   This quadric surface, $z=x^2-y^2,$ gives a Pringles chip its shape.
+  % \response
+  %   What is a hyperbolic paraboloid?
+  %
+  % \end{clue}
 
   % Retired clue:
   % \begin{clue}[say]
