@@ -96,12 +96,12 @@ function buildMain() {
         </div>`;
       break;
     case 'final-clue': {
-      const label = `FERMAT’S LAST ROUND &middot; <span class="clue-content">${pub.final.category}</span>`;
+      const label = 'FERMAT’S LAST ROUND';
       html = pub.final.response
         ? answerHtml(label, pub.final.response, pub.final.solution)
         : `
         <div class="screen">
-          <div class="screen-label">${label}</div>
+          ${screenLabel(label)}
           ${modeBadge(pub.final.mode)}
           ${clueBody(pub.final.clue)}
         </div>`;
@@ -144,13 +144,17 @@ function boardHtml() {
 
 function clueHtml() {
   const a = pub.active;
+  // The category and value aren't repeated here (the class just picked
+  // them). A label is shown only when it says something new.
   const label = a.doubleDown
-    ? `DOUBLE DOWN &middot; <span class="clue-content">${a.category}</span>${a.ddTeam ? ` &middot; ${escapeHtml(a.ddTeam)} wagers ${formatScore(a.value)}` : ''}`
-    : `<span class="clue-content">${a.category}</span> &middot; ${a.value}${a.review ? ' &middot; REVIEW' : ''}`;
+    ? `DOUBLE DOWN${a.ddTeam ? ` &middot; ${escapeHtml(a.ddTeam)} wagers ${formatScore(a.value)}` : ''}`
+    : a.review
+      ? 'REVIEW'
+      : '';
   if (a.response) return answerHtml(label, a.response, a.solution);
   return `
     <div class="screen">
-      <div class="screen-label">${label}</div>
+      ${screenLabel(label)}
       ${modeBadge(a.mode)}
       ${clueBody(a.clue)}
     </div>`;
@@ -196,6 +200,10 @@ function resultsHtml() {
     </div>`;
 }
 
+function screenLabel(label) {
+  return label ? `<div class="screen-label">${label}</div>` : '';
+}
+
 // The answer screen: the correct response, plus the worked solution if any.
 function answerHtml(label, response, solution) {
   const r = takeFigures(response);
@@ -205,7 +213,7 @@ function answerHtml(label, response, solution) {
     ${s.text ? `<div class="answer-solution${r.text ? '' : ' alone'}">${s.text}</div>` : ''}`;
   return `
     <div class="screen answer-screen">
-      <div class="screen-label">${label} &middot; ANSWER</div>
+      ${screenLabel(label)}
       ${screenBody(inner, r.figures + s.figures, 0.085, 0.016)}
     </div>`;
 }
