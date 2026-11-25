@@ -81,7 +81,17 @@ games/
 ```
 
 To start a game, copy the [`template`](games/template/template.tex) folder,
-rename the folder and the file, and fill it in. Each game loads the shared
+rename the folder and the file, and fill it in.
+
+**Downloads:** the **template** link and **Download** under each built-in
+game on the setup screen give a `.zip` of one folder: the `.tex` file, the
+pictures it uses, and a copy of `jeopardy.sty`. The download changes
+`\usepackage{../jeopardy}` to `\usepackage{jeopardy}`, so the folder
+compiles on its own, with no folder above it. The app accepts either line,
+and ignores any `jeopardy.sty` you load, so the same `.zip` can be loaded
+back as is. To make a downloaded game a built-in one, put its folder in
+`games/`, delete its `jeopardy.sty` (so the master copy is used), and change
+the line back to `\usepackage{../jeopardy}`. Each game loads the shared
 style with `\usepackage{../jeopardy}`. pdflatex then warns that you asked
 for `../jeopardy` but the package provides `jeopardy`; that's harmless.
 
@@ -128,7 +138,7 @@ for `../jeopardy` but the package provides `jeopardy`; that's harmless.
   screen, and your screen shows it too. Combine options with commas, as in
   `\begin{clue}[dailydouble, write]`. A clue with neither shows no banner,
   which suits Final Jeopardy, where every team writes anyway. The PDFs
-  don't show it.
+  show it only with the `writesay` option (see below).
 - **Pictures:** use `\includegraphics{rose.png}` anywhere in a clue,
   response or solution, and put the image file in the game's folder. On the
   board, a screen with a picture shows the text on the left and the picture
@@ -182,8 +192,17 @@ above the game, as in `games/`):
 | `answers` | The clues and responses, after an overview of the board |
 | `solutions` (default) | The clues, responses and worked solutions, after an overview of the board. This is the one to proofread while you write a game. |
 
-To make another version, change the option and compile again. The web game
-ignores this option, and the PDFs never mention the Daily Double.
+Add any of these after it, separated by commas, as in
+`\usepackage[solutions, writesay, noboard]{../jeopardy}`:
+
+| Option | What it does |
+| --- | --- |
+| `writesay` | Shows each clue's `[write]` or `[say]` mark as a small WRITE or SAY under its value. Handy while writing and editing; leave it off for copies you give students. |
+| `board` | Always shows the board overview, even with `questions` |
+| `noboard` | Never shows the board overview |
+
+To make another version, change the options and compile again. The web game
+ignores these options, and the PDFs never mention the Daily Double.
 
 **Built-in games:** put the game's folder in `games/` and add its path
 (like `my-game/my-game.tex`) to [`games/index.json`](games/index.json).

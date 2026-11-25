@@ -1,14 +1,14 @@
 % Jeopardy game template.
 %
-% Each game lives in its own folder inside games/, with its pictures:
-%   games/jeopardy.sty            (shared by every game)
-%   games/my-game/my-game.tex
-%   games/my-game/figure.png
-% Copy this template folder, rename it and the file, and fill in the
-% clues. \usepackage{../jeopardy} below finds the shared jeopardy.sty one
-% folder up. (pdflatex warns that the package "provides jeopardy"; that
-% warning is harmless.) To list the game in the app, add it to
-% games/index.json.
+% Keep this file, jeopardy.sty and any pictures together in one folder.
+% Rename the folder and this file, and fill in the clues.
+%
+% (In the Jeopardy repository, the games instead share one master copy,
+% games/jeopardy.sty, one folder up, and use \usepackage{../jeopardy};
+% pdflatex's warning that the package "provides jeopardy" is harmless.
+% The Download button changes that line to \usepackage{jeopardy} and puts
+% a copy of jeopardy.sty in the folder. To list a game in the app, add it
+% to games/index.json.)
 %
 % Rules:
 %   * 5 or 6 categories, each with exactly 5 clues.
@@ -38,6 +38,10 @@
 %   questions  clues only, e.g. a study sheet for students
 %   answers    clues and responses
 %   solutions  clues, responses, and worked solutions
+% Add any of these, separated by commas, e.g. [solutions, writesay]:
+%   writesay   show each clue's [write]/[say] mark (for you, not students)
+%   board      always show the board overview (even with questions)
+%   noboard    never show the board overview
 \usepackage[solutions]{../jeopardy}
 
 \gametitle{My Game Title}

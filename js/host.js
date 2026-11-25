@@ -4,7 +4,7 @@
 import { parseGame, packagesUsed, imagesUsed } from './texparser.js';
 import { openChannel, syncSupported } from './sync.js';
 import { setMathHTML, setMacros, mathAvailable, fitWideMath } from './math.js';
-import { unzip } from './zip.js';
+import { unzip, zip } from './zip.js';
 import { escapeHtml, formatScore } from './util.js';
 
 const STORAGE_KEY = 'classroom-jeopardy.saved.v1';
@@ -65,6 +65,7 @@ function init() {
   }
 
   $('#btn-open-board').addEventListener('click', openBoard);
+  $('#btn-template').addEventListener('click', (e) => downloadGame('template/template.tex', e.currentTarget));
   $('#btn-undo').addEventListener('click', undo);
   $('#btn-final').addEventListener('click', () => act(startFinal));
   $('#btn-new').addEventListener('click', endGame);
@@ -136,10 +137,13 @@ async function loadGameList() {
     box.innerHTML = list
       .map(
         (g) => `
-        <button class="game-option" data-file="${escapeHtml(g.file)}">
-          <span class="game-option-title">${escapeHtml(g.title)}</span>
-          <span class="game-option-desc">${escapeHtml(g.description || '')}</span>
-        </button>`
+        <div class="game-item">
+          <button class="game-option" data-file="${escapeHtml(g.file)}">
+            <span class="game-option-title">${escapeHtml(g.title)}</span>
+            <span class="game-option-desc">${escapeHtml(g.description || '')}</span>
+          </button>
+          <button class="btn link small game-download" data-download="${escapeHtml(g.file)}" title="A .zip with the .tex file, its pictures and jeopardy.sty">⬇ Download</button>
+        </div>`
       )
       .join('');
   } catch (e) {
@@ -148,6 +152,8 @@ async function loadGameList() {
 }
 
 async function onGameListClick(e) {
+  const dl = e.target.closest('[data-download]');
+  if (dl) return downloadGame(dl.dataset.download, dl);
   const btn = e.target.closest('.game-option');
   if (!btn) return;
   try {
@@ -160,6 +166,67 @@ async function onGameListClick(e) {
   } catch (err) {
     alert(`Couldn’t load ${btn.dataset.file}: ${err.message}`);
   }
+}
+
+// Download a built-in game as a .zip of its folder: the .tex file, the
+// pictures it uses, and a copy of jeopardy.sty. In this repository the games
+// share one master jeopardy.sty in games/ (\usepackage{../jeopardy}); the
+// download puts the copy next to the .tex file and changes that line to
+// \usepackage{jeopardy}, so the folder compiles on its own. The same .zip
+// can be loaded back with "Load a .tex file" (the app accepts either form,
+// and ignores jeopardy.sty).
+async function downloadGame(file, btn = null) {
+  const folder = file.includes('/') ? file.slice(0, file.lastIndexOf('/') + 1) : '';
+  const label = btn ? btn.textContent : '';
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = 'Preparing…';
+  }
+  try {
+    const get = async (url) => {
+      const res = await fetch(url, { cache: 'no-cache' });
+      if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`);
+      return new Uint8Array(await res.arrayBuffer());
+    };
+    const text = new TextDecoder().decode(await get(`games/${file}`));
+    const entries = [
+      { path: file, data: text.replace(/^([^%\n]*\\usepackage\s*(?:\[[^\]]*\])?\s*\{)\.\.\/jeopardy\}/gm, '$1jeopardy}') },
+      { path: `${folder}jeopardy.sty`, data: await get('games/jeopardy.sty') },
+    ];
+    const seen = new Set(entries.map((e) => e.path));
+    const add = async (rel) => {
+      const path = normalizePath(folder + rel);
+      if (seen.has(path)) return;
+      seen.add(path);
+      entries.push({ path, data: await get(`games/${path}`) });
+    };
+    const missing = [];
+    for (const [path, r] of await findImagesOnServer(text, `games/${file}`)) {
+      if (r.url) await add(r.url.slice(`games/${folder}`.length));
+      else missing.push(path);
+    }
+    const name = (folder ? folder.slice(0, -1) : file.replace(/\.tex$/i, '')).replace(/^.*\//, '');
+    saveBlob(zip(entries), `${name}.zip`);
+    if (missing.length) notice(`The download of ${file} is missing: ${missing.join(', ')}.`);
+  } catch (err) {
+    alert(`Couldn’t download ${file}: ${err.message}`);
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = label;
+    }
+  }
+}
+
+function saveBlob(blob, name) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = name;
+  document.body.append(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 10000);
 }
 
 // The .tex file can be chosen together with its images (⌘-click or

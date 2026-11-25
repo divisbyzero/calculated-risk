@@ -87,3 +87,75 @@ function mimeType(name) {
     sty: 'text/x-tex',
   }[ext] || 'application/octet-stream';
 }
+
+// Make a .zip from a list of { path, data } entries (data is a Uint8Array
+// or a string). Files are stored without compression: pictures are already
+// compressed and .tex files are small, so this keeps the code simple.
+export function zip(entries) {
+  const enc = new TextEncoder();
+  const now = new Date();
+  const time = (now.getHours() << 11) | (now.getMinutes() << 5) | (now.getSeconds() >> 1);
+  const date = ((now.getFullYear() - 1980) << 9) | ((now.getMonth() + 1) << 5) | now.getDate();
+  const parts = [];
+  const central = [];
+  let offset = 0;
+  for (const { path, data } of entries) {
+    const name = enc.encode(path);
+    const bytes = typeof data === 'string' ? enc.encode(data) : data;
+    const crc = crc32(bytes);
+    const local = new DataView(new ArrayBuffer(30));
+    local.setUint32(0, LOCAL_SIG, true);
+    local.setUint16(4, 20, true); // version needed
+    local.setUint16(6, 0x800, true); // UTF-8 names
+    local.setUint16(8, 0, true); // stored
+    local.setUint16(10, time, true);
+    local.setUint16(12, date, true);
+    local.setUint32(14, crc, true);
+    local.setUint32(18, bytes.length, true);
+    local.setUint32(22, bytes.length, true);
+    local.setUint16(26, name.length, true);
+    parts.push(local, name, bytes);
+
+    const c = new DataView(new ArrayBuffer(46));
+    c.setUint32(0, CENTRAL_SIG, true);
+    c.setUint16(4, (3 << 8) | 20, true); // made by Unix, so the permissions below count
+    c.setUint16(6, 20, true);
+    c.setUint16(8, 0x800, true);
+    c.setUint16(10, 0, true);
+    c.setUint16(12, time, true);
+    c.setUint16(14, date, true);
+    c.setUint32(16, crc, true);
+    c.setUint32(20, bytes.length, true);
+    c.setUint32(24, bytes.length, true);
+    c.setUint16(28, name.length, true);
+    // Unix permissions: scripts (.sh) are executable.
+    c.setUint32(38, ((/\.sh$/.test(path) ? 0o100755 : 0o100644) << 16) >>> 0, true);
+    c.setUint32(42, offset, true);
+    central.push(c, name);
+    offset += 30 + name.length + bytes.length;
+  }
+  const centralSize = central.reduce((n, p) => n + p.byteLength, 0);
+  const end = new DataView(new ArrayBuffer(22));
+  end.setUint32(0, EOCD_SIG, true);
+  end.setUint16(8, entries.length, true);
+  end.setUint16(10, entries.length, true);
+  end.setUint32(12, centralSize, true);
+  end.setUint32(16, offset, true);
+  return new Blob([...parts, ...central, end], { type: 'application/zip' });
+}
+
+let crcTable = null;
+
+function crc32(bytes) {
+  if (!crcTable) {
+    crcTable = new Uint32Array(256);
+    for (let n = 0; n < 256; n++) {
+      let c = n;
+      for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
+      crcTable[n] = c >>> 0;
+    }
+  }
+  let crc = 0xffffffff;
+  for (let i = 0; i < bytes.length; i++) crc = crcTable[(crc ^ bytes[i]) & 0xff] ^ (crc >>> 8);
+  return (crc ^ 0xffffffff) >>> 0;
+}

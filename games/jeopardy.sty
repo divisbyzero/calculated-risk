@@ -9,8 +9,9 @@
 %     (the Daily Double is for the game only; the PDF doesn't show it)
 %   \begin{clue}[write] ... or \begin{clue}[say] ...
 %     (tells the players whether to write their response before ringing
-%     in or just say it; the game shows it, the PDF doesn't. Combine with
-%     commas: \begin{clue}[dailydouble, write])
+%     in or just say it; the game shows it, and the PDF shows it only with
+%     the writesay option below. Combine with commas:
+%     \begin{clue}[dailydouble, write])
 %   \begin{final}{Category} ... \response ... \solution ... \end{final}
 %   \begin{final}[write]{Category} ...   (same write/say option)
 %   \includegraphics[width=...]{file.png}  anywhere in a clue,
@@ -24,6 +25,12 @@
 %   \usepackage[solutions]{jeopardy}  clues, responses, and worked solutions
 %                                     (the default)
 % The answers and solutions versions start with an overview of the board.
+%
+% Extra options (combine with commas, e.g. [solutions, writesay, noboard]):
+%   writesay    show each clue's [write]/[say] mark under its value
+%               (handy while writing; leave it off for student copies)
+%   board       always show the board overview (even with questions)
+%   noboard     never show the board overview
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{jeopardy}[2026/11/23 Jeopardy game files]
 
@@ -32,11 +39,21 @@
 
 \newif\ifjeo@key       % show responses
 \newif\ifjeo@solutions % show worked solutions
+\newif\ifjeo@writesay  % show [write]/[say] marks
+\newif\ifjeo@board     % show the board overview
+\newcommand*{\jeo@boardchoice}{auto} % auto: only with responses
 \DeclareOption{questions}{\jeo@keyfalse\jeo@solutionsfalse}
 \DeclareOption{answers}{\jeo@keytrue\jeo@solutionsfalse}
 \DeclareOption{solutions}{\jeo@keytrue\jeo@solutionstrue}
+\DeclareOption{writesay}{\jeo@writesaytrue}
+\DeclareOption{nowritesay}{\jeo@writesayfalse}
+\DeclareOption{board}{\renewcommand*{\jeo@boardchoice}{on}}
+\DeclareOption{noboard}{\renewcommand*{\jeo@boardchoice}{off}}
 \ExecuteOptions{solutions}
 \ProcessOptions\relax
+\def\jeo@tmp{on}\ifx\jeo@boardchoice\jeo@tmp\jeo@boardtrue\else
+\def\jeo@tmp{off}\ifx\jeo@boardchoice\jeo@tmp\jeo@boardfalse\else
+\ifjeo@key\jeo@boardtrue\else\jeo@boardfalse\fi\fi\fi
 
 %----------------------------------------------------------------------
 % Packages
@@ -102,12 +119,12 @@
   \vspace{8pt}%
   \noindent{\color{jeoAccent}\rule{\linewidth}{1.2pt}}\par
   \vspace{14pt}%
-  \ifjeo@key\jeo@board\fi
+  \ifjeo@board\jeo@board\fi
 }
 \AtBeginDocument{\jeo@maketitle}
 
 %----------------------------------------------------------------------
-% Board overview (answer key only)
+% Board overview (answers and solutions versions, or with the board option)
 %
 % Each run records the categories in the .aux file; the next run draws
 % them as a small board. latexmk reruns automatically.
@@ -233,9 +250,35 @@
 }
 
 \newcommand*{\jeo@valuetext}{}
+\newcommand*{\jeo@mode}{}
 \let\jeo@auxwrite\relax
 \newcommand{\jeo@makevalue}[1]{%
-  {\sffamily\bfseries\color{jeoAccent}#1}}
+  \ifjeo@writesay
+    \begin{tabular}[t]{@{}r@{}}%
+      {\sffamily\bfseries\color{jeoAccent}#1}\\[-1pt]%
+      \jeo@modetag
+    \end{tabular}%
+  \else
+    {\sffamily\bfseries\color{jeoAccent}#1}%
+  \fi}
+
+% [write]/[say] marks (shown only with the writesay option).
+\definecolor{jeoWrite}{HTML}{C0610F}
+\definecolor{jeoSay}{HTML}{1E7A44}
+\def\jeo@w{write}
+\def\jeo@s{say}
+\newcommand*{\jeo@modetag}{%
+  {\sffamily\bfseries\scriptsize
+   \ifx\jeo@mode\jeo@w\color{jeoWrite}WRITE\else
+   \ifx\jeo@mode\jeo@s\color{jeoSay}SAY\fi\fi}}
+
+% Find write or say in a clue's options (e.g. "dailydouble, write").
+\newcommand{\jeo@findmode}[1]{%
+  \def\jeo@mode{}%
+  \edef\jeo@opts{\zap@space#1 \@empty}%
+  \@for\jeo@opt:=\jeo@opts\do{%
+    \ifx\jeo@opt\jeo@w\let\jeo@mode\jeo@w\fi
+    \ifx\jeo@opt\jeo@s\let\jeo@mode\jeo@s\fi}}
 
 % Tighter display spacing inside entries.
 \newcommand{\jeo@displayskips}{%
@@ -290,9 +333,11 @@
 % comes next (then the display itself starts below the label).
 \newcommand{\jeo@afterlabel}{\@ifnextchar\[{}{\par\nobreak}}
 
-% The optional argument ([dailydouble], [write], [say]) is accepted but not shown.
+% The optional argument ([dailydouble], [write], [say]) is not shown, except
+% that write/say is shown with the writesay option.
 \NewEnviron{clue}[1][]{%
   \stepcounter{jeoclue}%
+  \jeo@findmode{#1}%
   \edef\jeo@auxwrite{\noexpand\protected@write\noexpand\@auxout{}%
     {\string\jeo@auxrow{\thejeoclue}}}%
   \edef\jeo@valuetext{\the\numexpr100*\value{jeoclue}\relax}%
@@ -302,8 +347,9 @@
 %----------------------------------------------------------------------
 % Final Jeopardy
 
-% The optional argument ([write], [say]) is accepted but not shown.
+% The optional argument ([write], [say]) is shown only with writesay.
 \NewEnviron{final}[2][]{%
+  \jeo@findmode{#1}%
   \protected@write\@auxout{}{\string\jeo@auxfinal{\unexpanded{#2}}}%
   \jeo@heading{FINAL JEOPARDY}{#2}%
   \let\jeo@auxwrite\relax
