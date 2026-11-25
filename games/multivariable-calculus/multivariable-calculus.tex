@@ -259,13 +259,13 @@
 
   % NEW: written by Claude, not from Lab 11.
   \begin{clue}[say]
-    It is the directional derivative of $f(x,y)=x^2y$ at the point $(1,2)$ in the direction of the vector $\langle 3,4\rangle.$
+    It is the directional derivative of $f(x,y)=xy^2$ at the point $(1,2)$ in the direction of the vector $\langle 3,4\rangle.$
   \response
-    What is $\frac{16}{5}$?
+    What is $\frac{28}{5}$?
   \solution
-    The gradient is $\nabla f(x,y)=\langle 2xy,\,x^2\rangle,$ so $\nabla f(1,2)=\langle 4,\,1\rangle.$ The vector $\langle 3,4\rangle$ has length $5,$ so the unit vector in its direction is $\bvec{u}=\left\langle\frac{3}{5},\frac{4}{5}\right\rangle.$ So,
+    The gradient is $\nabla f(x,y)=\langle y^2,\,2xy\rangle,$ so $\nabla f(1,2)=\langle 4,\,4\rangle.$ The vector $\langle 3,4\rangle$ has length $5,$ so the unit vector in its direction is $\bvec{u}=\left\langle\frac{3}{5},\frac{4}{5}\right\rangle.$ So,
     \[
-    D_{\bvec{u}}f(1,2)=\nabla f(1,2)\dotprod\bvec{u}=4\cdot\tfrac{3}{5}+1\cdot\tfrac{4}{5}=\tfrac{16}{5}.
+    D_{\bvec{u}}f(1,2)=\nabla f(1,2)\dotprod\bvec{u}=4\cdot\tfrac{3}{5}+4\cdot\tfrac{4}{5}=\tfrac{28}{5}.
     \]
   \end{clue}
 
