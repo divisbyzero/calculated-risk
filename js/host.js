@@ -2,9 +2,10 @@
 // window what it should display.
 
 import { parseGame, packagesUsed, imagesUsed } from './texparser.js';
+import { IMAGE_ACCEPT, imageCandidates, imageFormatError, findImagesOnServer, normalizePath, downloadGameFromButton } from './files.js';
 import { openChannel, syncSupported } from './sync.js';
 import { setMathHTML, setMacros, mathAvailable, fitWideMath } from './math.js';
-import { unzip, zip } from './zip.js';
+import { unzip } from './zip.js';
 import { FINAL_MUSIC } from './config.js';
 import { escapeHtml, formatScore } from './util.js';
 
@@ -48,11 +49,11 @@ function init() {
     notice('This browser can’t connect the host and board windows. Please update Safari (15.4 or later) or use another current browser.');
   }
   if (location.protocol === 'file:') {
-    notice('This page was opened as a file. Run it from a web server instead (see the README) so the game list and board window work.');
+    notice('This page was opened straight from a file, so the game list and board window won’t work. Open it through a web server instead (for example, run “python3 -m http.server” in this folder and visit http://localhost:8000).');
   }
   // MathJax loads from the internet; give it a moment before warning.
   setTimeout(() => {
-    if (!mathAvailable()) notice('MathJax didn’t load, so math will appear as raw LaTeX. Check your internet connection and reload.');
+    if (!mathAvailable()) notice('The math typesetting (MathJax) didn’t load, so math will appear as raw LaTeX. Check your internet connection and reload the page.');
   }, 4000);
 
   renderTeamInputs();
@@ -66,13 +67,15 @@ function init() {
   }
 
   $('#btn-open-board').addEventListener('click', openBoard);
-  $('#btn-template').addEventListener('click', (e) => downloadGame('template/template.tex', e.currentTarget));
+  for (const b of document.querySelectorAll('[data-open-board]')) b.addEventListener('click', openBoard);
+  $('#btn-template').addEventListener('click', (e) => downloadGameFromButton('template/template.tex', e.currentTarget));
   $('#btn-undo').addEventListener('click', undo);
   $('#btn-final').addEventListener('click', () => act(startFinal));
   $('#btn-new').addEventListener('click', endGame);
 
   $('#game-list').addEventListener('click', onGameListClick);
   $('#file-input').addEventListener('change', onFileChosen);
+  setUpDropZone($('#own-game'));
   $('#preview').addEventListener('toggle', renderPreview);
   window.addEventListener('resize', () => {
     fitWideMath($('#preview-body'));
@@ -131,30 +134,35 @@ function notice(text) {
 
 async function loadGameList() {
   const box = $('#game-list');
+  const own = $('#own-game');
   try {
     const res = await fetch('games/index.json', { cache: 'no-cache' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const list = await res.json();
-    box.innerHTML = list
-      .map(
-        (g) => `
+    own.insertAdjacentHTML(
+      'beforebegin',
+      list
+        .map(
+          (g) => `
         <div class="game-item">
           <button class="game-option" data-file="${escapeHtml(g.file)}">
             <span class="game-option-title">${escapeHtml(g.title)}</span>
             <span class="game-option-desc">${escapeHtml(g.description || '')}</span>
           </button>
-          <button class="btn link small game-download" data-download="${escapeHtml(g.file)}" title="A .zip with the .tex file, its pictures and jeopardy.sty">⬇ Download</button>
+          <button class="btn link game-download" data-download="${escapeHtml(g.file)}"
+            title="A .zip with the game's LaTeX file and pictures, to edit or print">Download</button>
         </div>`
-      )
-      .join('');
+        )
+        .join('')
+    );
   } catch (e) {
-    box.innerHTML = `<p class="muted">Couldn’t load the built-in games (${escapeHtml(e.message)}). You can still load a .tex file.</p>`;
+    box.insertAdjacentHTML('afterbegin', `<p class="muted">The built-in games couldn’t be loaded (${escapeHtml(e.message)}). You can still load your own.</p>`);
   }
 }
 
 async function onGameListClick(e) {
   const dl = e.target.closest('[data-download]');
-  if (dl) return downloadGame(dl.dataset.download, dl);
+  if (dl) return downloadGameFromButton(dl.dataset.download, dl);
   const btn = e.target.closest('.game-option');
   if (!btn) return;
   try {
@@ -165,69 +173,8 @@ async function onGameListClick(e) {
     await loadSource(text, btn.dataset.file, images, `games/${btn.dataset.file}`);
     markSelected(btn);
   } catch (err) {
-    alert(`Couldn’t load ${btn.dataset.file}: ${err.message}`);
+    alert(`Couldn’t load that game: ${err.message}`);
   }
-}
-
-// Download a built-in game as a .zip of its folder: the .tex file, the
-// pictures it uses, and a copy of jeopardy.sty. In this repository the games
-// share one master jeopardy.sty in games/ (\usepackage{../jeopardy}); the
-// download puts the copy next to the .tex file and changes that line to
-// \usepackage{jeopardy}, so the folder compiles on its own. The same .zip
-// can be loaded back with "Load a .tex file" (the app accepts either form,
-// and ignores jeopardy.sty).
-async function downloadGame(file, btn = null) {
-  const folder = file.includes('/') ? file.slice(0, file.lastIndexOf('/') + 1) : '';
-  const label = btn ? btn.textContent : '';
-  if (btn) {
-    btn.disabled = true;
-    btn.textContent = 'Preparing…';
-  }
-  try {
-    const get = async (url) => {
-      const res = await fetch(url, { cache: 'no-cache' });
-      if (!res.ok) throw new Error(`${url}: HTTP ${res.status}`);
-      return new Uint8Array(await res.arrayBuffer());
-    };
-    const text = new TextDecoder().decode(await get(`games/${file}`));
-    const entries = [
-      { path: file, data: text.replace(/^([^%\n]*\\usepackage\s*(?:\[[^\]]*\])?\s*\{)\.\.\/jeopardy\}/gm, '$1jeopardy}') },
-      { path: `${folder}jeopardy.sty`, data: await get('games/jeopardy.sty') },
-    ];
-    const seen = new Set(entries.map((e) => e.path));
-    const add = async (rel) => {
-      const path = normalizePath(folder + rel);
-      if (seen.has(path)) return;
-      seen.add(path);
-      entries.push({ path, data: await get(`games/${path}`) });
-    };
-    const missing = [];
-    for (const [path, r] of await findImagesOnServer(text, `games/${file}`)) {
-      if (r.url) await add(r.url.slice(`games/${folder}`.length));
-      else missing.push(path);
-    }
-    const name = (folder ? folder.slice(0, -1) : file.replace(/\.tex$/i, '')).replace(/^.*\//, '');
-    saveBlob(zip(entries), `${name}.zip`);
-    if (missing.length) notice(`The download of ${file} is missing: ${missing.join(', ')}.`);
-  } catch (err) {
-    alert(`Couldn’t download ${file}: ${err.message}`);
-  } finally {
-    if (btn) {
-      btn.disabled = false;
-      btn.textContent = label;
-    }
-  }
-}
-
-function saveBlob(blob, name) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = name;
-  document.body.append(a);
-  a.click();
-  a.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 10000);
 }
 
 // The .tex file can be chosen together with its images (⌘-click or
@@ -235,6 +182,31 @@ function saveBlob(blob, name) {
 async function onFileChosen(e) {
   const chosen = [...e.target.files];
   e.target.value = ''; // so choosing the same file again reloads it
+  await handleFiles(chosen);
+}
+
+// The "Your own game" tile: click (or Enter/Space) to choose files, or drop
+// them on it.
+function setUpDropZone(zone) {
+  zone.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      $('#file-input').click();
+    }
+  });
+  zone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    zone.classList.add('dragging');
+  });
+  zone.addEventListener('dragleave', () => zone.classList.remove('dragging'));
+  zone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    zone.classList.remove('dragging');
+    handleFiles([...e.dataTransfer.files]);
+  });
+}
+
+async function handleFiles(chosen) {
   if (!chosen.length) return;
 
   // Unpack any .zip files. Files from a zip keep their path inside it.
@@ -265,8 +237,8 @@ async function onFileChosen(e) {
   for (const f of others) {
     if (/\.sty$/i.test(f.name)) localPackages.set(f.name.slice(0, -4).toLowerCase(), await f.text());
   }
-  await loadSource(text, tex.file.path || tex.file.name, images, null, localPackages);
-  markSelected(null);
+  await loadSource(text, tex.file.name, images, null, localPackages);
+  markSelected($('#own-game'));
 }
 
 // Find the game's .tex file among the chosen files. A zipped game folder can
@@ -275,7 +247,7 @@ async function onFileChosen(e) {
 async function pickGameFile(files) {
   const texFiles = files.filter((f) => /\.tex$/i.test(f.name));
   if (!texFiles.length) {
-    alert('Choose a .tex file, or a .zip of a game folder. To add pictures, select them together with the .tex file.');
+    alert('Choose a .tex game file, or a .zip of a game’s folder.');
     return null;
   }
   if (texFiles.length === 1) return { file: texFiles[0] };
@@ -291,46 +263,6 @@ async function pickGameFile(files) {
 
 function stripComments(text) {
   return text.replace(/(^|[^\\])%.*$/gm, '$1');
-}
-
-// ---------------------------------------------------------------------------
-// Images. Each \includegraphics path maps to { url } or { error }. A path
-// without an extension tries these, in order (like pdflatex does).
-
-const IMAGE_EXTS = ['png', 'jpg', 'jpeg', 'svg', 'gif', 'webp'];
-const IMAGE_ACCEPT = /\.(png|jpe?g|svg|gif|webp)$/i;
-
-function imageCandidates(path) {
-  if (/\.[A-Za-z0-9]+$/.test(path)) return [path];
-  return IMAGE_EXTS.map((x) => `${path}.${x}`);
-}
-
-function imageFormatError(path) {
-  if (/\.pdf$/i.test(path)) {
-    return `${path} is a PDF. Browsers can't show PDF images; save a PNG copy and use that (pdflatex can use the PNG too).`;
-  }
-  if (/\.(eps|ps)$/i.test(path)) return `${path} can't be shown in a browser; save a PNG copy and use that.`;
-  return null;
-}
-
-// Built-in games: images live next to the game file on the server.
-async function findImagesOnServer(text, gamePath) {
-  const dir = gamePath.slice(0, gamePath.lastIndexOf('/') + 1);
-  const images = new Map();
-  await Promise.all(imagesUsed(text).map(async (path) => {
-    const bad = imageFormatError(path);
-    if (bad) return images.set(path, { error: bad });
-    for (const c of imageCandidates(path)) {
-      try {
-        const res = await fetch(dir + c, { method: 'HEAD', cache: 'no-cache' });
-        if (res.ok) return images.set(path, { url: dir + c });
-      } catch {
-        /* try the next one */
-      }
-    }
-    images.set(path, { error: `Image not found: ${dir}${path}${/\.[A-Za-z0-9]+$/.test(path) ? '' : ' (tried .png, .jpg, .svg, .gif and .webp)'}.` });
-  }));
-  return images;
 }
 
 // A loaded .tex file: match images among the chosen files, and keep them in
@@ -365,20 +297,10 @@ async function findImagesInFiles(text, files, texPath, fromZip = new Set()) {
   }
   for (const f of files) {
     if (!used.has(f) && !fromZip.has(f) && !IMAGE_ACCEPT.test(f.name) && !/\.sty$/i.test(f.name)) {
-      notice(`Ignored ${f.name}: only .tex, .zip and image files can be loaded.`);
+      notice(`Skipped ${f.name}: only .tex, .zip and picture files can be loaded.`);
     }
   }
   return images;
-}
-
-// Resolve "." and ".." in a path inside a zip.
-function normalizePath(path) {
-  const out = [];
-  for (const part of path.split('/')) {
-    if (part === '..') out.pop();
-    else if (part !== '.' && part !== '') out.push(part);
-  }
-  return out.join('/');
 }
 
 function readAsDataURL(file) {
@@ -391,7 +313,7 @@ function readAsDataURL(file) {
 }
 
 function markSelected(btn) {
-  document.querySelectorAll('.game-option').forEach((b) => b.classList.toggle('selected', b === btn));
+  document.querySelectorAll('.game-option, .game-own').forEach((b) => b.classList.toggle('selected', b === btn));
 }
 
 // Fetch the .sty file for each package the game uses, when it exists, so
@@ -430,21 +352,24 @@ async function fetchPackages(text, gamePath, localPackages = new Map()) {
 // gamePath: where a built-in game's .tex file is on the server.
 async function loadSource(text, source, images, gamePath, localPackages) {
   const packages = await fetchPackages(text, gamePath, localPackages);
-  loaded = { ...parseGame(text, { packages, images }), source };
+  loaded = { ...parseGame(text, { packages, images }), source, builtIn: !!gamePath };
   setMacros(loaded.game.macros);
   renderLoadStatus();
   updateStartButton();
 }
 
 function renderLoadStatus() {
-  const { game, errors, warnings, source } = loaded;
+  const { game, errors, warnings, source, builtIn } = loaded;
   const s = game.stats;
-  const summary = `${s.categories} categories, ${s.clues} clues, ${s.dailyDoubles} Daily Double${s.dailyDoubles === 1 ? '' : 's'}, ${game.final ? 'Final Jeopardy' : 'no Final Jeopardy'}, ${s.solutions} worked solution${s.solutions === 1 ? '' : 's'}`;
+  const plural = (n, one, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;
+  const parts = [plural(s.categories, 'category', 'categories'), plural(s.clues, 'clue'), plural(s.dailyDoubles, 'Daily Double')];
+  parts.push(game.final ? 'Final Jeopardy' : 'no Final Jeopardy');
+  if (s.solutions) parts.push(plural(s.solutions, 'worked solution'));
   let html = `
     <div class="${errors.length ? 'load-bad' : 'load-ok'}">
-      <strong>${escapeHtml(source)}</strong>: <span class="clue-content">${game.titleHtml}</span>
-      <div class="small">${summary}</div>
-      ${errors.length ? `<div><strong>${errors.length} problem${errors.length === 1 ? '' : 's'} to fix before playing:</strong></div><ul class="msg-list msg-errors mathjax_ignore">${errors.map((m) => `<li>${escapeHtml(m)}</li>`).join('')}</ul>` : ''}
+      <div class="load-title">${errors.length ? '' : '<span class="load-check" aria-hidden="true">✓</span> '}<span class="clue-content">${game.titleHtml}</span>${builtIn ? '' : ` <span class="muted small">(${escapeHtml(source)})</span>`}</div>
+      <div class="small">${parts.join(' · ')}</div>
+      ${errors.length ? `<div class="load-problems"><strong>${errors.length === 1 ? 'One thing' : `${errors.length} things`} to fix in the file before playing:</strong></div><ul class="msg-list msg-errors mathjax_ignore">${errors.map((m) => `<li>${escapeHtml(m)}</li>`).join('')}</ul>` : ''}
     </div>`;
   if (warnings.length) {
     html += `<ul class="msg-list msg-warnings mathjax_ignore">${warnings.map((m) => `<li>${escapeHtml(m)}</li>`).join('')}</ul>`;
@@ -527,7 +452,7 @@ function updateStartButton() {
     hint.textContent = 'Choose a game first.';
   } else if (loaded.errors.length) {
     btn.disabled = true;
-    hint.textContent = 'Fix the problems in the game file, then load it again.';
+    hint.textContent = 'Fix the file, then load it again.';
   } else {
     btn.disabled = false;
     hint.textContent = '';
@@ -660,7 +585,7 @@ function renderBoardStatus() {
   const chip = $('#board-status');
   const on = boardConnected();
   chip.classList.toggle('on', on);
-  chip.textContent = on ? 'Board window: connected' : 'Board window: not open';
+  chip.textContent = on ? 'Board connected' : 'Board not open';
 }
 
 function broadcast() {
@@ -957,7 +882,7 @@ function showSetup() {
   $('#btn-undo').hidden = true;
   $('#btn-final').hidden = true;
   $('#btn-new').hidden = true;
-  $('#topbar-title').innerHTML = 'Jeopardy! <span class="muted">Host</span>';
+  $('#topbar-title').innerHTML = '<a href="./" class="topbar-home">Jeopardy!</a> <span class="muted">Host</span>';
 }
 
 function showGame() {

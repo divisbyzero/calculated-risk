@@ -1,39 +1,57 @@
 # Classroom Jeopardy
 
-A Jeopardy game for math classes. Clues are written in LaTeX and rendered with
-MathJax. The professor runs the game from a **host window** that shows the
-correct responses and keeps score, while a separate **board window** on the
-projector shows only what the class should see.
+Jeopardy-style review games for math class. Clues are written in LaTeX and
+typeset with MathJax. The teacher runs the game from a **host window** that
+shows the correct responses and keeps score, while a **board window** on the
+projector shows only what the class should see. The same LaTeX file also
+compiles to printable handouts.
 
-It's a static website: plain HTML, CSS and JavaScript with no server code and
-no build step. The only outside dependency is MathJax, which loads from a CDN,
-so the computer needs internet access.
+It's a static website (plain HTML, CSS and JavaScript, with no server code
+and no build step), so it can be hosted anywhere that serves files, such as
+GitHub Pages. MathJax and the Final Jeopardy music load from the internet,
+so the computer running the game needs a connection.
 
-## Running it
+Not affiliated with or endorsed by Jeopardy Productions, Inc.
 
-The pages must be served over `http://`; opening `index.html` as a file won't
+## The pages
+
+| Page | What it's for |
+| --- | --- |
+| `index.html` | The landing page: what the app is, how it works, how to write a game, and a FAQ |
+| `host.html` | Set up and run a game (the teacher's screen) |
+| `board.html` | The projector screen. The host page opens it; you don't open it yourself. |
+
+## Running it on your own computer
+
+The pages must be served over `http://`; opening the files directly won't
 work. From this folder:
 
 ```sh
 python3 -m http.server 8000 --bind 127.0.0.1
 ```
 
-Then open <http://127.0.0.1:8000> in Safari (15.4 or newer), Chrome, Edge or
-Firefox. The server is only reachable from this computer.
+Then open <http://127.0.0.1:8000> in a current Chrome, Edge, Firefox or
+Safari (15.4 or newer). The server is only reachable from this computer.
 
-To host it online, publish this folder with GitHub Pages (Settings → Pages →
-deploy from the `main` branch). Note that anything in `games/` is then public,
+## Putting it online
+
+Publish this folder with GitHub Pages (Settings → Pages → deploy from the
+`main` branch), or any static host. Everything in `games/` is then public,
 including the responses, so keep private games on your own computer and load
-them with **Load a .tex file**.
+them with **Your own game** on the host page. Loaded files never leave the
+browser.
 
 ## Running a game
 
-1. Set your display to **extend** onto the projector (System Settings →
-   Displays; turn mirroring off).
-2. Open the app, choose a game or load your own `.tex` file, and name the teams.
-3. Click **Open board window**, drag that window onto the projector, then click
-   inside it (or press **F**) to go full screen. The host's top bar shows
-   "Board window: connected" when the two windows are talking.
+1. Set your computer to **extend** its display onto the projector, not
+   mirror it (on a Mac: System Settings → Displays; on Windows: Windows + P →
+   Extend).
+2. Open the host page. Choose a game (or drop your own file on **Your own
+   game**), name the teams, and choose what the board shows after a correct
+   answer.
+3. Click **Open board window**, drag that window onto the projector, then
+   click inside it (or press **F**) to go full screen. The top bar says
+   **Board connected** when the two windows are talking.
 4. Click **Start game**.
 
 During the game:
@@ -41,82 +59,56 @@ During the game:
 - Click a value on your board to show that clue on the projector.
 - Mark each team that answers **Correct** or **Incorrect**. The app adds or
   subtracts the value. A team can only be marked once per clue.
-- After a correct answer, the board can show one of three things. Choose
-  under **After a correct answer, the board shows** on the setup screen, or
-  in the score panel during the game. The app remembers your choice.
-  - **Nothing**: go straight back to the board.
-  - **The answer**: the answer screen shows the correct response only.
-  - **The answer + worked solution** (the default): the response, plus the
-    worked solution if the clue has one.
-- **Show answer screen** shows it at any time, for example when nobody gets
-  the clue. It includes the worked solution unless you chose **The answer**. **Show the clue again** switches back.
+- After a correct answer, the board shows one of three things, set on the
+  setup screen or in the score panel during the game:
+  - **The answer and the worked solution** (the default; the solution only
+    if the clue has one),
+  - **Just the answer**, or
+  - **Nothing**, going straight back to the board.
+- **Show answer screen** shows the answer at any time, for example when nobody
+  gets the clue. **Show the clue again** switches back.
 - **Return to board** closes the clue. **Cancel** puts a clue back if you
   opened it by mistake.
-- To revisit a clue that's already been played (say, a student has a
-  question), click its gray square. The board shows it marked "REVIEW". You
-  can switch to the answer screen, and no scoring happens.
-- **Daily Double** squares are marked "DD" on your screen only. Choose the team
-  and enter the wager (up to the team's score or the board's top value,
+- To revisit a clue that's already been played, click its gray square. The
+  board shows it marked "REVIEW", and no scoring happens.
+- **Daily Double** squares are marked "DD" on your screen only. Choose the
+  team and enter the wager (up to the team's score or the board's top value,
   whichever is larger).
-- **Final Jeopardy**: the board shows the category, you enter each team's wager
-  (up to its score), then show the clue and mark each team. When you show the
-  clue, the think music starts in a small YouTube player on your screen (play
-  it through the room's speakers; pause it there). If your browser blocks it
-  from starting on its own, press play. To change or turn off the music, edit
-  `FINAL_MUSIC` in `js/config.js`. It needs an internet connection.
-- **Undo** reverses the last action. **Adjust** next to a score sets it by hand.
-- The game saves itself in the browser as you go. If the host page is reloaded,
-  you'll be offered **Resume**.
+- **Final Jeopardy**: the board shows the category, you enter each team's
+  wager (up to its score), then show the clue and mark each team. When you
+  show the clue, think music starts in a small YouTube player on your screen;
+  if the browser blocks it, press play. To change or turn off the music, edit
+  `FINAL_MUSIC` in `js/config.js`.
+- **Undo** reverses the last action. **Adjust** next to a score sets it by
+  hand.
+- The game saves itself in the browser as you go. If the host page is
+  closed or reloaded, it offers **Resume game**.
 
 ## Writing a game
 
-Each game has its own folder inside `games/`, holding the `.tex` file and
-its pictures. The shared [`jeopardy.sty`](games/jeopardy.sty) sits one level
-up, in `games/` itself:
-
-```
-games/
-  index.json                      the list of built-in games
-  jeopardy.sty                    shared by every game
-  template/template.tex
-  multivariable-calculus/
-    multivariable-calculus.tex
-    rose.png
-```
-
-To start a game, copy the [`template`](games/template/template.tex) folder,
-rename the folder and the file, and fill it in.
-
-**Downloads:** the **template** link and **Download** under each built-in
-game on the setup screen give a `.zip` of one folder: the `.tex` file, the
-pictures it uses, and a copy of `jeopardy.sty`. The download changes
-`\usepackage{../jeopardy}` to `\usepackage{jeopardy}`, so the folder
-compiles on its own, with no folder above it. The app accepts either line,
-and ignores any `jeopardy.sty` you load, so the same `.zip` can be loaded
-back as is. To make a downloaded game a built-in one, put its folder in
-`games/`, delete its `jeopardy.sty` (so the master copy is used), and change
-the line back to `\usepackage{../jeopardy}`. Each game loads the shared
-style with `\usepackage{../jeopardy}`. pdflatex then warns that you asked
-for `../jeopardy` but the package provides `jeopardy`; that's harmless.
+A game is one LaTeX file. The easiest start is the **template** link on the
+host page (or **Download the template** on the landing page). It gives a
+`.zip` with `template.tex` and `jeopardy.sty` in one folder, ready to edit in
+any LaTeX editor or Overleaf.
 
 ```latex
 \documentclass{article}
-\usepackage[solutions]{../jeopardy}  % or questions, or answers (see below)
+\usepackage[solutions]{jeopardy}   % or questions, or answers (see Printing)
 \gametitle{Calculus I Review}
-\newcommand{\dd}[1]{\frac{d}{d#1}}   % macros work inside math
+\newcommand{\dd}[1]{\frac{d}{d#1}} % macros work inside math
 
 \begin{document}
 
 \begin{category}{Derivatives}
-  \begin{clue}
-    $\dd{x}\left(x^3\right)$
+  \begin{clue}[say]
+    It is the derivative of $x^3.$
   \response
-    $3x^2$
-  \solution                           % optional worked solution
-    By the power rule, $\dd{x} x^n = n x^{n-1}$, so the derivative is $3x^2$.
+    What is $3x^2$?
+  \solution                          % optional worked solution
+    By the power rule, $\dd{x} x^n = n x^{n-1}.$
   \end{clue}
 
-  \begin{clue}[dailydouble]
+  \begin{clue}[dailydouble, write]
     ...
   \response
     ...
@@ -127,98 +119,132 @@ for `../jeopardy` but the package provides `jeopardy`; that's harmless.
 % ... 5 or 6 categories
 
 \begin{final}{Series}
-  Does $\sum_{n=1}^\infty \frac{1}{n^2}$ converge?
+  It is the sum of $\sum_{n=1}^\infty \frac{1}{n^2}.$
 \response
-  Yes, to $\pi^2/6$.
+  What is $\pi^2/6$?
 \end{final}
 
 \end{document}
 ```
 
-- **Write it or say it** (optional): mark a clue `\begin{clue}[write]` when
-  players must write their response before ringing in (a long expression),
-  or `\begin{clue}[say]` when they can just say it (like "What is 6?"). The
-  board shows a large ✍️ WRITE IT or 🗣️ SAY IT banner on the clue
-  screen, and your screen shows it too. Combine options with commas, as in
-  `\begin{clue}[dailydouble, write]`. A clue with neither shows no banner,
-  which suits Final Jeopardy, where every team writes anyway. The PDFs
-  show it only with the `writesay` option (see below).
-- **Pictures:** use `\includegraphics{rose.png}` anywhere in a clue,
-  response or solution, and put the image file in the game's folder. On the
-  board, a screen with a picture shows the text on the left and the picture
-  on the right, scaled to fill its half. The `width=`/`height=` options only
-  affect the PDF. Use **PNG** or JPG: browsers can't show PDF images, and
-  pdflatex can't use SVG. A name without an extension (`rose`) finds
-  `rose.png`.
-  To load your own game with pictures, zip the game's folder (in Finder,
-  right-click it and choose **Compress**; in Windows, **Send to >
-  Compressed (zipped) folder**) and choose the `.zip` file. The page finds
-  the game's `.tex` file and its pictures inside, and uses any `.sty` macro
-  package you put in the folder. Other files in the folder, such as the PDFs
-  or TikZ sources for figures, are ignored. You can also select the `.tex`
-  file **and** its images together in the file dialog (⌘-click or
-  Ctrl-click); then images are matched by file name. A game with many large images may be too big for
-  the browser to save for **Resume**, so keep picture-heavy games as
-  built-in games.
-  To make a PNG from a TikZ drawing, compile it with
-  `\documentclass[border=4pt]{standalone}` and convert it at 300 dpi:
+- **Board size:** 5 or 6 categories with 5 clues each. Clues are worth
+  100–500 **by position**, so you can reorder them by moving blocks around.
+- **Options on a clue**, combined with commas:
+  - `dailydouble` makes it a Daily Double.
+  - `write` or `say` tells players whether they must write their response
+    before ringing in (a long expression) or can just say it ("What is 6?").
+    The board shows a large ✍️ WRITE IT or 🗣️ SAY IT banner. A clue with
+    neither shows no banner, which suits Final Jeopardy, where every team
+    writes anyway. `\begin{final}[write]{Category}` also works.
+- **Solutions:** `\solution` is optional. Use it for worked steps (`align*`
+  works well). It appears on your host screen and, depending on the setting,
+  on the board's answer screen.
+- **Math** works in `$...$`, `\(...\)`, `\[...\]`, `$$...$$` and environments
+  like `align*`. Your `\newcommand` and `\DeclareMathOperator` macros work
+  inside math. Long equations shrink to fit the board.
+- **Text** can use `\textbf`, `\emph`, `\textit`, `\texttt`, `\underline`,
+  `itemize`, `enumerate`, `center`, `\\`, `\$`, quotes, dashes and accents.
+  Anything else is reported when you load the file.
+- **Pictures:** use `\includegraphics{rose.png}` anywhere in a clue, response
+  or solution, and keep the image in the same folder as the game. On the
+  board, the text goes on the left and the picture on the right. The
+  `width=`/`height=` options only affect the PDF. Use **PNG** or JPG:
+  browsers can't show PDF images, and pdflatex can't use SVG. A name without
+  an extension (`rose`) finds `rose.png`. To make a PNG from a TikZ drawing,
+  compile it with `\documentclass[border=4pt]{standalone}` and convert it:
   `gs -dSAFER -dBATCH -dNOPAUSE -sDEVICE=pngalpha -r300 -o rose.png rose.pdf`
   (`gs` comes with MacTeX).
-- `\solution` is optional. Use it for worked steps (`align*` works well). It
-  appears on the answer screen and on your host screen.
-- MathJax doesn't support `@{...}` in array column specs and silently drops
-  it. Write `\begin{array}{rcl} u & = & x \end{array}` instead of
+- **Your own macro package:** a game can `\usepackage{mymacros}`. Put
+  `mymacros.sty` in the game's folder, and the app reads its macros too.
+- MathJax doesn't support `@{...}` in array column specs. Write
+  `\begin{array}{rcl} u & = & x \end{array}` instead of
   `\begin{array}{r@{=}l} u & x \end{array}`.
-- The board has 5 or 6 categories with 5 clues each. Clues are worth 100–500 **by
-  position**, so you can reorder them by moving blocks around.
-- Math works in `$...$`, `\(...\)`, `\[...\]`, `$$...$$` and environments
-  like `align*`. Your `\newcommand` and `\DeclareMathOperator` macros work
-  inside math.
-- Text can use `\textbf`, `\emph`, `\textit`, `\texttt`, `itemize`,
-  `enumerate`, `center`, `\\`, `\$`, quotes, dashes and accents. Anything else
-  is reported when you load the file.
-- When you load a file, the app lists problems with line numbers, and
-  **Preview every clue and response** shows everything rendered.
 
-**Macros:** define them in the game's preamble with `\newcommand` or
-`\DeclareMathOperator`; they work in the app and in the PDF. A game can also
-`\usepackage{...}` a style file of your own, in its folder or in `games/`; the
-app reads its macros too.
+**Loading it:** on the host page, drop the `.tex` file on **Your own game**
+or click the tile to choose it. If the game has pictures (or its own `.sty`),
+zip its folder first (in Finder, right-click → **Compress**; in Windows,
+right-click → **Send to → Compressed (zipped) folder**) and load the `.zip`.
+The app finds the game file and pictures inside and ignores everything else,
+such as PDFs and TikZ sources. Selecting the `.tex` file and its pictures
+together also works. The app lists any problems with line numbers, and
+**Preview every clue and response** shows everything rendered. A game with
+many large pictures may be too big for the browser to save for **Resume**.
 
-**Printing:** compile the game file with LaTeX as usual (pdflatex, xelatex
-or Overleaf all work). The option on `\usepackage[...]{jeopardy}` at the top
-of the file chooses the PDF (on Overleaf, upload `jeopardy.sty` one folder
-above the game, as in `games/`):
+## Printing
+
+Compile the game file with LaTeX as usual (pdflatex, xelatex or Overleaf).
+`jeopardy.sty` must be in the same folder as the game (a downloaded game
+already has it). The option on `\usepackage[...]{jeopardy}` chooses the PDF:
 
 | Option | The PDF contains |
 | --- | --- |
 | `questions` | The clues only, e.g. a study sheet for students |
 | `answers` | The clues and responses, after an overview of the board |
-| `solutions` (default) | The clues, responses and worked solutions, after an overview of the board. This is the one to proofread while you write a game. |
+| `solutions` (default) | The clues, responses and worked solutions, after an overview of the board. This is the one to proofread while you write. |
 
 Add any of these after it, separated by commas, as in
-`\usepackage[solutions, writesay, noboard]{../jeopardy}`:
+`\usepackage[solutions, writesay, noboard]{jeopardy}`:
 
 | Option | What it does |
 | --- | --- |
-| `writesay` | Shows each clue's `[write]` or `[say]` mark as a small WRITE or SAY under its value. Handy while writing and editing; leave it off for copies you give students. |
+| `writesay` | Shows each clue's `[write]` or `[say]` mark under its value. Handy while writing; leave it off for copies you give students. |
 | `board` | Always shows the board overview, even with `questions` |
 | `noboard` | Never shows the board overview |
 
-To make another version, change the options and compile again. The web game
-ignores these options, and the PDFs never mention the Daily Double.
+The web game ignores these options, and the PDFs never mention the Daily
+Double. Each clue stays on one page with its response; Final Jeopardy
+follows the last category on the same page when it fits, and a long worked
+solution may continue onto the next page.
 
-**Built-in games:** put the game's folder in `games/` and add its path
-(like `my-game/my-game.tex`) to [`games/index.json`](games/index.json).
+## Built-in games
+
+The games on the host page live in `games/`, one folder each, and share one
+master copy of `jeopardy.sty`:
+
+```text
+games/
+  index.json                      the list shown on the host page
+  jeopardy.sty                    shared by every game
+  template/template.tex
+  multivariable-calculus/
+    multivariable-calculus.tex    uses \usepackage[...]{../jeopardy}
+    polar-circle.png
+    figures/                      TikZ sources for the pictures (optional)
+```
+
+To add one, put its folder in `games/` and add an entry to
+[`games/index.json`](games/index.json) with the path (like
+`my-game/my-game.tex`), a title and a one-line description. Built-in games
+load the shared style with `\usepackage{../jeopardy}`; pdflatex warns that
+the package "provides jeopardy", which is harmless.
+
+**Download** under each game gives a `.zip` of its folder: the `.tex` file,
+the pictures it uses, and a copy of `jeopardy.sty`, with the line changed to
+`\usepackage{jeopardy}` so the folder compiles on its own. To turn a
+downloaded game back into a built-in one, put its folder in `games/`, delete
+its `jeopardy.sty`, and change the line back to `\usepackage{../jeopardy}`.
+
+## Settings
+
+`js/config.js` holds the settings you might want to change:
+
+- `BOARD`: the number of categories and clues, and the value step. Set
+  `enforceStandardSize` to `false` to allow boards of any size.
+- `FINAL_MUSIC`: the YouTube video played during Final Jeopardy, and whether
+  it starts on its own. Set `youtubeId: ''` to turn it off.
 
 ## Files
 
 | Path | What it is |
 | --- | --- |
-| `index.html`, `js/host.js` | Host window: setup, game flow, scoring, undo |
-| `board.html`, `js/board.js` | Projector window: display only |
-| `js/texparser.js` | Reads `.tex` game files and reports errors |
-| `js/config.js` | Board size and values (5 or 6 categories of 5 clues; set `enforceStandardSize` to `false` to allow other sizes), and the Final Jeopardy music |
+| `index.html`, `css/landing.css`, `js/landing.js` | Landing page |
+| `host.html`, `css/host.css`, `js/host.js` | Host window: setup, game flow, scoring, undo |
+| `board.html`, `css/board.css`, `js/board.js` | Projector window: display only |
+| `css/shared.css` | Styles for clue content, used by both windows |
+| `js/texparser.js` | Reads `.tex` game files and reports problems |
+| `js/files.js`, `js/zip.js` | Finding a game's pictures; reading and writing `.zip` files |
+| `js/config.js` | Board size and the Final Jeopardy music |
 | `js/sync.js` | Connects the two windows (BroadcastChannel) |
-| `js/math.js`, `js/mathjax-config.js` | MathJax setup and typesetting |
-| `games/` | One folder per built-in game (its `.tex` file and pictures), plus the list `index.json`, the shared `jeopardy.sty`, and the `template` folder |
+| `js/math.js`, `js/mathjax-config.js` | MathJax setup, typesetting, and fitting wide equations |
+| `img/favicon.svg` | Site icon |
+| `games/` | Built-in games, the shared `jeopardy.sty`, and the template |

@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Jeopardy Host</title>
+  <title>Host a game · Classroom Jeopardy</title>
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/shared.css">
   <link rel="stylesheet" href="css/host.css">
   <script src="js/mathjax-config.js"></script>
@@ -12,9 +13,9 @@
 </head>
 <body>
   <header class="topbar">
-    <div class="topbar-title" id="topbar-title">Jeopardy! <span class="muted">Host</span></div>
+    <div class="topbar-title" id="topbar-title"><a href="./" class="topbar-home">Jeopardy!</a> <span class="muted">Host</span></div>
     <div class="topbar-actions">
-      <span id="board-status" class="status-chip">Board window: not open</span>
+      <span id="board-status" class="status-chip">Board not open</span>
       <button id="btn-open-board" class="btn">Open board window</button>
       <button id="btn-undo" class="btn" hidden>Undo</button>
       <button id="btn-final" class="btn" hidden>Final Jeopardy</button>
@@ -26,25 +27,31 @@
 
   <!-- Setup -->
   <main id="setup-screen" class="setup">
+    <div class="setup-intro">
+      <h1>Set up a game</h1>
+      <p class="muted">Pick a game, name the teams, put the board on your projector, and start. Everything runs in this browser; nothing is uploaded.</p>
+    </div>
+
     <section class="card" id="resume-card" hidden>
-      <h2>Saved game</h2>
+      <h2>Pick up where you left off</h2>
       <p id="resume-text"></p>
       <div class="row">
-        <button id="btn-resume" class="btn primary">Resume</button>
+        <button id="btn-resume" class="btn primary">Resume game</button>
         <button id="btn-discard" class="btn">Discard</button>
       </div>
     </section>
 
     <section class="card">
       <h2><span class="step">1</span> Choose a game</h2>
-      <div id="game-list" class="game-list"></div>
-      <div class="row">
-        <label class="btn file-btn">
-          Load a .tex file&hellip;
+      <div id="game-list" class="game-list">
+        <label class="game-own" id="own-game" tabindex="0">
+          <span class="game-own-icon" aria-hidden="true">+</span>
+          <span class="game-option-title">Your own game</span>
+          <span class="game-option-desc">Drop a <code>.tex</code> file here, or click to choose one. If it has pictures, use a <code>.zip</code> of its folder.</span>
           <input type="file" id="file-input" multiple accept=".tex,text/x-tex,application/x-tex,text/plain,.zip,application/zip,.png,.jpg,.jpeg,.svg,.gif,.webp,image/*,.sty">
         </label>
-        <span class="muted small">Your file stays on this computer. If it has pictures, zip the game’s folder and choose the .zip, or select the pictures together with the .tex file. Start from the <button class="btn link small inline-link" id="btn-template">template</button>.</span>
       </div>
+      <p class="muted small">Writing your own? Start from the <button class="btn link inline-link" id="btn-template">template</button>, or read <a href="./#write">how to write a game</a>.</p>
       <div id="load-status"></div>
       <details id="preview" hidden>
         <summary>Preview every clue and response</summary>
@@ -59,32 +66,35 @@
     </section>
 
     <section class="card">
-      <h2><span class="step">3</span> Options</h2>
-      <p><strong>After a correct answer, the board shows:</strong></p>
+      <h2><span class="step">3</span> After a correct answer</h2>
+      <p class="muted small">What the board shows before going back to the clues. You can change this during the game, too.</p>
       <div class="radio-list">
         <label class="check">
-          <input type="radio" name="opt-after-correct" value="none">
-          <span>Nothing <span class="muted small">(go straight back to the board)</span></span>
+          <input type="radio" name="opt-after-correct" value="solution">
+          <span>The answer and the worked solution <span class="muted small">(when the clue has one)</span></span>
         </label>
         <label class="check">
           <input type="radio" name="opt-after-correct" value="answer">
-          <span>The answer</span>
+          <span>Just the answer</span>
         </label>
         <label class="check">
-          <input type="radio" name="opt-after-correct" value="solution">
-          <span>The answer + worked solution <span class="muted small">(if the clue has one)</span></span>
+          <input type="radio" name="opt-after-correct" value="none">
+          <span>Nothing; go straight back to the board</span>
         </label>
       </div>
-      <p class="muted small">You can also change this during the game, in the Scores panel.</p>
     </section>
 
     <section class="card">
-      <h2><span class="step">4</span> Board window</h2>
-      <p class="muted">
-        Set your display to <strong>extend</strong> (not mirror) onto the projector.
-        Click <strong>Open board window</strong> at the top, drag the new window to the projector,
-        then click inside it or press <kbd>F</kbd> to make it full screen.
-      </p>
+      <h2><span class="step">4</span> Put the board on the projector</h2>
+      <ol class="steps-list">
+        <li>Set your computer to <strong>extend</strong> its display onto the projector (not mirror).</li>
+        <li>Open the board window and drag it onto the projector screen.</li>
+        <li>Click inside it, or press <kbd>F</kbd>, to make it full screen.</li>
+      </ol>
+      <div class="row">
+        <button class="btn" data-open-board>Open board window</button>
+        <span class="muted small">Your screen keeps the answers; the board only shows what the class should see.</span>
+      </div>
     </section>
 
     <div class="start-row">

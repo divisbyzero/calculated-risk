@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Classroom Jeopardy · Review games for math class</title>
+  <meta name="description" content="Jeopardy-style review games for math class, with real math notation, a full-screen board for the projector, and a host screen that keeps the answers and the score. Free, in your browser.">
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/landing.css">
+  <script src="js/mathjax-config.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.js"></script>
+  <script type="module" src="js/landing.js"></script>
+</head>
+<body>
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a href="./" class="brand"><img src="img/favicon.svg" alt="" width="28" height="28"> Classroom Jeopardy</a>
+      <nav class="nav-links" aria-label="Page sections">
+        <a href="#how">How it works</a>
+        <a href="#features">Features</a>
+        <a href="#write">Write a game</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <a href="host.html" class="button button-small">Host a game</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="wrap hero-inner">
+        <div class="hero-text">
+          <h1>Jeopardy-style review games, made for math class.</h1>
+          <p class="lede">Clues with real math notation, a full-screen board for the projector, and a host screen that keeps the answers and the score. It runs in your browser: free, no accounts, nothing to install.</p>
+          <div class="hero-actions">
+            <a href="host.html" class="button button-gold">Host a game <span aria-hidden="true">→</span></a>
+            <a href="#write" class="button button-ghost">Write your own</a>
+          </div>
+          <p class="hero-note">Ready-made Calculus games are included, so you can try it right away.</p>
+        </div>
+
+        <div class="hero-visual" aria-hidden="true">
+          <div class="mock-frame">
+            <div class="mock-board">
+              <div class="mock-cat">Vectors</div><div class="mock-cat">Limits</div><div class="mock-cat">Integrals</div><div class="mock-cat">Series</div>
+              <div class="mock-cell">100</div><div class="mock-cell">100</div><div class="mock-cell used"></div><div class="mock-cell">100</div>
+              <div class="mock-cell">200</div><div class="mock-cell used"></div><div class="mock-cell">200</div><div class="mock-cell">200</div>
+              <div class="mock-cell">300</div><div class="mock-cell">300</div><div class="mock-cell">300</div><div class="mock-cell">300</div>
+            </div>
+          </div>
+          <div class="mock-clue">
+            <div class="mock-clue-head">Integrals · 200</div>
+            <div class="mock-pill">🗣️ SAY IT</div>
+            <div class="mock-clue-text">It is the value of \(\displaystyle\int_0^1 3x^2\,dx.\)</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="section" id="how">
+      <div class="wrap">
+        <h2 class="section-title">How it works</h2>
+        <p class="section-lede">Two windows: one on your laptop, one on the projector.</p>
+        <ol class="steps">
+          <li>
+            <span class="step-num">1</span>
+            <h3>Choose a game</h3>
+            <p>Play a ready-made game or load one you wrote. Your file is read by your browser and never leaves your computer.</p>
+          </li>
+          <li>
+            <span class="step-num">2</span>
+            <h3>Put the board on the projector</h3>
+            <p>Open the board window, drag it onto the projector, and make it full screen. Students see only the board.</p>
+          </li>
+          <li>
+            <span class="step-num">3</span>
+            <h3>Run it from your laptop</h3>
+            <p>Click a clue to reveal it, mark each team right or wrong, and the scores update on the board. Made a mistake? Undo it.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="section section-tint" id="features">
+      <div class="wrap">
+        <h2 class="section-title">Everything a review day needs</h2>
+        <div class="features">
+          <div class="feature">
+            <h3>Math that looks like math</h3>
+            <p>Clues and answers are typeset from LaTeX, from fractions and vectors to triple integrals, and sized to fill the screen.</p>
+          </div>
+          <div class="feature">
+            <h3>Answers only you can see</h3>
+            <p>Your screen shows the correct response and a worked solution. The projector shows only what the class should see.</p>
+          </div>
+          <div class="feature">
+            <h3>Daily Doubles and Final Jeopardy</h3>
+            <p>Wagers are checked against each team’s score, and Final Jeopardy plays think music while teams work.</p>
+          </div>
+          <div class="feature">
+            <h3>Write it or say it</h3>
+            <p>Mark clues that need a written answer. The board shows a big ✍️&nbsp;WRITE&nbsp;IT or 🗣️&nbsp;SAY&nbsp;IT, so everyone knows how to respond.</p>
+          </div>
+          <div class="feature">
+            <h3>Solutions and pictures</h3>
+            <p>After a correct answer, show the answer alone or with its worked solution. Figures appear beside the text.</p>
+          </div>
+          <div class="feature">
+            <h3>Print it, too</h3>
+            <p>The same LaTeX file compiles to a study sheet, an answer key, or a full solutions packet for after class.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Write a game -->
+    <section class="section" id="write">
+      <div class="wrap write">
+        <div class="write-text">
+          <h2 class="section-title">Write your own game</h2>
+          <p>A game is a single LaTeX file. Write five or six categories with five clues each. Values go up by 100 in the order you write them.</p>
+          <ul class="checklist">
+            <li>Each clue is the clue, then <code>\response</code>, then an optional <code>\solution</code>.</li>
+            <li>Add <code>[dailydouble]</code>, <code>[write]</code>, or <code>[say]</code> to a clue with one word.</li>
+            <li>Use <code>\includegraphics{figure.png}</code> for a picture.</li>
+            <li>Finish with <code>\begin{final}{Category}</code> for Final Jeopardy.</li>
+          </ul>
+          <div class="write-actions">
+            <button class="button" id="download-template">Download the template</button>
+            <a href="host.html" class="text-link">Then load it on the host page →</a>
+          </div>
+          <p class="fine">The template comes with <code>jeopardy.sty</code>, so it also compiles in Overleaf or any LaTeX editor. If your game has pictures, load a <code>.zip</code> of its folder.</p>
+        </div>
+        <pre class="code" aria-label="Example game file"><code><span class="c">\documentclass{article}</span>
+<span class="c">\usepackage[solutions]{jeopardy}</span>
+<span class="k">\gametitle</span>{Calculus Review}
+
+<span class="k">\begin</span>{document}
+<span class="k">\begin</span>{category}{Integrals}
+  <span class="k">\begin</span>{clue}[say]
+    It is the value of $\int_0^1 3x^2\,dx.$
+  <span class="k">\response</span>
+    What is $1$?
+  <span class="k">\solution</span>
+    $\int_0^1 3x^2\,dx = x^3\big|_0^1 = 1.$
+  <span class="k">\end</span>{clue}
+  <span class="m">% … four more clues</span>
+<span class="k">\end</span>{category}
+<span class="m">% … more categories</span>
+
+<span class="k">\begin</span>{final}{Series}
+  …
+<span class="k">\end</span>{final}
+<span class="k">\end</span>{document}</code></pre>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section section-tint" id="faq">
+      <div class="wrap faq">
+        <h2 class="section-title">Questions</h2>
+        <details>
+          <summary>What do I need?</summary>
+          <p>A laptop and a projector (or any second screen), and a current version of Chrome, Edge, Firefox, or Safari. The math typesetting and the Final Jeopardy music load from the internet, so you’ll need a connection.</p>
+        </details>
+        <details>
+          <summary>Do students need to do anything?</summary>
+          <p>No. They watch the projector and answer out loud or on paper, just like the show.</p>
+        </details>
+        <details>
+          <summary>Is my game file uploaded anywhere?</summary>
+          <p>No. Your browser reads the file on your computer. Nothing is sent to a server.</p>
+        </details>
+        <details>
+          <summary>What if I close the tab in the middle of a game?</summary>
+          <p>The game saves itself as you play. Open the host page again and choose <strong>Resume game</strong>.</p>
+        </details>
+        <details>
+          <summary>My projector shows the same thing as my laptop. What do I change?</summary>
+          <p>Your display is set to mirror, so the class would see your host screen, answers included. Switch it to extend: on a Mac, open System Settings → Displays and turn off mirroring; on Windows, press <kbd>Windows</kbd>&nbsp;+&nbsp;<kbd>P</kbd> and choose Extend.</p>
+        </details>
+        <details>
+          <summary>How do I make a handout from a game?</summary>
+          <p>Compile the game’s <code>.tex</code> file with LaTeX. Change the option on the <code>\usepackage[…]{jeopardy}</code> line to <code>questions</code> for a study sheet, <code>answers</code> for an answer key, or <code>solutions</code> for answers with worked solutions.</p>
+        </details>
+      </div>
+    </section>
+
+    <!-- Closing call to action -->
+    <section class="cta">
+      <div class="wrap cta-inner">
+        <h2>Ready for review day?</h2>
+        <a href="host.html" class="button button-gold">Host a game <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <span>Classroom Jeopardy is a free tool for teachers.</span>
+      <span>Not affiliated with or endorsed by Jeopardy Productions, Inc.</span>
+    </div>
+  </footer>
+</body>
+</html>

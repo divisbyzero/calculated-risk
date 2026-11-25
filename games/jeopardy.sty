@@ -247,7 +247,11 @@
   before skip=6pt, after skip=2pt,
   segmentation style={draw=jeoRule, line width=0.6pt},
   middle=6pt,
+  jeo@answerextra,
 }
+\tcbset{jeo@answerextra/.style={}}
+% Final Jeopardy's box may continue onto the next page (see \jeo@entry).
+\newif\ifjeo@final
 
 \newcommand*{\jeo@valuetext}{}
 \newcommand*{\jeo@mode}{}
@@ -295,12 +299,18 @@
 
 % #1 clue, #2 response, #3 solution, #4 nonempty if there is a solution.
 % (A solution is shown only in the solutions version.)
-% Each entry is set in a minipage so a clue never separates from its
-% answer across a page break.
+% Each clue is set in a minipage so it never separates from its answer
+% across a page break. Final Jeopardy instead starts right after its
+% heading, on the same page when the clue and response fit there, and a
+% long worked solution may continue onto the next page.
 \newcommand{\jeo@entry}[4]{%
   \def\jeo@hassolution{#4}%
   \par\addvspace{\ifjeo@key 14pt\else 10pt\fi}%
-  \noindent\begin{minipage}{\linewidth}%
+  \ifjeo@final
+    \begingroup\tcbset{jeo@answerextra/.style={breakable}}%
+  \else
+    \noindent\begin{minipage}{\linewidth}%
+  \fi
   \jeo@auxwrite
   \jeo@displayskips
   \begin{list}{}{%
@@ -324,7 +334,7 @@
           \tcblower\jeo@label{SOLUTION}\jeo@afterlabel #3\end{jeo@answer}}%
     \fi
   \end{list}%
-  \end{minipage}\par
+  \ifjeo@final\endgroup\else\end{minipage}\fi\par
 }
 
 \newcommand{\jeo@checkdisplay}{\@ifnextchar\[{\jeo@inlinedisplay}{}}
@@ -352,6 +362,7 @@
   \jeo@findmode{#1}%
   \protected@write\@auxout{}{\string\jeo@auxfinal{\unexpanded{#2}}}%
   \jeo@heading{FINAL JEOPARDY}{#2}%
+  \jeo@finaltrue
   \let\jeo@auxwrite\relax
   \def\jeo@valuetext{}%
   \expandafter\jeo@split\BODY\solution\solution\jeo@stop
