@@ -3,8 +3,8 @@
   --blue-light: #1a2fc0;
   --gold: #ffcc33;
   --red: #ff7070;
-  --gap: 0.6vmin;
-  --radius: 0.6vmin;
+  --gap: 1.1vmin;
+  --radius: 1.6vmin;
 }
 
 html, body {
