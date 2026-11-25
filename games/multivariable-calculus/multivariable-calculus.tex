@@ -411,16 +411,18 @@
 
 
   \begin{clue}[write]
-    It is the indefinite integral $\displaystyle \int xe^x \, dx.$
+    To find $\displaystyle \int x^2\ln x \, dx$ using integration by parts, they are the best choices for $u$ and $dv.$
   \response
-    What is $xe^x-e^x+C$?
+    What are $u=\ln x$ and $dv=x^2\,dx$?
   \solution
-    Use integration by parts with $u=x$ and $dv=e^x\,dx.$ Then $du=dx$ and $v=e^x,$
+    Choose $u=\ln x,$ because its derivative is simpler, and $dv=x^2\,dx,$ which is easy to integrate. Then $du=\frac{1}{x}\,dx$ and $v=\frac{x^3}{3},$ so
     \begin{align*}
-    \int xe^x\,dx
-    &=xe^x-\int e^x\,dx \\
-    &=xe^x-e^x+c.
+    \int x^2\ln x\,dx
+    &=\frac{x^3}{3}\ln x-\int \frac{x^3}{3}\cdot\frac{1}{x}\,dx \\
+    &=\frac{x^3}{3}\ln x-\int \frac{x^2}{3}\,dx \\
+    &=\frac{x^3}{3}\ln x-\frac{x^3}{9}+C.
     \end{align*}
+    (With $u=x^2$ instead, we would need $v=\int \ln x\,dx,$ which is itself an integration by parts.)
   \end{clue}
 
 
