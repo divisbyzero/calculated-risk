@@ -219,7 +219,7 @@ body.idle { cursor: none; }
   object-fit: contain;
 }
 
-.answer-solution.alone { margin-top: 0; padding-top: 0; border-top: 0; }
+
 
 /* Answer screen */
 
@@ -232,17 +232,54 @@ body.idle { cursor: none; }
 }
 
 /* Worked solution: a left-aligned block, centered on the screen. */
+/* The response above a worked solution. Its text is sized to fit 40%
+   of the screen, then the box shrinks to the text (see fitBox in board.js). */
+.answer-top {
+  flex: 0 0 auto;
+  height: 40%;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2.4vh;
+}
+
+/* The worked solution and its pictures, in a frosted box. */
+.solution-box {
+  flex: 1 1 0;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 1.6vh 2.4vw 2.4vh;
+  border-radius: 2vh;
+  border: 0.2vh solid rgba(255, 255, 255, 0.22);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.07));
+  box-shadow: inset 0 0.2vh 0 rgba(255, 255, 255, 0.14), 0 1.2vh 3vh rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.solution-label {
+  align-self: flex-start;
+  margin-bottom: 1vh;
+  font-size: 1.8vh;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+}
+.solution-box .screen-body { flex: 1 1 0; }
+
+/* Worked solution: a left-aligned block, centered in its box. */
 .answer-solution {
   display: inline-block;
   max-width: 100%;
-  margin-top: 0.9em;
-  padding-top: 0.7em;
-  border-top: 0.3vh solid rgba(255, 255, 255, 0.35);
   text-align: left;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 0.8em;
   line-height: 1.4;
 }
+
 
 .big-word {
   font-size: 16vh;

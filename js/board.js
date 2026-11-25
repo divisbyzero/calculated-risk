@@ -205,16 +205,29 @@ function screenLabel(label) {
 }
 
 // The answer screen: the correct response, plus the worked solution if any.
+// A solution goes in its own frosted box below the response, together with
+// any pictures; the response is sized on its own so it stays large.
 function answerHtml(label, response, solution) {
   const r = takeFigures(response);
   const s = takeFigures(solution || '');
-  const inner = `
-    ${r.text ? `<div class="answer-response">${r.text}</div>` : ''}
-    ${s.text ? `<div class="answer-solution${r.text ? '' : ' alone'}">${s.text}</div>` : ''}`;
+  if (!s.text && !s.figures) {
+    return `
+    <div class="screen answer-screen">
+      ${screenLabel(label)}
+      ${screenBody(r.text ? `<div class="answer-response">${r.text}</div>` : '', r.figures, 0.085, 0.016)}
+    </div>`;
+  }
   return `
     <div class="screen answer-screen">
       ${screenLabel(label)}
-      ${screenBody(inner, r.figures + s.figures, 0.085, 0.016)}
+      ${r.text ? `
+      <div class="answer-top" data-fit-max="0.08" data-fit-min="0.025" data-fit-wrap>
+        <div class="fit-inner clue-content"><div class="answer-response">${r.text}</div></div>
+      </div>` : ''}
+      <div class="solution-box">
+        <div class="solution-label">Solution</div>
+        ${screenBody(s.text ? `<div class="answer-solution">${s.text}</div>` : '', r.figures + s.figures, 0.052, 0.014)}
+      </div>
     </div>`;
 }
 
@@ -290,6 +303,8 @@ function fitFigures() {
 function fitAll() {
   fitFigures();
   main.querySelectorAll('[data-fit-max]').forEach(fitBox);
+  // Fitting the response changes how much room the solution box has.
+  fitFigures();
 }
 
 // Shrink the text in a box until it fits, in three steps:
@@ -308,6 +323,10 @@ function fitBox(box) {
   const H = window.innerHeight;
   const min = parseFloat(box.dataset.fitMin) * H;
   let size = parseFloat(box.dataset.fitMax) * H;
+  // A "wrap" box fits its text into its full CSS height, then shrinks to
+  // the text, leaving the rest of the screen to what comes after it.
+  const wrap = box.dataset.fitWrap !== undefined;
+  if (wrap) box.style.height = '';
   clearWideMath(inner);
   const setSize = (s) => {
     size = s;
@@ -326,6 +345,7 @@ function fitBox(box) {
     fitWideMath(inner, WIDE_MATH_MIN);
     shrink(min, tallFits);
   }
+  if (wrap) box.style.height = Math.ceil(Math.min(box.clientHeight, inner.scrollHeight)) + 'px';
 }
 
 let resizeTimer;
