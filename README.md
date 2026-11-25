@@ -59,7 +59,11 @@ During the game:
   and enter the wager (up to the team's score or the board's top value,
   whichever is larger).
 - **Final Jeopardy**: the board shows the category, you enter each team's wager
-  (up to its score), then show the clue and mark each team.
+  (up to its score), then show the clue and mark each team. When you show the
+  clue, the think music starts in a small YouTube player on your screen (play
+  it through the room's speakers; pause it there). If your browser blocks it
+  from starting on its own, press play. To change or turn off the music, edit
+  `FINAL_MUSIC` in `js/config.js`. It needs an internet connection.
 - **Undo** reverses the last action. **Adjust** next to a score sets it by hand.
 - The game saves itself in the browser as you go. If the host page is reloaded,
   you'll be offered **Resume**.
@@ -214,7 +218,7 @@ ignores these options, and the PDFs never mention the Daily Double.
 | `index.html`, `js/host.js` | Host window: setup, game flow, scoring, undo |
 | `board.html`, `js/board.js` | Projector window: display only |
 | `js/texparser.js` | Reads `.tex` game files and reports errors |
-| `js/config.js` | Board size and values (5 or 6 categories of 5 clues; set `enforceStandardSize` to `false` to allow other sizes) |
+| `js/config.js` | Board size and values (5 or 6 categories of 5 clues; set `enforceStandardSize` to `false` to allow other sizes), and the Final Jeopardy music |
 | `js/sync.js` | Connects the two windows (BroadcastChannel) |
 | `js/math.js`, `js/mathjax-config.js` | MathJax setup and typesetting |
 | `games/` | One folder per built-in game (its `.tex` file and pictures), plus the list `index.json`, the shared `jeopardy.sty`, and the `template` folder |

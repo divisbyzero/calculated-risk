@@ -1,29 +1,16 @@
-% Multivariable Calculus review game, built from the Lab 11 final review.
-%
-% Marked with "% NEW" (written by Claude, not from Lab 11):
-%   Vectors and Surfaces 400 and 500, Curves and Motion 400 and 500,
-%   Partial Derivatives 100 and 500, Optimization 100, 200 and 500,
-%   Multiple Integrals 500, Potpourri 300 and 400, and Final Jeopardy.
-% Potpourri 100 and 200 come from the Calculus II game.
-%
-% Figures from Lab 11 are in the solutions of Multiple Integrals 100 and
-% 400, and Potpourri 500. (The retired Optimization 500, commented out,
-% uses square-candidates.png.) Their TikZ sources are in
-% figures/; run figures/build.sh to remake the PNGs after editing one.
-%
-% Marked with "% PICTURE" (would benefit from a figure):
-%   Vectors and Surfaces 500, Curves and Motion 500,
-%   Partial Derivatives 100, Multiple Integrals 500, and Final Jeopardy.
-%
 % Each clue is marked [write] or [say]: whether players must write their
 % response before ringing in, or can just say it. The game board shows
-% this on the clue screen; the PDF doesn't.
+% this on the clue screen; the PDF shows it only with the writesay option.
 \documentclass{article}
 % Which PDF to make (the web game ignores this):
 %   questions  clues only, e.g. a study sheet for students
 %   answers    clues and responses
 %   solutions  clues, responses, and worked solutions
-\usepackage[solutions]{../jeopardy}
+% Add any of these, separated by commas, e.g. [solutions, writesay]:
+%   writesay   show each clue's [write]/[say] mark (for you, not students)
+%   board      always show the board overview (even with questions)
+%   noboard    never show the board overview
+\usepackage[solutions,writesay]{../jeopardy}
 
 \gametitle{Multivariable Calculus}
 
@@ -134,7 +121,7 @@
   \end{clue}
 
   \begin{clue}[write]
-    A particle has velocity $\bvec{v}(t) = \uveci + t \uvecj$ and starts at $\bvec{r}(0) = \uvecj + 2\uveck.$ It is the particle's position at time $t=2.$
+    This is a particle's position at $t=2$ provided that it has velocity $\bvec{v}(t) = \uveci + t \uvecj$ and starts at $\bvec{r}(0) = \uvecj + 2\uveck.$ 
   \response
     What is $2 \uveci + 3 \uvecj + 2 \uveck$?
   \solution
@@ -142,29 +129,34 @@
     \bvec{r}(t)
     &=\int \bvec{v}(t)\,dt \\
     &=\int (\uveci+t\,\uvecj)\,dt \\
-    &=t\,\uveci+\frac{1}{2}t^2\,\uvecj+\bvec{c}.
+    &=t\,\uveci+\frac{1}{2}t^2\,\uvecj+\bvec{C}.
     \end{align*}
-    Using $\bvec{r}(0)=\uvecj+2\,\uveck,$ we get $\bvec{c}=\uvecj+2\,\uveck.$ So,
+    Using $\bvec{r}(0)=\uvecj+2\,\uveck,$ we get $\bvec{C}=\uvecj+2\,\uveck.$ So,
     \[
     \bvec{r}(t)=t\,\uveci+\left(1+\frac{1}{2}t^2\right)\uvecj+2\,\uveck.
     \]
     \[
-    \bvec{r}(2)=2\,\uveci+3\,\uvecj+2\,\uveck.
+    \bvec{r}(2)=2\,\uveci+3\,\uvecj+2\,\uveck=\langle 2, 3, 2 \rangle.
     \]
   \end{clue}
 
   % NEW: written by Claude, not from Lab 11.
   \begin{clue}[say]
-    It is the slope of the tangent line to the parametric curve $x=t^2,$ $y=t^3-3t$ at the point where $t=2.$
+    It is the slope of the tangent line to the parametric curve 
+    \begin{align*}
+    x&=t^2\\
+    y&=t^3-3t
+    \end{align*}
+    when $t=2.$
   \response
     What is $\frac{9}{4}$?
   \solution
     \[
     \frac{dy}{dx}=\frac{dy/dt}{dx/dt}=\frac{3t^2-3}{2t}.
     \]
-    So, when $t=2,$
+    When $t=2,$
     \[
-    \frac{dy}{dx}=\frac{3(2)^2-3}{2(2)}=\frac{9}{4}.
+    \frac{dy}{dx}=\frac{9}{4}.
     \]
   \end{clue}
 
@@ -177,7 +169,11 @@
   \solution
     Multiply both sides by $r$ to get $r^2=2r\sin\theta.$ Since $r^2=x^2+y^2$ and $r\sin\theta=y,$
     \[
-    x^2+y^2=2y,\qquad\text{or}\qquad x^2+(y-1)^2=1.
+    x^2+y^2=2y.
+    \]
+    Rearranging terms and completing the square gives
+    \[
+    x^2+(y-1)^2=1.
     \]
     This is the circle of radius $1$ centered at $(0,1),$ so its area is $\pi\cdot 1^2=\pi.$
   \end{clue}
@@ -190,11 +186,11 @@
   % NEW: written by Claude, not from Lab 11.
   % PICTURE (optional): a contour map of f(x,y) = x^2 + y^2.
   \begin{clue}[say]
-    They are the level curves of $f(x,y)=x^2+y^2.$
+    This is the level curve of the function $f(x,y)=2x^2+2y^2$ when $k=2.$
   \response
-    What are circles centered at the origin?
+    What is the unit circle?
   \solution
-    The level curve $f(x,y)=k$ is $x^2+y^2=k.$ For $k>0,$ this is the circle of radius $\sqrt{k}$ centered at the origin. (For $k=0,$ it is the single point $(0,0),$ and for $k<0,$ it is empty.)
+    When $k=2,$ the level curve is $2x^2+2y^2=2.$ This equation simplifies to $x^2+y^2=1,$ which is the unit circle in the $xy$-plane.
   \end{clue}
 
   \begin{clue}[say]
@@ -221,27 +217,27 @@
   \response
     What is $\displaystyle \frac{m}{1+m^2}$?
   \solution
-    Along $C_m,$ we have $y=mx,$ so
-    \[
-    \lim_{x\to 0}\frac{x(mx)}{x^2+(mx)^2}
-    =\lim_{x\to 0}\frac{mx^2}{x^2+m^2x^2}
-    =\lim_{x\to 0}\frac{m}{1+m^2}
-    =\frac{m}{1+m^2}.
-    \]
+    Along $y=mx$ we have 
+    \begin{align*}
+    \lim_{x\to 0}\frac{x(mx)}{x^2+(mx)^2}&=\lim_{x\to 0}\frac{mx^2}{x^2+m^2x^2} \\
+    %&=\lim_{x\to 0}\frac{mx^2}{x^2(1+m^2)} \\
+    &=\lim_{x\to 0}\frac{m}{1+m^2}\\
+    &=\frac{m}{1+m^2}.
+    \end{align*}
   \end{clue}
 
   \begin{clue}[write]
-    It is the equation of the tangent plane to the surface $z = e^{x+y}$ at the point $(0,0,1).$
+    It is the equation of the tangent plane to the graph of $f(x,y) = e^{x+y}$ at $(0,0).$
   \response
     What is $z=x+y+1$?
   \solution
     \[
-    \frac{\partial z}{\partial x}=e^{x+y},\qquad \frac{\partial z}{\partial y}=e^{x+y}.
+    \frac{\partial f}{\partial x}=e^{x+y},\qquad \frac{\partial f}{\partial y}=e^{x+y}.
     \]
     \[
-    \frac{\partial z}{\partial x}(0,0)=1,\qquad \frac{\partial z}{\partial y}(0,0)=1.
+    \frac{\partial f}{\partial x}(0,0)=1,\qquad \frac{\partial f}{\partial y}(0,0)=1.
     \]
-    A normal vector is $\bvec{n}=\langle \tfrac{\partial z}{\partial x}, \tfrac{\partial z}{\partial y}, -1\rangle=\langle 1,\,1,\,-1\rangle.$ So, the tangent plane is
+    A normal vector is $\bvec{n}=\langle \tfrac{\partial f}{\partial x}, \tfrac{\partial f}{\partial y}, -1\rangle=\langle 1,\,1,\,-1\rangle.$ So, the tangent plane is
     \[
     1(x-0)+1(y-0)-1(z-1)=0,\qquad\text{or}\qquad z=x+y+1.
     \]
@@ -249,13 +245,13 @@
 
   % NEW: written by Claude, not from Lab 11.
   \begin{clue}[say]
-    It is the directional derivative of $f(x,y)=xy^2$ at the point $(1,2)$ in the direction of the vector $\langle 3,4\rangle.$
+    It is the directional derivative of $f(x,y)=5xy^2$ at $(1,2)$ in the direction of $\langle 3,4\rangle.$
   \response
-    What is $\frac{28}{5}$?
+    What is $28$?
   \solution
-    The gradient is $\nabla f(x,y)=\langle y^2,\,2xy\rangle,$ so $\nabla f(1,2)=\langle 4,\,4\rangle.$ The vector $\langle 3,4\rangle$ has length $5,$ so the unit vector in its direction is $\bvec{u}=\left\langle\frac{3}{5},\frac{4}{5}\right\rangle.$ So,
+    The gradient is $\nabla f(x,y)=\langle 5y^2,\,10xy\rangle,$ so $\nabla f(1,2)=\langle 20,\,20\rangle.$ The vector $\langle 3,4\rangle$ has length $5,$ so the unit vector in its direction is $\bvec{u}=\left\langle\frac{3}{5},\frac{4}{5}\right\rangle.$ Thus,
     \[
-    D_{\bvec{u}}f(1,2)=\nabla f(1,2)\dotprod\bvec{u}=4\cdot\tfrac{3}{5}+4\cdot\tfrac{4}{5}=\tfrac{28}{5}.
+    D_{\bvec{u}}f(1,2)=\nabla f(1,2)\dotprod\bvec{u}=20\cdot\tfrac{3}{5}+20\cdot\tfrac{4}{5}=28.
     \]
   \end{clue}
 
@@ -266,7 +262,7 @@
 
   % NEW: written by Claude, not from Lab 11.
   \begin{clue}[say]
-    It is the critical point of $f(x,y)=x^2+y^2-4x+6y.$
+    It is the only critical point of $f(x,y)=x^2+y^2-4x+6y.$
   \response
     What is $(2,-3)$?
   \solution
@@ -279,14 +275,14 @@
 
   % NEW: written by Claude, not from Lab 11.
   \begin{clue}[say]
-    It is the type of critical point $(a,b)$ of $f$ when $f_{xx}(a,b)=1,$ $f_{yy}(a,b)=4,$ and $f_{xy}(a,b)=3.$
+    It is the type of critical point $(a,b)$ of $f$ assuming $f_{xx}(a,b)=1,$ $f_{yy}(a,b)=4,$ and $f_{xy}(a,b)=3.$
   \response
     What is a saddle point?
   \solution
     \[
     D=f_{xx}(a,b)f_{yy}(a,b)-(f_{xy}(a,b))^2=1\cdot 4-3^2=-5<0.
     \]
-    So, by the Second Derivatives Test, $(a,b)$ is a saddle point. (Even though $f_{xx}$ and $f_{yy}$ are both positive, it is not a local minimum.)
+    So, by the Second Derivatives Test, $(a,b)$ is a saddle point. 
   \end{clue}
 
   \begin{clue}[say]

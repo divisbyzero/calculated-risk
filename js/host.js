@@ -5,6 +5,7 @@ import { parseGame, packagesUsed, imagesUsed } from './texparser.js';
 import { openChannel, syncSupported } from './sync.js';
 import { setMathHTML, setMacros, mathAvailable, fitWideMath } from './math.js';
 import { unzip, zip } from './zip.js';
+import { FINAL_MUSIC } from './config.js';
 import { escapeHtml, formatScore } from './util.js';
 
 const STORAGE_KEY = 'classroom-jeopardy.saved.v1';
@@ -1082,12 +1083,28 @@ function contentHtml() {
     case 'final-clue':
       return `
         <div class="clue-head"><span class="tag" style="background:var(--blue)">Final Jeopardy</span><span class="cat-name clue-content">${g.final.categoryHtml}</span></div>
+        ${finalMusicHtml()}
         ${responseBoxes(g.final)}
         <div id="controls"></div>`;
     case 'results':
       return `<h2>Final scores</h2><div id="controls"></div>`;
   }
   return '';
+}
+
+// The Final Jeopardy music (see FINAL_MUSIC in config.js). It's part of the
+// content, which isn't redrawn while judging, so it keeps playing.
+function finalMusicHtml() {
+  const id = FINAL_MUSIC.youtubeId;
+  if (!id) return '';
+  const params = new URLSearchParams({ rel: '0', playsinline: '1', autoplay: FINAL_MUSIC.autoplay ? '1' : '0' });
+  return `
+    <div class="final-music">
+      <div class="box-label">Final Jeopardy music</div>
+      <iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?${params}"
+        title="Final Jeopardy music" allow="autoplay; encrypted-media; picture-in-picture"
+        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </div>`;
 }
 
 function controlsHtml() {

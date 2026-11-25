@@ -304,6 +304,9 @@ details summary { cursor: pointer; color: var(--blue); margin-top: 14px; }
 .mode-say { background: #1e8449; }
 
 .box { border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; }
+.final-music { margin-bottom: 12px; }
+.final-music .box-label { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+.final-music iframe { display: block; width: 320px; max-width: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: 8px; background: #000; }
 .box-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
 .box-clue { background: var(--blue); color: #fff; font-size: 20px; font-family: Georgia, "Times New Roman", serif; }
 .box-clue .box-label { color: rgba(255, 255, 255, 0.7); font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; }
