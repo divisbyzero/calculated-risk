@@ -4,6 +4,7 @@
 import { parseGame, packagesUsed, imagesUsed } from './texparser.js';
 import { openChannel, syncSupported } from './sync.js';
 import { setMathHTML, setMacros, mathAvailable, fitWideMath } from './math.js';
+import { unzip } from './zip.js';
 import { escapeHtml, formatScore } from './util.js';
 
 const STORAGE_KEY = 'classroom-jeopardy.saved.v1';
@@ -164,20 +165,64 @@ async function onGameListClick(e) {
 // The .tex file can be chosen together with its images (⌘-click or
 // Ctrl-click to choose several files).
 async function onFileChosen(e) {
-  const files = [...e.target.files];
+  const chosen = [...e.target.files];
   e.target.value = ''; // so choosing the same file again reloads it
-  if (!files.length) return;
-  const texFiles = files.filter((f) => /\.tex$/i.test(f.name));
-  if (texFiles.length !== 1) {
-    alert(texFiles.length
-      ? 'Choose just one .tex file at a time (plus its images).'
-      : 'Choose a .tex file too. To add its images, select them together with the .tex file.');
-    return;
+  if (!chosen.length) return;
+
+  // Unpack any .zip files. Files from a zip keep their path inside it.
+  const files = [];
+  const fromZip = new Set();
+  for (const f of chosen) {
+    if (!/\.zip$/i.test(f.name)) {
+      files.push(f);
+      continue;
+    }
+    try {
+      for (const z of await unzip(f)) {
+        files.push(z);
+        fromZip.add(z);
+      }
+    } catch (err) {
+      alert(`Couldn’t open ${f.name}: ${err.message}.`);
+      return;
+    }
   }
-  const text = await texFiles[0].text();
-  const images = await findImagesInFiles(text, files.filter((f) => f !== texFiles[0]));
-  await loadSource(text, texFiles[0].name, images);
+
+  const tex = await pickGameFile(files);
+  if (!tex) return;
+  const text = await tex.file.text();
+  const others = files.filter((f) => f !== tex.file);
+  const images = await findImagesInFiles(text, others, tex.file.path, fromZip);
+  const localPackages = new Map();
+  for (const f of others) {
+    if (/\.sty$/i.test(f.name)) localPackages.set(f.name.slice(0, -4).toLowerCase(), await f.text());
+  }
+  await loadSource(text, tex.file.path || tex.file.name, images, null, localPackages);
   markSelected(null);
+}
+
+// Find the game's .tex file among the chosen files. A zipped game folder can
+// hold other .tex files too (such as TikZ sources for its figures), so when
+// there are several, use the one that loads the jeopardy package.
+async function pickGameFile(files) {
+  const texFiles = files.filter((f) => /\.tex$/i.test(f.name));
+  if (!texFiles.length) {
+    alert('Choose a .tex file, or a .zip of a game folder. To add pictures, select them together with the .tex file.');
+    return null;
+  }
+  if (texFiles.length === 1) return { file: texFiles[0] };
+  const games = [];
+  for (const f of texFiles) {
+    if (/\\usepackage\s*(\[[^\]]*\])?\s*\{[^}]*jeopardy\}/.test(stripComments(await f.text()))) games.push(f);
+  }
+  if (games.length === 1) return { file: games[0] };
+  const names = (games.length ? games : texFiles).map((f) => f.path || f.name).join(', ');
+  alert(`Found more than one game file (${names}). Choose just one game at a time.`);
+  return null;
+}
+
+function stripComments(text) {
+  return text.replace(/(^|[^\\])%.*$/gm, '$1');
 }
 
 // ---------------------------------------------------------------------------
@@ -220,9 +265,12 @@ async function findImagesOnServer(text, gamePath) {
   return images;
 }
 
-// A loaded .tex file: match images by file name among the chosen files, and
-// keep them in the page as data URLs (so they reach the board window).
-async function findImagesInFiles(text, files) {
+// A loaded .tex file: match images among the chosen files, and keep them in
+// the page as data URLs (so they reach the board window). Files from a zip
+// are matched by their path relative to the .tex file first, then by name.
+async function findImagesInFiles(text, files, texPath, fromZip = new Set()) {
+  const texDir = texPath ? texPath.slice(0, texPath.lastIndexOf('/') + 1) : '';
+  const byPath = new Map(files.filter((f) => f.path).map((f) => [f.path.toLowerCase(), f]));
   const byName = new Map(files.map((f) => [f.name.toLowerCase(), f]));
   const images = new Map();
   const used = new Set();
@@ -233,7 +281,7 @@ async function findImagesInFiles(text, files) {
       continue;
     }
     const file = imageCandidates(path)
-      .map((c) => byName.get(c.slice(c.lastIndexOf('/') + 1).toLowerCase()))
+      .map((c) => byPath.get(normalizePath(texDir + c).toLowerCase()) || byName.get(c.slice(c.lastIndexOf('/') + 1).toLowerCase()))
       .find(Boolean);
     if (file) {
       used.add(file);
@@ -241,16 +289,28 @@ async function findImagesInFiles(text, files) {
     } else {
       const name = path.slice(path.lastIndexOf('/') + 1);
       images.set(path, {
-        error: `Image ${name} wasn't loaded. Choose it together with the .tex file (⌘-click or Ctrl-click to select several files).`,
+        error: fromZip.size
+          ? `Image ${name} isn't in the zip file. Put it in the game's folder, then zip the folder again.`
+          : `Image ${name} wasn't loaded. Choose it together with the .tex file (⌘-click or Ctrl-click to select several files), or load a .zip of the game's folder.`,
       });
     }
   }
   for (const f of files) {
-    if (!used.has(f) && !IMAGE_ACCEPT.test(f.name)) {
-      notice(`Ignored ${f.name}: only .tex files and images can be loaded.`);
+    if (!used.has(f) && !fromZip.has(f) && !IMAGE_ACCEPT.test(f.name) && !/\.sty$/i.test(f.name)) {
+      notice(`Ignored ${f.name}: only .tex, .zip and image files can be loaded.`);
     }
   }
   return images;
+}
+
+// Resolve "." and ".." in a path inside a zip.
+function normalizePath(path) {
+  const out = [];
+  for (const part of path.split('/')) {
+    if (part === '..') out.pop();
+    else if (part !== '.' && part !== '') out.push(part);
+  }
+  return out.join('/');
 }
 
 function readAsDataURL(file) {
@@ -270,11 +330,17 @@ function markSelected(btn) {
 // the game's macros from those packages work on screen. A package is looked
 // for where LaTeX would find it (relative to a built-in game's folder, as in
 // \usepackage{../mymacros}), then in games/.
-async function fetchPackages(text, gamePath) {
+async function fetchPackages(text, gamePath, localPackages = new Map()) {
   const packages = {};
   for (const name of packagesUsed(text)) {
     const base = name.replace(/^.*\//, '');
     if (base === 'jeopardy' || !/^[A-Za-z0-9_.\/-]+$/.test(name)) continue;
+    // A .sty chosen with the game (or in its zip) wins.
+    const local = localPackages.get(base.toLowerCase());
+    if (local !== undefined) {
+      packages[name] = local;
+      continue;
+    }
     const places = [];
     if (gamePath) places.push(new URL(`${name}.sty`, new URL(gamePath, location.href)).href);
     places.push(`games/${base}.sty`);
@@ -294,8 +360,8 @@ async function fetchPackages(text, gamePath) {
 }
 
 // gamePath: where a built-in game's .tex file is on the server.
-async function loadSource(text, source, images, gamePath) {
-  const packages = await fetchPackages(text, gamePath);
+async function loadSource(text, source, images, gamePath, localPackages) {
+  const packages = await fetchPackages(text, gamePath, localPackages);
   loaded = { ...parseGame(text, { packages, images }), source };
   setMacros(loaded.game.macros);
   renderLoadStatus();

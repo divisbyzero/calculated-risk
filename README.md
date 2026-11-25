@@ -136,9 +136,14 @@ for `../jeopardy` but the package provides `jeopardy`; that's harmless.
   affect the PDF. Use **PNG** or JPG: browsers can't show PDF images, and
   pdflatex can't use SVG. A name without an extension (`rose`) finds
   `rose.png`.
-  To load your own game with pictures, select the `.tex` file **and** its
-  images together in the file dialog (⌘-click or Ctrl-click). Images are
-  matched by file name. A game with many large images may be too big for
+  To load your own game with pictures, zip the game's folder (in Finder,
+  right-click it and choose **Compress**; in Windows, **Send to >
+  Compressed (zipped) folder**) and choose the `.zip` file. The page finds
+  the game's `.tex` file and its pictures inside, and uses any `.sty` macro
+  package you put in the folder. Other files in the folder, such as the PDFs
+  or TikZ sources for figures, are ignored. You can also select the `.tex`
+  file **and** its images together in the file dialog (⌘-click or
+  Ctrl-click); then images are matched by file name. A game with many large images may be too big for
   the browser to save for **Resume**, so keep picture-heavy games as
   built-in games.
   To make a PNG from a TikZ drawing, compile it with
