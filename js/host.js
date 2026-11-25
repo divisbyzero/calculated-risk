@@ -8,7 +8,21 @@ import { escapeHtml, formatScore } from './util.js';
 
 const STORAGE_KEY = 'classroom-jeopardy.saved.v1';
 const PREFS_KEY = 'classroom-jeopardy.prefs.v1';
-const DEFAULT_SETTINGS = { showAnswerAfterCorrect: true };
+// What the board shows after a correct answer: 'none' (straight back to the
+// board), 'answer' (the response) or 'solution' (response and worked solution).
+const DEFAULT_SETTINGS = { afterCorrect: 'solution' };
+const AFTER_CORRECT = ['none', 'answer', 'solution'];
+
+// Older saves and prefs used a checkbox, showAnswerAfterCorrect.
+function normalizeSettings(st) {
+  const out = { ...DEFAULT_SETTINGS, ...st };
+  if (!st || !('afterCorrect' in st)) {
+    if (st && st.showAnswerAfterCorrect === false) out.afterCorrect = 'none';
+  }
+  if (!AFTER_CORRECT.includes(out.afterCorrect)) out.afterCorrect = DEFAULT_SETTINGS.afterCorrect;
+  delete out.showAnswerAfterCorrect;
+  return out;
+}
 const MAX_HISTORY = 200;
 const $ = (sel) => document.querySelector(sel);
 
@@ -43,9 +57,11 @@ function init() {
   loadGameList();
   checkSavedGame();
 
-  const opt = $('#opt-show-answer');
-  opt.checked = readPrefs().showAnswerAfterCorrect;
-  opt.addEventListener('change', () => writePrefs({ showAnswerAfterCorrect: opt.checked }));
+  const pref = readPrefs().afterCorrect;
+  for (const r of document.querySelectorAll('input[name="opt-after-correct"]')) {
+    r.checked = r.value === pref;
+    r.addEventListener('change', () => writePrefs({ afterCorrect: r.value }));
+  }
 
   $('#btn-open-board').addEventListener('click', openBoard);
   $('#btn-undo').addEventListener('click', undo);
@@ -89,10 +105,14 @@ function init() {
   $('#host-main').addEventListener('input', onMainInput);
   $('#host-side').addEventListener('click', onSideClick);
   $('#host-side').addEventListener('change', (e) => {
-    if (e.target.id !== 'side-show-answer' || !state) return;
-    state.settings.showAnswerAfterCorrect = e.target.checked;
-    writePrefs({ showAnswerAfterCorrect: e.target.checked });
+    if (e.target.id !== 'side-after-correct' || !state) return;
+    state.settings.afterCorrect = e.target.value;
+    writePrefs({ afterCorrect: e.target.value });
     save();
+    // The answer screen may now include or leave out the solution.
+    mainKey = null;
+    renderMain();
+    broadcast();
   });
 
   setInterval(renderBoardStatus, 2000);
@@ -337,7 +357,7 @@ function responseCell(q) {
 
 function readPrefs() {
   try {
-    return { ...DEFAULT_SETTINGS, ...JSON.parse(localStorage.getItem(PREFS_KEY)) };
+    return normalizeSettings(JSON.parse(localStorage.getItem(PREFS_KEY)));
   } catch {
     return { ...DEFAULT_SETTINGS };
   }
@@ -345,7 +365,7 @@ function readPrefs() {
 
 function writePrefs(prefs) {
   try {
-    localStorage.setItem(PREFS_KEY, JSON.stringify({ ...readPrefs(), ...prefs }));
+    localStorage.setItem(PREFS_KEY, JSON.stringify(normalizeSettings({ ...readPrefs(), ...prefs })));
   } catch {
     /* ignore */
   }
@@ -390,7 +410,7 @@ function startGame() {
     view: 'board',
     active: null,
     final: null,
-    settings: { showAnswerAfterCorrect: $('#opt-show-answer').checked },
+    settings: normalizeSettings({ afterCorrect: document.querySelector('input[name="opt-after-correct"]:checked')?.value }),
   };
   history = [];
   mainKey = null;
@@ -439,7 +459,7 @@ function resumeGame() {
   const saved = readSaved();
   if (!saved) return;
   state = saved.state;
-  state.settings = { ...DEFAULT_SETTINGS, ...state.settings };
+  state.settings = normalizeSettings(state.settings);
   history = saved.history || [];
   mainKey = null;
   commit();
@@ -549,7 +569,7 @@ function publicState() {
       mode: q.mode || null,
       // When set, the board shows the answer screen instead of the clue.
       response: state.view === 'clue' && a.showResponse ? q.responseHtml : null,
-      solution: state.view === 'clue' && a.showResponse ? q.solutionHtml : null,
+      solution: state.view === 'clue' && a.showResponse && showSolutions() ? q.solutionHtml : null,
     };
   }
   if (state.final && g.final) {
@@ -559,7 +579,7 @@ function publicState() {
       clue: showClue ? g.final.clueHtml : null,
       mode: g.final.mode || null,
       response: state.final.showResponse ? g.final.responseHtml : null,
-      solution: state.final.showResponse ? g.final.solutionHtml : null,
+      solution: state.final.showResponse && showSolutions() ? g.final.solutionHtml : null,
     };
   }
   return pub;
@@ -641,7 +661,7 @@ function judge(team, right) {
   // A correct answer (or any answer to a Daily Double) finishes the clue:
   // either show the answer screen or go straight back to the board.
   if (right || a.ddTeam !== null) {
-    if (state.settings.showAnswerAfterCorrect) {
+    if (state.settings.afterCorrect !== 'none') {
       a.showResponse = true;
     } else {
       state.used[a.c][a.r] = true;
@@ -836,9 +856,13 @@ function renderSide() {
   $('#host-side').innerHTML = `
     <h2>Scores</h2>${rows}
     <div class="side-meta">${remainingClues()} clue${remainingClues() === 1 ? '' : 's'} left on the board</div>
-    <label class="check side-option">
-      <input type="checkbox" id="side-show-answer" ${state.settings.showAnswerAfterCorrect ? 'checked' : ''}>
-      <span>Show the answer screen after a correct answer</span>
+    <label class="side-option">
+      <span>After a correct answer, the board shows:</span>
+      <select id="side-after-correct">
+        ${[['none', 'Nothing (back to the board)'], ['answer', 'The answer'], ['solution', 'The answer + worked solution']]
+          .map(([v, t]) => `<option value="${v}"${state.settings.afterCorrect === v ? ' selected' : ''}>${t}</option>`)
+          .join('')}
+      </select>
     </label>`;
 }
 
@@ -863,8 +887,15 @@ function responseBoxes(q) {
     ${q.solutionHtml ? `<div class="box box-solution clue-content"><div class="box-label">Worked solution</div>${q.solutionHtml}</div>` : ''}`;
 }
 
+// The answer screen leaves out the worked solution only in "answer" mode.
+// ("Nothing" only skips the automatic answer screen; if the host opens it,
+// it shows everything.)
+function showSolutions() {
+  return state.settings.afterCorrect !== 'answer';
+}
+
 function boardShows(showingAnswer, q) {
-  const what = showingAnswer ? `the answer screen (response${q.solutionHtml ? ' and worked solution' : ''})` : 'the clue';
+  const what = showingAnswer ? `the answer screen (response${q.solutionHtml && showSolutions() ? ' and worked solution' : ''})` : 'the clue';
   return `<div class="board-shows">Board shows: <strong>${what}</strong></div>`;
 }
 

@@ -41,13 +41,15 @@ During the game:
 - Click a value on your board to show that clue on the projector.
 - Mark each team that answers **Correct** or **Incorrect**. The app adds or
   subtracts the value. A team can only be marked once per clue.
-- After a correct answer, the board switches to the **answer screen**: the
-  response, plus the worked solution if the clue has one. If you'd rather go
-  straight back to the board, turn off **Show the answer screen after a
-  correct answer**. It's on the setup screen and in the score panel during the
-  game, and the app remembers your choice.
+- After a correct answer, the board can show one of three things. Choose
+  under **After a correct answer, the board shows** on the setup screen, or
+  in the score panel during the game. The app remembers your choice.
+  - **Nothing**: go straight back to the board.
+  - **The answer**: the answer screen shows the correct response only.
+  - **The answer + worked solution** (the default): the response, plus the
+    worked solution if the clue has one.
 - **Show answer screen** shows it at any time, for example when nobody gets
-  the clue. **Show the clue again** switches back.
+  the clue. It includes the worked solution unless you chose **The answer**. **Show the clue again** switches back.
 - **Return to board** closes the clue. **Cancel** puts a clue back if you
   opened it by mistake.
 - To revisit a clue that's already been played (say, a student has a

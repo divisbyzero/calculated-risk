@@ -185,7 +185,9 @@ details summary { cursor: pointer; color: var(--blue); margin-top: 14px; }
 .check { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
 .check input { margin-top: 4px; width: 16px; height: 16px; flex: 0 0 auto; }
 
-.side-option { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 13px; }
+.side-option { display: flex; flex-direction: column; gap: 6px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 13px; }
+.side-option select { font: inherit; padding: 4px 6px; border: 1px solid var(--line); border-radius: 6px; }
+.radio-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
 
 .box-solution { background: #f1f3f8; border: 1px solid var(--line); font-size: 18px; font-family: Georgia, "Times New Roman", serif; }
 .box-solution .box-label { color: var(--muted); font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; }

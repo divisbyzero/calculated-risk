@@ -60,13 +60,22 @@
 
     <section class="card">
       <h2><span class="step">3</span> Options</h2>
-      <label class="check">
-        <input type="checkbox" id="opt-show-answer">
-        <span>
-          <strong>Show the answer screen after a correct answer</strong><br>
-          <span class="muted small">The board shows the response and, if the clue has one, the worked solution. Turn this off to go straight back to the board. You can also change this during the game.</span>
-        </span>
-      </label>
+      <p><strong>After a correct answer, the board shows:</strong></p>
+      <div class="radio-list">
+        <label class="check">
+          <input type="radio" name="opt-after-correct" value="none">
+          <span>Nothing <span class="muted small">(go straight back to the board)</span></span>
+        </label>
+        <label class="check">
+          <input type="radio" name="opt-after-correct" value="answer">
+          <span>The answer</span>
+        </label>
+        <label class="check">
+          <input type="radio" name="opt-after-correct" value="solution">
+          <span>The answer + worked solution <span class="muted small">(if the clue has one)</span></span>
+        </label>
+      </div>
+      <p class="muted small">You can also change this during the game, in the Scores panel.</p>
     </section>
 
     <section class="card">
