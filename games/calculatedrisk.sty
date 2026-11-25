@@ -1,17 +1,17 @@
-% jeopardy.sty -- typesets a Jeopardy game file as a printable document.
+% calculatedrisk.sty -- typesets a Calculated Risk game file as a printable document.
 %
 % The web app reads the same .tex file directly. Commands provided:
 %   \gametitle{...}                        (preamble)
 %   \begin{category}{Name} ... \end{category}
 %   \begin{clue} ... \response ... \end{clue}
 %   \begin{clue} ... \response ... \solution ... \end{clue}   (worked solution)
-%   \begin{clue}[dailydouble] ... \response ... \end{clue}
-%     (the Daily Double is for the game only; the PDF doesn't show it)
+%   \begin{clue}[doubledown] ... \response ... \end{clue}
+%     (the Double Down is for the game only; the PDF doesn't show it)
 %   \begin{clue}[write] ... or \begin{clue}[say] ...
 %     (tells the players whether to write their response before ringing
 %     in or just say it; the game shows it, and the PDF shows it only with
 %     the writesay option below. Combine with commas:
-%     \begin{clue}[dailydouble, write])
+%     \begin{clue}[doubledown, write])
 %   \begin{final}{Category} ... \response ... \solution ... \end{final}
 %   \begin{final}[write]{Category} ...   (same write/say option)
 %   \includegraphics[width=...]{file.png}  anywhere in a clue,
@@ -20,9 +20,9 @@
 % Clue values are assigned by position: 100, 200, 300, ...
 %
 % Choose the version of the PDF with a package option:
-%   \usepackage[questions]{jeopardy}  clues only (a study sheet for students)
-%   \usepackage[answers]{jeopardy}    clues and responses
-%   \usepackage[solutions]{jeopardy}  clues, responses, and worked solutions
+%   \usepackage[questions]{calculatedrisk}  clues only (a study sheet for students)
+%   \usepackage[answers]{calculatedrisk}    clues and responses
+%   \usepackage[solutions]{calculatedrisk}  clues, responses, and worked solutions
 %                                     (the default)
 % The answers and solutions versions start with an overview of the board.
 %
@@ -32,28 +32,28 @@
 %   board       always show the board overview (even with questions)
 %   noboard     never show the board overview
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{jeopardy}[2026/11/23 Jeopardy game files]
+\ProvidesPackage{calculatedrisk}[2026/11/25 Calculated Risk game files]
 
 %----------------------------------------------------------------------
 % Options
 
-\newif\ifjeo@key       % show responses
-\newif\ifjeo@solutions % show worked solutions
-\newif\ifjeo@writesay  % show [write]/[say] marks
-\newif\ifjeo@board     % show the board overview
-\newcommand*{\jeo@boardchoice}{auto} % auto: only with responses
-\DeclareOption{questions}{\jeo@keyfalse\jeo@solutionsfalse}
-\DeclareOption{answers}{\jeo@keytrue\jeo@solutionsfalse}
-\DeclareOption{solutions}{\jeo@keytrue\jeo@solutionstrue}
-\DeclareOption{writesay}{\jeo@writesaytrue}
-\DeclareOption{nowritesay}{\jeo@writesayfalse}
-\DeclareOption{board}{\renewcommand*{\jeo@boardchoice}{on}}
-\DeclareOption{noboard}{\renewcommand*{\jeo@boardchoice}{off}}
+\newif\ifcrisk@key       % show responses
+\newif\ifcrisk@solutions % show worked solutions
+\newif\ifcrisk@writesay  % show [write]/[say] marks
+\newif\ifcrisk@board     % show the board overview
+\newcommand*{\crisk@boardchoice}{auto} % auto: only with responses
+\DeclareOption{questions}{\crisk@keyfalse\crisk@solutionsfalse}
+\DeclareOption{answers}{\crisk@keytrue\crisk@solutionsfalse}
+\DeclareOption{solutions}{\crisk@keytrue\crisk@solutionstrue}
+\DeclareOption{writesay}{\crisk@writesaytrue}
+\DeclareOption{nowritesay}{\crisk@writesayfalse}
+\DeclareOption{board}{\renewcommand*{\crisk@boardchoice}{on}}
+\DeclareOption{noboard}{\renewcommand*{\crisk@boardchoice}{off}}
 \ExecuteOptions{solutions}
 \ProcessOptions\relax
-\def\jeo@tmp{on}\ifx\jeo@boardchoice\jeo@tmp\jeo@boardtrue\else
-\def\jeo@tmp{off}\ifx\jeo@boardchoice\jeo@tmp\jeo@boardfalse\else
-\ifjeo@key\jeo@boardtrue\else\jeo@boardfalse\fi\fi\fi
+\def\crisk@tmp{on}\ifx\crisk@boardchoice\crisk@tmp\crisk@boardtrue\else
+\def\crisk@tmp{off}\ifx\crisk@boardchoice\crisk@tmp\crisk@boardfalse\else
+\ifcrisk@key\crisk@boardtrue\else\crisk@boardfalse\fi\fi\fi
 
 %----------------------------------------------------------------------
 % Packages
@@ -74,54 +74,54 @@
 %----------------------------------------------------------------------
 % Colors
 
-\definecolor{jeoAccent}{HTML}{1B2A6B} % deep navy
-\definecolor{jeoGold}{HTML}{A87B12}   % muted gold
-\definecolor{jeoMuted}{HTML}{6B7280}  % gray text
-\definecolor{jeoRule}{HTML}{D5DAE5}   % light rules
-\definecolor{jeoSoft}{HTML}{F3F5FA}   % panel background
+\definecolor{criskAccent}{HTML}{1B2A6B} % deep navy
+\definecolor{criskGold}{HTML}{A87B12}   % muted gold
+\definecolor{criskMuted}{HTML}{6B7280}  % gray text
+\definecolor{criskRule}{HTML}{D5DAE5}   % light rules
+\definecolor{criskSoft}{HTML}{F3F5FA}   % panel background
 
 %----------------------------------------------------------------------
 % Title, headers, and footers
 
-\newcommand*{\jeo@title}{Jeopardy!}
-\newcommand{\gametitle}[1]{\renewcommand*{\jeo@title}{#1}}
+\newcommand*{\crisk@title}{Calculated Risk}
+\newcommand{\gametitle}[1]{\renewcommand*{\crisk@title}{#1}}
 
-\ifjeo@solutions
-  \newcommand*{\jeo@version}{Answer Key with Solutions}
-\else\ifjeo@key
-  \newcommand*{\jeo@version}{Answer Key}
+\ifcrisk@solutions
+  \newcommand*{\crisk@version}{Answer Key with Solutions}
+\else\ifcrisk@key
+  \newcommand*{\crisk@version}{Answer Key}
 \else
-  \newcommand*{\jeo@version}{Questions}
+  \newcommand*{\crisk@version}{Questions}
 \fi\fi
 
-\newcommand*{\jeo@kicker}{\sffamily\bfseries\footnotesize\color{jeoGold}}
-\newcommand*{\jeo@meta}{\sffamily\footnotesize\color{jeoMuted}}
+\newcommand*{\crisk@kicker}{\sffamily\bfseries\footnotesize\color{criskGold}}
+\newcommand*{\crisk@meta}{\sffamily\footnotesize\color{criskMuted}}
 
 \pagestyle{fancy}
 \fancyhf{}
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}
-\fancyhead[L]{\jeo@meta\jeo@title}
-\fancyhead[R]{\jeo@meta\jeo@version}
-\fancyfoot[C]{\jeo@meta\thepage}
+\fancyhead[L]{\crisk@meta\crisk@title}
+\fancyhead[R]{\crisk@meta\crisk@version}
+\fancyfoot[C]{\crisk@meta\thepage}
 \fancypagestyle{plain}{%
   \fancyhf{}%
-  \fancyfoot[C]{\jeo@meta\thepage}%
+  \fancyfoot[C]{\crisk@meta\thepage}%
 }
 
-\newcommand{\jeo@maketitle}{%
+\newcommand{\crisk@maketitle}{%
   \thispagestyle{plain}%
-  \noindent{\jeo@kicker JEOPARDY!}\par
+  \noindent{\crisk@kicker CALCULATED RISK}\par
   \vspace{6pt}%
-  \noindent{\fontsize{24}{29}\selectfont\bfseries\color{jeoAccent}\jeo@title\par}%
+  \noindent{\fontsize{24}{29}\selectfont\bfseries\color{criskAccent}\crisk@title\par}%
   \vspace{4pt}%
-  \noindent{\large\sffamily\color{jeoMuted}\jeo@version}\par
+  \noindent{\large\sffamily\color{criskMuted}\crisk@version}\par
   \vspace{8pt}%
-  \noindent{\color{jeoAccent}\rule{\linewidth}{1.2pt}}\par
+  \noindent{\color{criskAccent}\rule{\linewidth}{1.2pt}}\par
   \vspace{14pt}%
-  \ifjeo@board\jeo@board\fi
+  \ifcrisk@board\crisk@board\fi
 }
-\AtBeginDocument{\jeo@maketitle}
+\AtBeginDocument{\crisk@maketitle}
 
 %----------------------------------------------------------------------
 % Board overview (answers and solutions versions, or with the board option)
@@ -129,61 +129,61 @@
 % Each run records the categories in the .aux file; the next run draws
 % them as a small board. latexmk reruns automatically.
 
-\newcommand*{\jeo@ncat}{0}
-\newcommand*{\jeo@nrows}{0}
-\newcommand*{\jeo@finalname}{}
-\newcommand{\jeo@auxcat}[2]{%
-  \global\@namedef{jeo@cat@#1}{#2}%
-  \ifnum#1>\jeo@ncat\relax\xdef\jeo@ncat{#1}\fi
+\newcommand*{\crisk@ncat}{0}
+\newcommand*{\crisk@nrows}{0}
+\newcommand*{\crisk@finalname}{}
+\newcommand{\crisk@auxcat}[2]{%
+  \global\@namedef{crisk@cat@#1}{#2}%
+  \ifnum#1>\crisk@ncat\relax\xdef\crisk@ncat{#1}\fi
 }
-\newcommand{\jeo@auxrow}[1]{%
-  \ifnum#1>\jeo@nrows\relax\xdef\jeo@nrows{#1}\fi
+\newcommand{\crisk@auxrow}[1]{%
+  \ifnum#1>\crisk@nrows\relax\xdef\crisk@nrows{#1}\fi
 }
-\newcommand{\jeo@auxfinal}[1]{\gdef\jeo@finalname{#1}}
+\newcommand{\crisk@auxfinal}[1]{\gdef\crisk@finalname{#1}}
 
-\newcount\jeo@k
-\newcount\jeo@r
-\newdimen\jeo@colw
+\newcount\crisk@k
+\newcount\crisk@r
+\newdimen\crisk@colw
 
-\newcommand*{\jeo@headcell}[1]{%
-  \cellcolor{jeoAccent}\color{white}\sffamily\bfseries\scriptsize
-  \rule{0pt}{2.6ex}\@nameuse{jeo@cat@#1}\rule[-1.2ex]{0pt}{0pt}}
-\newcommand*{\jeo@valcell}[2]{%
-  \cellcolor{jeoSoft}\sffamily\footnotesize\color{jeoAccent}\the\numexpr100*#2\relax}
+\newcommand*{\crisk@headcell}[1]{%
+  \cellcolor{criskAccent}\color{white}\sffamily\bfseries\scriptsize
+  \rule{0pt}{2.6ex}\@nameuse{crisk@cat@#1}\rule[-1.2ex]{0pt}{0pt}}
+\newcommand*{\crisk@valcell}[2]{%
+  \cellcolor{criskSoft}\sffamily\footnotesize\color{criskAccent}\the\numexpr100*#2\relax}
 
-\def\jeo@addheads{%
-  \xdef\jeo@rows{\unexpanded\expandafter{\jeo@rows}%
-    \ifnum\jeo@k>1 &\fi\noexpand\jeo@headcell{\the\jeo@k}}%
-  \advance\jeo@k 1
-  \ifnum\jeo@k>\jeo@ncat\relax\else\expandafter\jeo@addheads\fi}
-\def\jeo@addcells{%
-  \xdef\jeo@rows{\unexpanded\expandafter{\jeo@rows}%
-    \ifnum\jeo@k>1 &\fi\noexpand\jeo@valcell{\the\jeo@k}{\the\jeo@r}}%
-  \advance\jeo@k 1
-  \ifnum\jeo@k>\jeo@ncat\relax\else\expandafter\jeo@addcells\fi}
+\def\crisk@addheads{%
+  \xdef\crisk@rows{\unexpanded\expandafter{\crisk@rows}%
+    \ifnum\crisk@k>1 &\fi\noexpand\crisk@headcell{\the\crisk@k}}%
+  \advance\crisk@k 1
+  \ifnum\crisk@k>\crisk@ncat\relax\else\expandafter\crisk@addheads\fi}
+\def\crisk@addcells{%
+  \xdef\crisk@rows{\unexpanded\expandafter{\crisk@rows}%
+    \ifnum\crisk@k>1 &\fi\noexpand\crisk@valcell{\the\crisk@k}{\the\crisk@r}}%
+  \advance\crisk@k 1
+  \ifnum\crisk@k>\crisk@ncat\relax\else\expandafter\crisk@addcells\fi}
 
-\newcommand{\jeo@board}{%
-  \ifnum\jeo@ncat>0
-    \gdef\jeo@rows{}%
-    \jeo@k=1 \jeo@addheads
-    \jeo@r=1
+\newcommand{\crisk@board}{%
+  \ifnum\crisk@ncat>0
+    \gdef\crisk@rows{}%
+    \crisk@k=1 \crisk@addheads
+    \crisk@r=1
     \loop
-      \xdef\jeo@rows{\unexpanded\expandafter{\jeo@rows}\noexpand\\}%
-      \jeo@k=1 \jeo@addcells
-      \advance\jeo@r 1
-    \ifnum\jeo@r<\numexpr\jeo@nrows+1\relax\repeat
-    \jeo@colw=\dimexpr(\linewidth-\numexpr\jeo@ncat+1\relax\dimexpr2pt\relax)/\jeo@ncat-2\tabcolsep\relax
+      \xdef\crisk@rows{\unexpanded\expandafter{\crisk@rows}\noexpand\\}%
+      \crisk@k=1 \crisk@addcells
+      \advance\crisk@r 1
+    \ifnum\crisk@r<\numexpr\crisk@nrows+1\relax\repeat
+    \crisk@colw=\dimexpr(\linewidth-\numexpr\crisk@ncat+1\relax\dimexpr2pt\relax)/\crisk@ncat-2\tabcolsep\relax
     \begingroup
     \centering
     \arrayrulecolor{white}%
     \setlength{\arrayrulewidth}{2pt}%
     \renewcommand{\arraystretch}{1.25}%
-    \begin{tabular}{*{\jeo@ncat}{|>{\centering\arraybackslash}m{\jeo@colw}}|}
-      \jeo@rows
+    \begin{tabular}{*{\crisk@ncat}{|>{\centering\arraybackslash}m{\crisk@colw}}|}
+      \crisk@rows
     \end{tabular}\par
-    \ifx\jeo@finalname\@empty\else
+    \ifx\crisk@finalname\@empty\else
       \vspace{6pt}%
-      {\jeo@meta Final Jeopardy:\ \jeo@finalname}\par
+      {\crisk@meta Fermat's Last Round:\ \crisk@finalname}\par
     \fi
     \endgroup
     \vspace{10pt}%
@@ -193,32 +193,32 @@
 %----------------------------------------------------------------------
 % Categories
 
-\newcounter{jeocategory}
-\newcounter{jeoclue}[jeocategory]
+\newcounter{criskcategory}
+\newcounter{criskclue}[criskcategory]
 
 % Start a new page if less than #1 of space is left on this one. (Unlike
 % the needspace package, this never encourages a break when there's room.)
-\newcommand{\jeo@needspace}[1]{%
+\newcommand{\crisk@needspace}[1]{%
   \par
   \ifdim\pagegoal<\maxdimen
     \ifdim\dimexpr\pagegoal-\pagetotal\relax<#1\relax\newpage\fi
   \fi}
 
-\newcommand{\jeo@heading}[2]{% #1 = kicker, #2 = name
+\newcommand{\crisk@heading}[2]{% #1 = kicker, #2 = name
   \par\addvspace{22pt}%
-  \jeo@needspace{12\baselineskip}%
-  \noindent{\jeo@kicker #1}\par\nopagebreak
+  \crisk@needspace{12\baselineskip}%
+  \noindent{\crisk@kicker #1}\par\nopagebreak
   \vspace{2pt}%
-  \noindent{\Large\bfseries\color{jeoAccent}#2}\par\nopagebreak
+  \noindent{\Large\bfseries\color{criskAccent}#2}\par\nopagebreak
   \vspace{5pt}%
-  \noindent{\color{jeoRule}\rule{\linewidth}{0.6pt}}\par\nopagebreak
+  \noindent{\color{criskRule}\rule{\linewidth}{0.6pt}}\par\nopagebreak
   \vspace{4pt}%
 }
 
 \newenvironment{category}[1]{%
-  \stepcounter{jeocategory}%
-  \protected@write\@auxout{}{\string\jeo@auxcat{\thejeocategory}{\unexpanded{#1}}}%
-  \jeo@heading{CATEGORY \thejeocategory}{#1}%
+  \stepcounter{criskcategory}%
+  \protected@write\@auxout{}{\string\crisk@auxcat{\thecriskcategory}{\unexpanded{#1}}}%
+  \crisk@heading{CATEGORY \thecriskcategory}{#1}%
 }{\par}
 
 %----------------------------------------------------------------------
@@ -231,61 +231,61 @@
 \providecommand{\response}{}
 \providecommand{\solution}{}
 
-\long\def\jeo@split#1\response#2\solution#3\solution#4\jeo@stop{%
-  \jeo@entry{#1}{#2}{#3}{#4}}
+\long\def\crisk@split#1\response#2\solution#3\solution#4\crisk@stop{%
+  \crisk@entry{#1}{#2}{#3}{#4}}
 
-\newcommand{\jeo@ifblank}[1]{%
+\newcommand{\crisk@ifblank}[1]{%
   \if\relax\detokenize{#1}\relax\expandafter\@firstoftwo\else\expandafter\@secondoftwo\fi}
 
-\newcommand*{\jeo@label}[1]{{\sffamily\bfseries\scriptsize\color{jeoAccent}#1}}
+\newcommand*{\crisk@label}[1]{{\sffamily\bfseries\scriptsize\color{criskAccent}#1}}
 
-\newtcolorbox{jeo@answer}{%
+\newtcolorbox{crisk@answer}{%
   enhanced,
-  colback=jeoSoft, colframe=jeoAccent,
+  colback=criskSoft, colframe=criskAccent,
   boxrule=0pt, leftrule=2pt, arc=0pt, outer arc=0pt,
   left=9pt, right=9pt, top=6pt, bottom=6pt,
   before skip=6pt, after skip=2pt,
-  segmentation style={draw=jeoRule, line width=0.6pt},
+  segmentation style={draw=criskRule, line width=0.6pt},
   middle=6pt,
-  jeo@answerextra,
+  crisk@answerextra,
 }
-\tcbset{jeo@answerextra/.style={}}
-% Final Jeopardy's box may continue onto the next page (see \jeo@entry).
-\newif\ifjeo@final
+\tcbset{crisk@answerextra/.style={}}
+% Fermat's Last Round's box may continue onto the next page (see \crisk@entry).
+\newif\ifcrisk@final
 
-\newcommand*{\jeo@valuetext}{}
-\newcommand*{\jeo@mode}{}
-\let\jeo@auxwrite\relax
-\newcommand{\jeo@makevalue}[1]{%
-  \ifjeo@writesay
+\newcommand*{\crisk@valuetext}{}
+\newcommand*{\crisk@mode}{}
+\let\crisk@auxwrite\relax
+\newcommand{\crisk@makevalue}[1]{%
+  \ifcrisk@writesay
     \begin{tabular}[t]{@{}r@{}}%
-      {\sffamily\bfseries\color{jeoAccent}#1}\\[-1pt]%
-      \jeo@modetag
+      {\sffamily\bfseries\color{criskAccent}#1}\\[-1pt]%
+      \crisk@modetag
     \end{tabular}%
   \else
-    {\sffamily\bfseries\color{jeoAccent}#1}%
+    {\sffamily\bfseries\color{criskAccent}#1}%
   \fi}
 
 % [write]/[say] marks (shown only with the writesay option).
-\definecolor{jeoWrite}{HTML}{C0610F}
-\definecolor{jeoSay}{HTML}{1E7A44}
-\def\jeo@w{write}
-\def\jeo@s{say}
-\newcommand*{\jeo@modetag}{%
+\definecolor{criskWrite}{HTML}{C0610F}
+\definecolor{criskSay}{HTML}{1E7A44}
+\def\crisk@w{write}
+\def\crisk@s{say}
+\newcommand*{\crisk@modetag}{%
   {\sffamily\bfseries\scriptsize
-   \ifx\jeo@mode\jeo@w\color{jeoWrite}WRITE\else
-   \ifx\jeo@mode\jeo@s\color{jeoSay}SAY\fi\fi}}
+   \ifx\crisk@mode\crisk@w\color{criskWrite}WRITE\else
+   \ifx\crisk@mode\crisk@s\color{criskSay}SAY\fi\fi}}
 
-% Find write or say in a clue's options (e.g. "dailydouble, write").
-\newcommand{\jeo@findmode}[1]{%
-  \def\jeo@mode{}%
-  \edef\jeo@opts{\zap@space#1 \@empty}%
-  \@for\jeo@opt:=\jeo@opts\do{%
-    \ifx\jeo@opt\jeo@w\let\jeo@mode\jeo@w\fi
-    \ifx\jeo@opt\jeo@s\let\jeo@mode\jeo@s\fi}}
+% Find write or say in a clue's options (e.g. "doubledown, write").
+\newcommand{\crisk@findmode}[1]{%
+  \def\crisk@mode{}%
+  \edef\crisk@opts{\zap@space#1 \@empty}%
+  \@for\crisk@opt:=\crisk@opts\do{%
+    \ifx\crisk@opt\crisk@w\let\crisk@mode\crisk@w\fi
+    \ifx\crisk@opt\crisk@s\let\crisk@mode\crisk@s\fi}}
 
 % Tighter display spacing inside entries.
-\newcommand{\jeo@displayskips}{%
+\newcommand{\crisk@displayskips}{%
   \setlength{\abovedisplayskip}{6pt plus 2pt minus 2pt}%
   \setlength{\belowdisplayskip}{6pt plus 2pt minus 2pt}%
   \setlength{\abovedisplayshortskip}{2pt plus 2pt}%
@@ -294,25 +294,25 @@
 % When a clue starts with \[ ... \], set that formula centered on the same
 % line as the value (in display style) instead of leaving an empty line
 % beside the value.
-\long\def\jeo@inlinedisplay\[#1\]{%
+\long\def\crisk@inlinedisplay\[#1\]{%
   \hspace*{\fill}$\displaystyle #1$\hspace*{\fill}\par}
 
 % #1 clue, #2 response, #3 solution, #4 nonempty if there is a solution.
 % (A solution is shown only in the solutions version.)
 % Each clue is set in a minipage so it never separates from its answer
-% across a page break. Final Jeopardy instead starts right after its
+% across a page break. Fermat's Last Round instead starts right after its
 % heading, on the same page when the clue and response fit there, and a
 % long worked solution may continue onto the next page.
-\newcommand{\jeo@entry}[4]{%
-  \def\jeo@hassolution{#4}%
-  \par\addvspace{\ifjeo@key 14pt\else 10pt\fi}%
-  \ifjeo@final
-    \begingroup\tcbset{jeo@answerextra/.style={breakable}}%
+\newcommand{\crisk@entry}[4]{%
+  \def\crisk@hassolution{#4}%
+  \par\addvspace{\ifcrisk@key 14pt\else 10pt\fi}%
+  \ifcrisk@final
+    \begingroup\tcbset{crisk@answerextra/.style={breakable}}%
   \else
     \noindent\begin{minipage}{\linewidth}%
   \fi
-  \jeo@auxwrite
-  \jeo@displayskips
+  \crisk@auxwrite
+  \crisk@displayskips
   \begin{list}{}{%
     \setlength{\leftmargin}{3.4em}%
     \setlength{\labelwidth}{2.8em}%
@@ -321,51 +321,51 @@
     \setlength{\partopsep}{0pt}%
     \setlength{\itemsep}{0pt}%
     \setlength{\parsep}{4pt}}%
-  \item[\jeo@makevalue{\jeo@valuetext}]%
+  \item[\crisk@makevalue{\crisk@valuetext}]%
     \begingroup
-    \jeo@checkdisplay
+    \crisk@checkdisplay
     #1\par
     \endgroup
-    \ifjeo@key
-      \ifjeo@solutions\else\def\jeo@hassolution{}\fi
-      \expandafter\jeo@ifblank\expandafter{\jeo@hassolution}%
-        {\begin{jeo@answer}\jeo@label{RESPONSE}\jeo@afterlabel #2\end{jeo@answer}}%
-        {\begin{jeo@answer}\jeo@label{RESPONSE}\jeo@afterlabel #2%
-          \tcblower\jeo@label{SOLUTION}\jeo@afterlabel #3\end{jeo@answer}}%
+    \ifcrisk@key
+      \ifcrisk@solutions\else\def\crisk@hassolution{}\fi
+      \expandafter\crisk@ifblank\expandafter{\crisk@hassolution}%
+        {\begin{crisk@answer}\crisk@label{RESPONSE}\crisk@afterlabel #2\end{crisk@answer}}%
+        {\begin{crisk@answer}\crisk@label{RESPONSE}\crisk@afterlabel #2%
+          \tcblower\crisk@label{SOLUTION}\crisk@afterlabel #3\end{crisk@answer}}%
     \fi
   \end{list}%
-  \ifjeo@final\endgroup\else\end{minipage}\fi\par
+  \ifcrisk@final\endgroup\else\end{minipage}\fi\par
 }
 
-\newcommand{\jeo@checkdisplay}{\@ifnextchar\[{\jeo@inlinedisplay}{}}
+\newcommand{\crisk@checkdisplay}{\@ifnextchar\[{\crisk@inlinedisplay}{}}
 
 % After a RESPONSE or SOLUTION label: start a new line, unless a display
 % comes next (then the display itself starts below the label).
-\newcommand{\jeo@afterlabel}{\@ifnextchar\[{}{\par\nobreak}}
+\newcommand{\crisk@afterlabel}{\@ifnextchar\[{}{\par\nobreak}}
 
-% The optional argument ([dailydouble], [write], [say]) is not shown, except
+% The optional argument ([doubledown], [write], [say]) is not shown, except
 % that write/say is shown with the writesay option.
 \NewEnviron{clue}[1][]{%
-  \stepcounter{jeoclue}%
-  \jeo@findmode{#1}%
-  \edef\jeo@auxwrite{\noexpand\protected@write\noexpand\@auxout{}%
-    {\string\jeo@auxrow{\thejeoclue}}}%
-  \edef\jeo@valuetext{\the\numexpr100*\value{jeoclue}\relax}%
-  \expandafter\jeo@split\BODY\solution\solution\jeo@stop
+  \stepcounter{criskclue}%
+  \crisk@findmode{#1}%
+  \edef\crisk@auxwrite{\noexpand\protected@write\noexpand\@auxout{}%
+    {\string\crisk@auxrow{\thecriskclue}}}%
+  \edef\crisk@valuetext{\the\numexpr100*\value{criskclue}\relax}%
+  \expandafter\crisk@split\BODY\solution\solution\crisk@stop
 }
 
 %----------------------------------------------------------------------
-% Final Jeopardy
+% Fermat's Last Round
 
 % The optional argument ([write], [say]) is shown only with writesay.
 \NewEnviron{final}[2][]{%
-  \jeo@findmode{#1}%
-  \protected@write\@auxout{}{\string\jeo@auxfinal{\unexpanded{#2}}}%
-  \jeo@heading{FINAL JEOPARDY}{#2}%
-  \jeo@finaltrue
-  \let\jeo@auxwrite\relax
-  \def\jeo@valuetext{}%
-  \expandafter\jeo@split\BODY\solution\solution\jeo@stop
+  \crisk@findmode{#1}%
+  \protected@write\@auxout{}{\string\crisk@auxfinal{\unexpanded{#2}}}%
+  \crisk@heading{FERMAT'S LAST ROUND}{#2}%
+  \crisk@finaltrue
+  \let\crisk@auxwrite\relax
+  \def\crisk@valuetext{}%
+  \expandafter\crisk@split\BODY\solution\solution\crisk@stop
 }
 
 \endinput

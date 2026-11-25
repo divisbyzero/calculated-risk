@@ -9,8 +9,8 @@ import { unzip } from './zip.js';
 import { FINAL_MUSIC } from './config.js';
 import { escapeHtml, formatScore } from './util.js';
 
-const STORAGE_KEY = 'classroom-jeopardy.saved.v1';
-const PREFS_KEY = 'classroom-jeopardy.prefs.v1';
+const STORAGE_KEY = 'calculated-risk.saved.v1';
+const PREFS_KEY = 'calculated-risk.prefs.v1';
 // What the board shows after a correct answer: 'none' (straight back to the
 // board), 'answer' (the response) or 'solution' (response and worked solution).
 const DEFAULT_SETTINGS = { afterCorrect: 'solution' };
@@ -243,7 +243,7 @@ async function handleFiles(chosen) {
 
 // Find the game's .tex file among the chosen files. A zipped game folder can
 // hold other .tex files too (such as TikZ sources for its figures), so when
-// there are several, use the one that loads the jeopardy package.
+// there are several, use the one that loads the calculatedrisk package.
 async function pickGameFile(files) {
   const texFiles = files.filter((f) => /\.tex$/i.test(f.name));
   if (!texFiles.length) {
@@ -253,7 +253,7 @@ async function pickGameFile(files) {
   if (texFiles.length === 1) return { file: texFiles[0] };
   const games = [];
   for (const f of texFiles) {
-    if (/\\usepackage\s*(\[[^\]]*\])?\s*\{[^}]*jeopardy\}/.test(stripComments(await f.text()))) games.push(f);
+    if (/\\usepackage\s*(\[[^\]]*\])?\s*\{[^}]*calculatedrisk\}/.test(stripComments(await f.text()))) games.push(f);
   }
   if (games.length === 1) return { file: games[0] };
   const names = (games.length ? games : texFiles).map((f) => f.path || f.name).join(', ');
@@ -324,7 +324,7 @@ async function fetchPackages(text, gamePath, localPackages = new Map()) {
   const packages = {};
   for (const name of packagesUsed(text)) {
     const base = name.replace(/^.*\//, '');
-    if (base === 'jeopardy' || !/^[A-Za-z0-9_.\/-]+$/.test(name)) continue;
+    if (base === 'calculatedrisk' || !/^[A-Za-z0-9_.\/-]+$/.test(name)) continue;
     // A .sty chosen with the game (or in its zip) wins.
     const local = localPackages.get(base.toLowerCase());
     if (local !== undefined) {
@@ -362,8 +362,8 @@ function renderLoadStatus() {
   const { game, errors, warnings, source, builtIn } = loaded;
   const s = game.stats;
   const plural = (n, one, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;
-  const parts = [plural(s.categories, 'category', 'categories'), plural(s.clues, 'clue'), plural(s.dailyDoubles, 'Daily Double')];
-  parts.push(game.final ? 'Final Jeopardy' : 'no Final Jeopardy');
+  const parts = [plural(s.categories, 'category', 'categories'), plural(s.clues, 'clue'), plural(s.doubleDowns, 'Double Down')];
+  parts.push(game.final ? 'Fermat’s Last Round' : 'no Fermat’s Last Round');
   if (s.solutions) parts.push(plural(s.solutions, 'worked solution'));
   let html = `
     <div class="${errors.length ? 'load-bad' : 'load-ok'}">
@@ -389,12 +389,12 @@ function renderPreview() {
   g.categories.forEach((c, ci) => {
     html += `<h3 class="clue-content">${ci + 1}. ${c.nameHtml}</h3><table>${PREVIEW_COLS}<tr><th>Value</th><th>Clue</th><th>Response</th></tr>`;
     for (const q of c.clues) {
-      html += `<tr><td>${q.value}${q.dailyDouble ? ' <span class="tag">DD</span>' : ''}${modeTag(q)}</td><td class="clue-content">${q.clueHtml}</td><td class="clue-content">${responseCell(q)}</td></tr>`;
+      html += `<tr><td>${q.value}${q.doubleDown ? ' <span class="tag">DD</span>' : ''}${modeTag(q)}</td><td class="clue-content">${q.clueHtml}</td><td class="clue-content">${responseCell(q)}</td></tr>`;
     }
     html += '</table>';
   });
   if (g.final) {
-    html += `<h3>Final Jeopardy: <span class="clue-content">${g.final.categoryHtml}</span></h3><table>${PREVIEW_COLS}<tr><th></th><th>Clue</th><th>Response</th></tr>
+    html += `<h3>Fermat’s Last Round: <span class="clue-content">${g.final.categoryHtml}</span></h3><table>${PREVIEW_COLS}<tr><th></th><th>Clue</th><th>Response</th></tr>
       <tr><td>${modeTag(g.final)}</td><td class="clue-content">${g.final.clueHtml}</td><td class="clue-content">${responseCell(g.final)}</td></tr></table>`;
   }
   const body = $('#preview-body');
@@ -563,7 +563,7 @@ function openBoard() {
     boardWindow.focus();
     return;
   }
-  boardWindow = window.open('board.html', 'jeopardy-board', 'popup=yes,width=1280,height=760');
+  boardWindow = window.open('board.html', 'calculated-risk-board', 'popup=yes,width=1280,height=760');
   if (!boardWindow) alert('The browser blocked the board window. Allow pop-ups for this site and try again.');
 }
 
@@ -615,12 +615,12 @@ function publicState() {
   const a = state.active;
   if (a) {
     const q = g.categories[a.c].clues[a.r];
-    const isDD = q.dailyDouble;
+    const isDD = q.doubleDown;
     const ddStarted = isDD && a.ddTeam !== null;
     pub.active = {
       category: g.categories[a.c].nameHtml,
       value: ddStarted ? a.wager : q.value,
-      dailyDouble: isDD && !a.review,
+      doubleDown: isDD && !a.review,
       review: !!a.review,
       ddTeam: ddStarted ? state.teams[a.ddTeam].name : null,
       ddTeamIndex: ddStarted ? a.ddTeam : null,
@@ -683,7 +683,7 @@ function openClue(c, r) {
   if (state.view !== 'board' || state.used[c][r]) return false;
   pushHistory();
   state.active = { c, r, judged: {}, showResponse: false, ddTeam: null, wager: null, ddPick: null, wagerDraft: '' };
-  state.view = clueAt(c, r).dailyDouble ? 'dd-wager' : 'clue';
+  state.view = clueAt(c, r).doubleDown ? 'dd-wager' : 'clue';
 }
 
 function pickDDTeam(i) {
@@ -694,7 +694,7 @@ function startDD() {
   const a = state.active;
   const errBox = $('#form-error');
   if (a.ddPick === null) {
-    errBox.textContent = 'Choose the team that picked the Daily Double.';
+    errBox.textContent = 'Choose the team that picked the Double Down.';
     return false;
   }
   const max = ddMaxWager(a.ddPick);
@@ -717,7 +717,7 @@ function judge(team, right) {
   state.teams[team].score += right ? amount : -amount;
   a.judged[team] = right ? 'right' : 'wrong';
 
-  // A correct answer (or any answer to a Daily Double) finishes the clue:
+  // A correct answer (or any answer to a Double Down) finishes the clue:
   // either show the answer screen or go straight back to the board.
   if (right || a.ddTeam !== null) {
     if (state.settings.afterCorrect !== 'none') {
@@ -768,7 +768,7 @@ function cancelClue() {
 function startFinal() {
   if (!state.game.final || state.view !== 'board') return false;
   const left = remainingClues();
-  if (left > 0 && !confirm(`There ${left === 1 ? 'is still 1 clue' : `are still ${left} clues`} on the board. Go to Final Jeopardy anyway?`)) return false;
+  if (left > 0 && !confirm(`There ${left === 1 ? 'is still 1 clue' : `are still ${left} clues`} on the board. Go to Fermat’s Last Round anyway?`)) return false;
   pushHistory();
   state.final = {
     wagerDrafts: state.teams.map(() => ''),
@@ -882,7 +882,7 @@ function showSetup() {
   $('#btn-undo').hidden = true;
   $('#btn-final').hidden = true;
   $('#btn-new').hidden = true;
-  $('#topbar-title').innerHTML = '<a href="./" class="topbar-home">Jeopardy!</a> <span class="muted">Host</span>';
+  $('#topbar-title').innerHTML = '<a href="./" class="topbar-home">Calculated Risk</a> <span class="muted">Host</span>';
 }
 
 function showGame() {
@@ -964,7 +964,7 @@ function contentHtml() {
   switch (state.view) {
     case 'board': {
       const n = g.categories.length;
-      let html = `<div class="hint">Click a clue to show it on the board. <span class="dd-badge">DD</span> marks a Daily Double; only you can see that. Click a gray square to review a clue that was already played.</div>`;
+      let html = `<div class="hint">Click a clue to show it on the board. <span class="dd-badge">DD</span> marks a Double Down; only you can see that. Click a gray square to review a clue that was already played.</div>`;
       html += `<div class="host-grid" style="grid-template-columns: repeat(${n}, minmax(0, 1fr));">`;
       for (const c of g.categories) html += `<div class="hcat clue-content">${c.nameHtml}</div>`;
       for (let r = 0; r < g.rows; r++) {
@@ -972,7 +972,7 @@ function contentHtml() {
           const q = g.categories[c].clues[r];
           if (!q) html += `<div class="hcell empty"></div>`;
           else if (state.used[c][r]) html += `<button class="hcell used" data-action="review" data-c="${c}" data-r="${r}" title="Show this clue again (scores won't change)">${q.value}</button>`;
-          else html += `<button class="hcell" data-action="open" data-c="${c}" data-r="${r}">${q.value}${q.dailyDouble ? '<span class="dd-badge">DD</span>' : ''}</button>`;
+          else html += `<button class="hcell" data-action="open" data-c="${c}" data-r="${r}">${q.value}${q.doubleDown ? '<span class="dd-badge">DD</span>' : ''}</button>`;
         }
       }
       return html + `</div><div id="controls"></div>`;
@@ -980,9 +980,9 @@ function contentHtml() {
     case 'dd-wager': {
       const q = clueAt(a.c, a.r);
       return `
-        <div class="dd-banner">Daily Double!</div>
+        <div class="dd-banner">Double Down!</div>
         <div class="clue-head"><span class="cat-name clue-content">${g.categories[a.c].nameHtml}</span><span class="amount">${q.value} square</span></div>
-        <p>The board is showing <strong>DAILY DOUBLE</strong>. Choose the team and enter its wager.</p>
+        <p>The board is showing <strong>DOUBLE DOWN</strong>. Choose the team and enter its wager.</p>
         <div id="controls"></div>
         <details class="peek"><summary>Peek at the clue and response</summary>${responseBoxes(q)}</details>`;
     }
@@ -991,7 +991,7 @@ function contentHtml() {
       const amount = a.review
         ? `<span class="amount">${q.value}</span><span class="tag" style="background:var(--muted)">Review</span>`
         : a.ddTeam !== null
-          ? `<span class="tag">Daily Double</span><span class="amount">${escapeHtml(state.teams[a.ddTeam].name)} wagered ${formatScore(a.wager)}</span>`
+          ? `<span class="tag">Double Down</span><span class="amount">${escapeHtml(state.teams[a.ddTeam].name)} wagered ${formatScore(a.wager)}</span>`
           : `<span class="amount">${q.value}</span>`;
       return `
         <div class="clue-head"><span class="cat-name clue-content">${g.categories[a.c].nameHtml}</span>${amount}</div>
@@ -1000,14 +1000,14 @@ function contentHtml() {
     }
     case 'final-category':
       return `
-        <div class="dd-banner" style="color:var(--blue)">Final Jeopardy</div>
+        <div class="dd-banner" style="color:var(--blue)">Fermat’s Last Round</div>
         <div class="clue-head"><span class="muted">Category:</span><span class="cat-name clue-content">${g.final.categoryHtml}</span></div>
         <p>The board is showing the category. Enter each team’s wager (a team can wager up to its current score).</p>
         <div id="controls"></div>
         <details class="peek"><summary>Peek at the clue and response</summary>${responseBoxes(g.final)}</details>`;
     case 'final-clue':
       return `
-        <div class="clue-head"><span class="tag" style="background:var(--blue)">Final Jeopardy</span><span class="cat-name clue-content">${g.final.categoryHtml}</span></div>
+        <div class="clue-head"><span class="tag" style="background:var(--blue)">Fermat’s Last Round</span><span class="cat-name clue-content">${g.final.categoryHtml}</span></div>
         ${finalMusicHtml()}
         ${responseBoxes(g.final)}
         <div id="controls"></div>`;
@@ -1017,7 +1017,7 @@ function contentHtml() {
   return '';
 }
 
-// The Final Jeopardy music (see FINAL_MUSIC in config.js). It's part of the
+// The Fermat’s Last Round music (see FINAL_MUSIC in config.js). It's part of the
 // content, which isn't redrawn while judging, so it keeps playing.
 function finalMusicHtml() {
   const id = FINAL_MUSIC.youtubeId;
@@ -1025,9 +1025,9 @@ function finalMusicHtml() {
   const params = new URLSearchParams({ rel: '0', playsinline: '1', autoplay: FINAL_MUSIC.autoplay ? '1' : '0' });
   return `
     <div class="final-music">
-      <div class="box-label">Final Jeopardy music</div>
+      <div class="box-label">Fermat’s Last Round music</div>
       <iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?${params}"
-        title="Final Jeopardy music" allow="autoplay; encrypted-media; picture-in-picture"
+        title="Fermat’s Last Round music" allow="autoplay; encrypted-media; picture-in-picture"
         referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
     </div>`;
 }
@@ -1038,7 +1038,7 @@ function controlsHtml() {
     case 'board': {
       if (remainingClues() > 0) return '';
       return state.game.final
-        ? `<div class="board-done">All clues are done. <button class="btn primary" data-action="final">Go to Final Jeopardy</button></div>`
+        ? `<div class="board-done">All clues are done. <button class="btn primary" data-action="final">Go to Fermat’s Last Round</button></div>`
         : `<div class="board-done">All clues are done. <button class="btn primary" data-action="new-game">End game</button></div>`;
     }
 
@@ -1112,7 +1112,7 @@ function controlsHtml() {
         .join('');
       return `
         <div class="judge-list">${rows}</div>
-        <div class="actions"><button class="btn primary" data-action="final-clue">Show the Final Jeopardy clue</button></div>
+        <div class="actions"><button class="btn primary" data-action="final-clue">Show the Fermat’s Last Round clue</button></div>
         <div class="form-error" id="form-error"></div>`;
     }
 

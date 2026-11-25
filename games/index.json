@@ -5,7 +5,7 @@
     "description": "Vectors, curves, functions of several variables, optimization, and multiple integrals."
   },
   {
-    "file": "calculus2-jeopardy/calculus2-jeopardy.tex",
+    "file": "calculus2/calculus2.tex",
     "title": "Calculus II",
     "description": "Integration by parts, limits, improper integrals, and applications of integration."
   },

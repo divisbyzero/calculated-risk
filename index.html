@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Classroom Jeopardy · Review games for math class</title>
-  <meta name="description" content="Jeopardy-style review games for math class, with real math notation, a full-screen board for the projector, and a host screen that keeps the answers and the score. Free, in your browser.">
+  <title>Calculated Risk · A math review game for the classroom</title>
+  <meta name="description" content="Calculated Risk: a math review game for the classroom, with real math notation, a full-screen board for the projector, and a host screen that keeps the answers and the score. Free, in your browser.">
   <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/landing.css">
   <script src="js/mathjax-config.js"></script>
@@ -14,7 +14,7 @@
 <body>
   <header class="nav">
     <div class="wrap nav-inner">
-      <a href="./" class="brand"><img src="img/favicon.svg" alt="" width="28" height="28"> Classroom Jeopardy</a>
+      <a href="./" class="brand"><img src="img/favicon.svg" alt="" width="28" height="28"> Calculated Risk</a>
       <nav class="nav-links" aria-label="Page sections">
         <a href="#how">How it works</a>
         <a href="#features">Features</a>
@@ -30,7 +30,8 @@
     <section class="hero">
       <div class="wrap hero-inner">
         <div class="hero-text">
-          <h1>Jeopardy-style review games, made for math class.</h1>
+          <p class="eyebrow">Calculated Risk</p>
+          <h1>A math review game for the classroom.</h1>
           <p class="lede">Clues with real math notation, a full-screen board for the projector, and a host screen that keeps the answers and the score. It runs in your browser: free, no accounts, nothing to install.</p>
           <div class="hero-actions">
             <a href="host.html" class="button button-gold">Host a game <span aria-hidden="true">→</span></a>
@@ -96,8 +97,8 @@
             <p>Your screen shows the correct response and a worked solution. The projector shows only what the class should see.</p>
           </div>
           <div class="feature">
-            <h3>Daily Doubles and Final Jeopardy</h3>
-            <p>Wagers are checked against each team’s score, and Final Jeopardy plays think music while teams work.</p>
+            <h3>Double Downs and Fermat's Last Round</h3>
+            <p>Wagers are checked against each team’s score. You can even play music of your choice while teams work on the final clue.</p>
           </div>
           <div class="feature">
             <h3>Write it or say it</h3>
@@ -123,18 +124,18 @@
           <p>A game is a single LaTeX file. Write five or six categories with five clues each. Values go up by 100 in the order you write them.</p>
           <ul class="checklist">
             <li>Each clue is the clue, then <code>\response</code>, then an optional <code>\solution</code>.</li>
-            <li>Add <code>[dailydouble]</code>, <code>[write]</code>, or <code>[say]</code> to a clue with one word.</li>
+            <li>Add <code>[doubledown]</code>, <code>[write]</code>, or <code>[say]</code> to a clue with one word.</li>
             <li>Use <code>\includegraphics{figure.png}</code> for a picture.</li>
-            <li>Finish with <code>\begin{final}{Category}</code> for Final Jeopardy.</li>
+            <li>Finish with <code>\begin{final}{Category}</code> for Fermat's Last Round.</li>
           </ul>
           <div class="write-actions">
             <button class="button" id="download-template">Download the template</button>
             <a href="host.html" class="text-link">Then load it on the host page →</a>
           </div>
-          <p class="fine">The template comes with <code>jeopardy.sty</code>, so it also compiles in Overleaf or any LaTeX editor. If your game has pictures, load a <code>.zip</code> of its folder.</p>
+          <p class="fine">The template comes with <code>calculatedrisk.sty</code>, so it also compiles in Overleaf or any LaTeX editor. If your game has pictures, load a <code>.zip</code> of its folder.</p>
         </div>
         <pre class="code" aria-label="Example game file"><code><span class="c">\documentclass{article}</span>
-<span class="c">\usepackage[solutions]{jeopardy}</span>
+<span class="c">\usepackage[solutions]{calculatedrisk}</span>
 <span class="k">\gametitle</span>{Calculus Review}
 
 <span class="k">\begin</span>{document}
@@ -163,11 +164,11 @@
         <h2 class="section-title">Questions</h2>
         <details>
           <summary>What do I need?</summary>
-          <p>A laptop and a projector (or any second screen), and a current version of Chrome, Edge, Firefox, or Safari. The math typesetting and the Final Jeopardy music load from the internet, so you’ll need a connection.</p>
+          <p>A laptop and a projector (or any second screen), and a current version of Chrome, Edge, Firefox, or Safari. The math typesetting loads from the internet, so you’ll need a connection.</p>
         </details>
         <details>
           <summary>Do students need to do anything?</summary>
-          <p>No. They watch the projector and answer out loud or on paper, just like the show.</p>
+          <p>No. They watch the projector and answer out loud or on paper.</p>
         </details>
         <details>
           <summary>Is my game file uploaded anywhere?</summary>
@@ -183,7 +184,7 @@
         </details>
         <details>
           <summary>How do I make a handout from a game?</summary>
-          <p>Compile the game’s <code>.tex</code> file with LaTeX. Change the option on the <code>\usepackage[…]{jeopardy}</code> line to <code>questions</code> for a study sheet, <code>answers</code> for an answer key, or <code>solutions</code> for answers with worked solutions.</p>
+          <p>Compile the game’s <code>.tex</code> file with LaTeX. Change the option on the <code>\usepackage[…]{calculatedrisk}</code> line to <code>questions</code> for a study sheet, <code>answers</code> for an answer key, or <code>solutions</code> for answers with worked solutions.</p>
         </details>
       </div>
     </section>
@@ -199,8 +200,8 @@
 
   <footer class="footer">
     <div class="wrap footer-inner">
-      <span>Classroom Jeopardy is a free tool for teachers.</span>
-      <span>Not affiliated with or endorsed by Jeopardy Productions, Inc.</span>
+      <span>Calculated Risk is a free tool for teachers.</span>
+      <span>An independent, non-commercial math review game for classroom use, not affiliated with any television program.</span>
     </div>
   </footer>
 </body>

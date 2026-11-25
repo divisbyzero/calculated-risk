@@ -41,7 +41,7 @@ export function packagesUsed(source) {
 // Packages whose features MathJax already has (or that don't matter on
 // screen), so a missing .sty file isn't worth a warning.
 const KNOWN_PACKAGES = new Set([
-  'jeopardy', 'amsmath', 'amssymb', 'amsthm', 'amsfonts', 'mathtools',
+  'calculatedrisk', 'amsmath', 'amssymb', 'amsthm', 'amsfonts', 'mathtools',
   'mathrsfs', 'bm', 'graphicx', 'xcolor', 'color', 'geometry', 'enumitem',
   'enumerate', 'hyperref', 'cleveref', 'booktabs', 'array', 'multicol',
   'todonotes', 'tikz', 'pgfplots', 'fullpage', 'fontspec', 'inputenc',
@@ -144,12 +144,12 @@ export function parseGame(source, options = {}) {
     }
   }
   if (!titleText) {
-    warn('No \\gametitle{...} found; the game will be called "Jeopardy!".');
-    titleText = 'Jeopardy!';
-    titleHtml = 'Jeopardy!';
+    warn('No \\gametitle{...} found; the game will be called "Calculated Risk".');
+    titleText = 'Calculated Risk';
+    titleHtml = 'Calculated Risk';
   }
 
-  // Categories and Final Jeopardy
+  // Categories and Fermat’s Last Round
   const categories = [];
   let final = null;
 
@@ -168,7 +168,7 @@ export function parseGame(source, options = {}) {
     }
 
     const endTag = `\\end{${kind}}`;
-    // Final Jeopardy can take [write] or [say] before its category name.
+    // Fermat’s Last Round can take [write] or [say] before its category name.
     let nameAt = skipWs(text, afterBegin);
     let finalOpts = '';
     if (kind === 'final' && text[nameAt] === '[') {
@@ -187,7 +187,7 @@ export function parseGame(source, options = {}) {
 
     const e = text.indexOf(endTag, g.end);
     if (e < 0 || e > bodyEnd) {
-      err(`Missing ${endTag} for the ${kind === 'final' ? 'Final Jeopardy' : 'category'} that starts here.`, m.index);
+      err(`Missing ${endTag} for the ${kind === 'final' ? 'Fermat’s Last Round' : 'category'} that starts here.`, m.index);
       break;
     }
     const nested = /\\begin\{(category|final)\}/g;
@@ -200,17 +200,17 @@ export function parseGame(source, options = {}) {
     }
 
     const nameText = g.content.trim();
-    if (!nameText) err(`The ${kind === 'final' ? 'Final Jeopardy category' : 'category name'} is empty.`, m.index);
+    if (!nameText) err(`The ${kind === 'final' ? 'Fermat’s Last Round category' : 'category name'} is empty.`, m.index);
     const nameHtml = convert(nameText, g.start);
 
     if (kind === 'category') {
       const clues = parseClues(text, g.end, e, nameText || `#${categories.length + 1}`, { err, warn, convert, lineOf });
       categories.push({ nameText, nameHtml, line: lineOf(m.index), clues });
     } else if (final) {
-      warn('More than one Final Jeopardy found; using the first one.', m.index);
+      warn('More than one Fermat’s Last Round found; using the first one.', m.index);
     } else {
-      const parts = splitResponse(text, g.end, e, 'Final Jeopardy', m.index, { err, convert });
-      const { mode } = parseClueOptions(finalOpts, 'Final Jeopardy', m.index, { err, warn }, false);
+      const parts = splitResponse(text, g.end, e, 'Fermat’s Last Round', m.index, { err, convert });
+      const { mode } = parseClueOptions(finalOpts, 'Fermat’s Last Round', m.index, { err, warn }, false);
       final = { categoryText: nameText, categoryHtml: nameHtml, mode, ...parts };
     }
     re.lastIndex = e + endTag.length;
@@ -237,12 +237,12 @@ export function parseGame(source, options = {}) {
     }
   }
 
-  const dailyDoubles = categories.reduce((n, c) => n + c.clues.filter((x) => x.dailyDouble).length, 0);
-  if (categories.length && dailyDoubles === 0) {
-    warn('No Daily Double is marked. To add one, write \\begin{clue}[dailydouble].');
+  const doubleDowns = categories.reduce((n, c) => n + c.clues.filter((x) => x.doubleDown).length, 0);
+  if (categories.length && doubleDowns === 0) {
+    warn('No Double Down is marked. To add one, write \\begin{clue}[doubledown].');
   }
   if (!final) {
-    warn('No Final Jeopardy found. Add \\begin{final}{Category} ... \\response ... \\end{final} to include one.');
+    warn('No Fermat’s Last Round found. Add \\begin{final}{Category} ... \\response ... \\end{final} to include one.');
   }
 
   const game = {
@@ -255,7 +255,7 @@ export function parseGame(source, options = {}) {
     stats: {
       categories: categories.length,
       clues: categories.reduce((n, c) => n + c.clues.length, 0),
-      dailyDoubles,
+      doubleDowns,
       solutions:
         categories.reduce((n, c) => n + c.clues.filter((x) => x.solutionHtml).length, 0) +
         (final && final.solutionHtml ? 1 : 0),
@@ -314,9 +314,9 @@ function parseClues(text, start, end, label, ctx) {
     const where = `category "${label}", ${value} clue`;
     const parts = splitResponse(text, i, e, where, m.index, ctx);
 
-    const { dailyDouble, mode } = parseClueOptions(opts, where, m.index, ctx, true);
+    const { doubleDown, mode } = parseClueOptions(opts, where, m.index, ctx, true);
 
-    clues.push({ value, dailyDouble, mode, ...parts });
+    clues.push({ value, doubleDown, mode, ...parts });
     pos = e + '\\end{clue}'.length;
     re.lastIndex = pos;
   }
@@ -324,23 +324,23 @@ function parseClues(text, start, end, label, ctx) {
   return clues;
 }
 
-// Read a clue's options, e.g. [dailydouble, write]. "write" or "say" tells
+// Read a clue's options, e.g. [doubledown, write]. "write" or "say" tells
 // the players whether they must write their response before ringing in;
 // the board shows it on the clue screen (the PDF ignores it).
 function parseClueOptions(opts, where, off, ctx, allowDD) {
-  let dailyDouble = false;
+  let doubleDown = false;
   let mode = null;
-  const allowed = allowDD ? '[dailydouble], [write] and [say]' : '[write] and [say]';
+  const allowed = allowDD ? '[doubledown], [write] and [say]' : '[write] and [say]';
   for (const raw of opts.split(',')) {
     const o = raw.trim().toLowerCase();
     if (!o) continue;
-    if (o === 'dailydouble' && allowDD) dailyDouble = true;
+    if (o === 'doubledown' && allowDD) doubleDown = true;
     else if (o === 'write' || o === 'say') {
       if (mode && mode !== o) ctx.warn(`Both [write] and [say] are marked (${where}); using [${o}].`, off);
       mode = o;
     } else ctx.warn(`Unknown option [${raw.trim()}] (${where}). The options are ${allowed}.`, off);
   }
-  return { dailyDouble, mode };
+  return { doubleDown, mode };
 }
 
 // Split a clue into its parts: clue \response response [\solution solution].

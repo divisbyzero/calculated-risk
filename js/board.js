@@ -81,7 +81,7 @@ function buildMain() {
       html = boardHtml();
       break;
     case 'dd-wager':
-      html = `<div class="screen dd"><div class="big-word">DAILY<br>DOUBLE</div></div>`;
+      html = `<div class="screen dd"><div class="big-word">DOUBLE<br>DOWN</div></div>`;
       break;
     case 'clue':
       html = clueHtml();
@@ -89,14 +89,14 @@ function buildMain() {
     case 'final-category':
       html = `
         <div class="screen">
-          <div class="screen-label">FINAL JEOPARDY</div>
+          <div class="screen-label">FERMAT’S LAST ROUND</div>
           <div class="screen-body" data-fit-max="0.12" data-fit-min="0.03">
             <div class="fit-inner clue-content"><div class="final-cat">${pub.final.category}</div></div>
           </div>
         </div>`;
       break;
     case 'final-clue': {
-      const label = `FINAL JEOPARDY &middot; <span class="clue-content">${pub.final.category}</span>`;
+      const label = `FERMAT’S LAST ROUND &middot; <span class="clue-content">${pub.final.category}</span>`;
       html = pub.final.response
         ? answerHtml(label, pub.final.response, pub.final.solution)
         : `
@@ -113,7 +113,7 @@ function buildMain() {
     default:
       html = `
         <div class="screen title-screen">
-          <div class="big-word clue-content">${pub.title || 'Jeopardy!'}</div>
+          <div class="big-word clue-content">${pub.title || 'Calculated Risk'}</div>
           <div class="title-sub">Waiting for the host&hellip;</div>
         </div>`;
   }
@@ -144,8 +144,8 @@ function boardHtml() {
 
 function clueHtml() {
   const a = pub.active;
-  const label = a.dailyDouble
-    ? `DAILY DOUBLE &middot; <span class="clue-content">${a.category}</span>${a.ddTeam ? ` &middot; ${escapeHtml(a.ddTeam)} wagers ${formatScore(a.value)}` : ''}`
+  const label = a.doubleDown
+    ? `DOUBLE DOWN &middot; <span class="clue-content">${a.category}</span>${a.ddTeam ? ` &middot; ${escapeHtml(a.ddTeam)} wagers ${formatScore(a.value)}` : ''}`
     : `<span class="clue-content">${a.category}</span> &middot; ${a.value}${a.review ? ' &middot; REVIEW' : ''}`;
   if (a.response) return answerHtml(label, a.response, a.solution);
   return `

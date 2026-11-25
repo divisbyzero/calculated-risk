@@ -2,7 +2,7 @@
 // Both windows are pages of the same site, so a BroadcastChannel connects
 // them directly; no server is involved.
 
-const CHANNEL_NAME = 'classroom-jeopardy';
+const CHANNEL_NAME = 'calculated-risk';
 
 export const syncSupported = typeof BroadcastChannel !== 'undefined';
 

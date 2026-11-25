@@ -59,12 +59,12 @@ export function normalizePath(path) {
 
 // Download a built-in game (a path inside games/, like
 // "my-game/my-game.tex") as a .zip of its folder: the .tex file, the
-// pictures it uses, and a copy of jeopardy.sty. In this repository the games
-// share one master jeopardy.sty in games/ (\usepackage{../jeopardy}); the
+// pictures it uses, and a copy of calculatedrisk.sty. In this repository the games
+// share one master calculatedrisk.sty in games/ (\usepackage{../calculatedrisk}); the
 // download puts the copy next to the .tex file and changes that line to
-// \usepackage{jeopardy}, so the folder compiles on its own. The same .zip
+// \usepackage{calculatedrisk}, so the folder compiles on its own. The same .zip
 // can be loaded back into the app (it accepts either form, and ignores
-// jeopardy.sty). Returns the pictures that couldn't be found.
+// calculatedrisk.sty). Returns the pictures that couldn't be found.
 export async function downloadGame(file) {
   const folder = file.includes('/') ? file.slice(0, file.lastIndexOf('/') + 1) : '';
   const get = async (url) => {
@@ -74,8 +74,8 @@ export async function downloadGame(file) {
   };
   const text = new TextDecoder().decode(await get(`games/${file}`));
   const entries = [
-    { path: file, data: text.replace(/^([^%\n]*\\usepackage\s*(?:\[[^\]]*\])?\s*\{)\.\.\/jeopardy\}/gm, '$1jeopardy}') },
-    { path: `${folder}jeopardy.sty`, data: await get('games/jeopardy.sty') },
+    { path: file, data: text.replace(/^([^%\n]*\\usepackage\s*(?:\[[^\]]*\])?\s*\{)\.\.\/calculatedrisk\}/gm, '$1calculatedrisk}') },
+    { path: `${folder}calculatedrisk.sty`, data: await get('games/calculatedrisk.sty') },
   ];
   const seen = new Set(entries.map((e) => e.path));
   const missing = [];

@@ -1,13 +1,13 @@
-% Jeopardy game template.
+% Calculated Risk game template.
 %
-% Keep this file, jeopardy.sty and any pictures together in one folder.
+% Keep this file, calculatedrisk.sty and any pictures together in one folder.
 % Rename the folder and this file, and fill in the clues.
 %
-% (In the Jeopardy repository, the games instead share one master copy,
-% games/jeopardy.sty, one folder up, and use \usepackage{../jeopardy};
-% pdflatex's warning that the package "provides jeopardy" is harmless.
-% The Download button changes that line to \usepackage{jeopardy} and puts
-% a copy of jeopardy.sty in the folder. To list a game in the app, add it
+% (In the Calculated Risk repository, the games instead share one master copy,
+% games/calculatedrisk.sty, one folder up, and use \usepackage{../calculatedrisk};
+% pdflatex's warning that the package "provides calculatedrisk" is harmless.
+% The Download button changes that line to \usepackage{calculatedrisk} and puts
+% a copy of calculatedrisk.sty in the folder. To list a game in the app, add it
 % to games/index.json.)
 %
 % Rules:
@@ -17,11 +17,11 @@
 %   * Each clue is: the clue, then \response, then the correct response.
 %   * Optionally add \solution after the response, followed by worked steps.
 %     After a correct answer, the board can show the response and solution.
-%   * Mark a Daily Double with \begin{clue}[dailydouble].
+%   * Mark a Double Down with \begin{clue}[doubledown].
 %   * Optional: mark a clue [write] if players must write the response
 %     before ringing in, or [say] if they can just say it. The board shows
 %     a large icon for it. Combine options with commas:
-%     \begin{clue}[dailydouble, write]. Final Jeopardy takes it too:
+%     \begin{clue}[doubledown, write]. Fermat's Last Round takes it too:
 %     \begin{final}[write]{Category}.
 %   * Pictures: \includegraphics[height=4cm]{figure.png} anywhere in a
 %     clue, response or solution. Put the file in this game's folder and
@@ -42,7 +42,7 @@
 %   writesay   show each clue's [write]/[say] mark (for you, not students)
 %   board      always show the board overview (even with questions)
 %   noboard    never show the board overview
-\usepackage[solutions]{../jeopardy}
+\usepackage[solutions]{../calculatedrisk}
 
 \gametitle{My Game Title}
 
@@ -98,7 +98,7 @@
     Response
   \end{clue}
 
-  \begin{clue}[dailydouble]
+  \begin{clue}[doubledown]
     Clue
   \response
     Response
@@ -214,9 +214,9 @@
 \end{category}
 
 \begin{final}{Final Category}
-  Final Jeopardy clue
+  Fermat's Last Round clue
 \response
-  Final Jeopardy response
+  Fermat's Last Round response
 \end{final}
 
 \end{document}

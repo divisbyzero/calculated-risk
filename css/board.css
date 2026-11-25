@@ -115,7 +115,7 @@ body.idle { cursor: none; }
 
 .fit-inner { width: 100%; }
 
-/* ---- Full-screen messages (clue, Daily Double, Final) ---- */
+/* ---- Full-screen messages (clue, Double Down, Final) ---- */
 
 .screen {
   position: absolute;

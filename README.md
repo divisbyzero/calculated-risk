@@ -1,17 +1,19 @@
-# Classroom Jeopardy
+# Calculated Risk
 
-Jeopardy-style review games for math class. Clues are written in LaTeX and
-typeset with MathJax. The teacher runs the game from a **host window** that
+*A math review game for the classroom.*
+
+Teams choose clues from a board of categories and point values and respond in
+the form of a question. Clues are written in LaTeX and typeset with MathJax. The teacher runs the game from a **host window** that
 shows the correct responses and keeps score, while a **board window** on the
 projector shows only what the class should see. The same LaTeX file also
 compiles to printable handouts.
 
 It's a static website (plain HTML, CSS and JavaScript, with no server code
 and no build step), so it can be hosted anywhere that serves files, such as
-GitHub Pages. MathJax and the Final Jeopardy music load from the internet,
-so the computer running the game needs a connection.
+GitHub Pages. MathJax loads from the internet, so the computer running the
+game needs a connection.
 
-Not affiliated with or endorsed by Jeopardy Productions, Inc.
+An independent, non-commercial math review game for classroom use, not affiliated with any television program.
 
 ## The pages
 
@@ -71,14 +73,14 @@ During the game:
   opened it by mistake.
 - To revisit a clue that's already been played, click its gray square. The
   board shows it marked "REVIEW", and no scoring happens.
-- **Daily Double** squares are marked "DD" on your screen only. Choose the
+- **Double Down** squares are marked "DD" on your screen only. Choose the
   team and enter the wager (up to the team's score or the board's top value,
   whichever is larger).
-- **Final Jeopardy**: the board shows the category, you enter each team's
+- **Fermat's Last Round**: the board shows the category, you enter each team's
   wager (up to its score), then show the clue and mark each team. When you
-  show the clue, think music starts in a small YouTube player on your screen;
-  if the browser blocks it, press play. To change or turn off the music, edit
-  `FINAL_MUSIC` in `js/config.js`.
+  show the clue, you can have music play in a small YouTube player on your
+  screen. It's off by default; to turn it on, set `FINAL_MUSIC` in
+  `js/config.js` to a video you have the right to play in class.
 - **Undo** reverses the last action. **Adjust** next to a score sets it by
   hand.
 - The game saves itself in the browser as you go. If the host page is
@@ -88,12 +90,12 @@ During the game:
 
 A game is one LaTeX file. The easiest start is the **template** link on the
 host page (or **Download the template** on the landing page). It gives a
-`.zip` with `template.tex` and `jeopardy.sty` in one folder, ready to edit in
+`.zip` with `template.tex` and `calculatedrisk.sty` in one folder, ready to edit in
 any LaTeX editor or Overleaf.
 
 ```latex
 \documentclass{article}
-\usepackage[solutions]{jeopardy}   % or questions, or answers (see Printing)
+\usepackage[solutions]{calculatedrisk}   % or questions, or answers (see Printing)
 \gametitle{Calculus I Review}
 \newcommand{\dd}[1]{\frac{d}{d#1}} % macros work inside math
 
@@ -108,7 +110,7 @@ any LaTeX editor or Overleaf.
     By the power rule, $\dd{x} x^n = n x^{n-1}.$
   \end{clue}
 
-  \begin{clue}[dailydouble, write]
+  \begin{clue}[doubledown, write]
     ...
   \response
     ...
@@ -130,11 +132,11 @@ any LaTeX editor or Overleaf.
 - **Board size:** 5 or 6 categories with 5 clues each. Clues are worth
   100–500 **by position**, so you can reorder them by moving blocks around.
 - **Options on a clue**, combined with commas:
-  - `dailydouble` makes it a Daily Double.
+  - `doubledown` makes it a Double Down.
   - `write` or `say` tells players whether they must write their response
     before ringing in (a long expression) or can just say it ("What is 6?").
     The board shows a large ✍️ WRITE IT or 🗣️ SAY IT banner. A clue with
-    neither shows no banner, which suits Final Jeopardy, where every team
+    neither shows no banner, which suits Fermat's Last Round, where every team
     writes anyway. `\begin{final}[write]{Category}` also works.
 - **Solutions:** `\solution` is optional. Use it for worked steps (`align*`
   works well). It appears on your host screen and, depending on the setting,
@@ -173,8 +175,8 @@ many large pictures may be too big for the browser to save for **Resume**.
 ## Printing
 
 Compile the game file with LaTeX as usual (pdflatex, xelatex or Overleaf).
-`jeopardy.sty` must be in the same folder as the game (a downloaded game
-already has it). The option on `\usepackage[...]{jeopardy}` chooses the PDF:
+`calculatedrisk.sty` must be in the same folder as the game (a downloaded game
+already has it). The option on `\usepackage[...]{calculatedrisk}` chooses the PDF:
 
 | Option | The PDF contains |
 | --- | --- |
@@ -183,7 +185,7 @@ already has it). The option on `\usepackage[...]{jeopardy}` chooses the PDF:
 | `solutions` (default) | The clues, responses and worked solutions, after an overview of the board. This is the one to proofread while you write. |
 
 Add any of these after it, separated by commas, as in
-`\usepackage[solutions, writesay, noboard]{jeopardy}`:
+`\usepackage[solutions, writesay, noboard]{calculatedrisk}`:
 
 | Option | What it does |
 | --- | --- |
@@ -191,23 +193,23 @@ Add any of these after it, separated by commas, as in
 | `board` | Always shows the board overview, even with `questions` |
 | `noboard` | Never shows the board overview |
 
-The web game ignores these options, and the PDFs never mention the Daily
-Double. Each clue stays on one page with its response; Final Jeopardy
+The web game ignores these options, and the PDFs never mention the Double
+Down. Each clue stays on one page with its response; Fermat's Last Round
 follows the last category on the same page when it fits, and a long worked
 solution may continue onto the next page.
 
 ## Built-in games
 
 The games on the host page live in `games/`, one folder each, and share one
-master copy of `jeopardy.sty`:
+master copy of `calculatedrisk.sty`:
 
 ```text
 games/
   index.json                      the list shown on the host page
-  jeopardy.sty                    shared by every game
+  calculatedrisk.sty                    shared by every game
   template/template.tex
   multivariable-calculus/
-    multivariable-calculus.tex    uses \usepackage[...]{../jeopardy}
+    multivariable-calculus.tex    uses \usepackage[...]{../calculatedrisk}
     polar-circle.png
     figures/                      TikZ sources for the pictures (optional)
 ```
@@ -215,14 +217,14 @@ games/
 To add one, put its folder in `games/` and add an entry to
 [`games/index.json`](games/index.json) with the path (like
 `my-game/my-game.tex`), a title and a one-line description. Built-in games
-load the shared style with `\usepackage{../jeopardy}`; pdflatex warns that
-the package "provides jeopardy", which is harmless.
+load the shared style with `\usepackage{../calculatedrisk}`; pdflatex warns that
+the package "provides calculatedrisk", which is harmless.
 
 **Download** under each game gives a `.zip` of its folder: the `.tex` file,
-the pictures it uses, and a copy of `jeopardy.sty`, with the line changed to
-`\usepackage{jeopardy}` so the folder compiles on its own. To turn a
+the pictures it uses, and a copy of `calculatedrisk.sty`, with the line changed to
+`\usepackage{calculatedrisk}` so the folder compiles on its own. To turn a
 downloaded game back into a built-in one, put its folder in `games/`, delete
-its `jeopardy.sty`, and change the line back to `\usepackage{../jeopardy}`.
+its `calculatedrisk.sty`, and change the line back to `\usepackage{../calculatedrisk}`.
 
 ## Settings
 
@@ -230,7 +232,7 @@ its `jeopardy.sty`, and change the line back to `\usepackage{../jeopardy}`.
 
 - `BOARD`: the number of categories and clues, and the value step. Set
   `enforceStandardSize` to `false` to allow boards of any size.
-- `FINAL_MUSIC`: the YouTube video played during Final Jeopardy, and whether
+- `FINAL_MUSIC`: an optional YouTube video played during Fermat's Last Round (off by default), and whether
   it starts on its own. Set `youtubeId: ''` to turn it off.
 
 ## Files
@@ -243,8 +245,12 @@ its `jeopardy.sty`, and change the line back to `\usepackage{../jeopardy}`.
 | `css/shared.css` | Styles for clue content, used by both windows |
 | `js/texparser.js` | Reads `.tex` game files and reports problems |
 | `js/files.js`, `js/zip.js` | Finding a game's pictures; reading and writing `.zip` files |
-| `js/config.js` | Board size and the Final Jeopardy music |
+| `js/config.js` | Board size and the Fermat's Last Round music |
 | `js/sync.js` | Connects the two windows (BroadcastChannel) |
 | `js/math.js`, `js/mathjax-config.js` | MathJax setup, typesetting, and fitting wide equations |
 | `img/favicon.svg` | Site icon |
-| `games/` | Built-in games, the shared `jeopardy.sty`, and the template |
+| `games/` | Built-in games, the shared `calculatedrisk.sty`, and the template |
+
+## License
+
+MIT. See [LICENSE](LICENSE).

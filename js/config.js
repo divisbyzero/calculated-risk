@@ -13,11 +13,13 @@ export const BOARD = {
   enforceStandardSize: true,
 };
 
-// Music for Final Jeopardy: a YouTube video shown on the host screen while
-// teams work on the Final Jeopardy clue. Set youtubeId to '' to turn it off.
-// With autoplay, it starts when you show the clue (you can pause it there).
+// Optional music for Fermat’s Last Round: a YouTube video shown on the host
+// screen while teams work on the final clue. It's off by default. To turn it
+// on, set youtubeId to the ID of a video you have the right to play in class
+// (the part after "v=" in a YouTube link), such as a royalty-free "thinking"
+// track. With autoplay, it starts when you show the clue (you can pause it).
 export const FINAL_MUSIC = {
-  youtubeId: 'vNGn7hkJRVY',
+  youtubeId: '',
   autoplay: true,
 };
 
