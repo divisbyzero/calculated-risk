@@ -1,7 +1,7 @@
 // The projector window. It only displays what the host window sends it.
 
 import { openChannel } from './sync.js';
-import { setMathHTML, setMacros } from './math.js';
+import { setMathHTML, setMacros, fitWideMath, hasWideMath, clearWideMath } from './math.js';
 import { escapeHtml, formatScore } from './util.js';
 
 const main = document.getElementById('main');
@@ -284,17 +284,39 @@ function fitAll() {
   main.querySelectorAll('[data-fit-max]').forEach(fitBox);
 }
 
+// Shrink the text in a box until it fits, in three steps:
+//   1. Shrink everything until it fits vertically and horizontally. A long
+//      equation can only shrink the whole text to WIDE_FLOOR of the size
+//      that fits vertically, so one equation can't make everything tiny.
+//   2. Then shrink just the equations that are still too wide (down to
+//      WIDE_MATH_MIN of their size), and shrink everything again if needed.
+//   3. Anything still too wide scrolls sideways (see shared.css).
+const WIDE_FLOOR = 0.65;
+const WIDE_MATH_MIN = 0.5;
+
 function fitBox(box) {
   const inner = box.querySelector('.fit-inner');
   if (!inner) return;
   const H = window.innerHeight;
   const min = parseFloat(box.dataset.fitMin) * H;
   let size = parseFloat(box.dataset.fitMax) * H;
-  inner.style.fontSize = size + 'px';
-  for (let k = 0; k < 40 && size > min; k++) {
-    if (inner.scrollHeight <= box.clientHeight && inner.scrollWidth <= box.clientWidth) break;
-    size = Math.max(min, size * 0.92);
+  clearWideMath(inner);
+  const setSize = (s) => {
+    size = s;
     inner.style.fontSize = size + 'px';
+  };
+  const tallFits = () => inner.scrollHeight <= box.clientHeight;
+  const wideFits = () => inner.scrollWidth <= box.clientWidth && !hasWideMath(inner);
+  const shrink = (floor, fits) => {
+    for (let k = 0; k < 60 && size > floor && !fits(); k++) setSize(Math.max(floor, size * 0.94));
+  };
+
+  setSize(size);
+  shrink(min, tallFits);
+  shrink(Math.max(min, size * WIDE_FLOOR), () => tallFits() && wideFits());
+  if (!wideFits()) {
+    fitWideMath(inner, WIDE_MATH_MIN);
+    shrink(min, tallFits);
   }
 }
 

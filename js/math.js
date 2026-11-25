@@ -57,7 +57,7 @@ export function setMathHTML(el, html) {
 // that still don't fit scroll sideways (see shared.css).
 const MIN_SCALE = 0.6;
 
-export function fitWideMath(el) {
+export function fitWideMath(el, minScale = MIN_SCALE) {
   for (const box of el.querySelectorAll('mjx-container[display="true"]')) {
     box.style.fontSize = '';
     const math = box.firstElementChild;
@@ -65,7 +65,20 @@ export function fitWideMath(el) {
     const avail = box.clientWidth;
     const need = math.getBoundingClientRect().width;
     if (avail > 0 && need > avail) {
-      box.style.fontSize = `${Math.max(MIN_SCALE, (avail - 2) / need) * 100}%`;
+      box.style.fontSize = `${Math.max(minScale, (avail - 2) / need) * 100}%`;
     }
   }
+}
+
+// Is any display equation in el wider than the space it has?
+export function hasWideMath(el) {
+  for (const box of el.querySelectorAll('mjx-container[display="true"]')) {
+    const math = box.firstElementChild;
+    if (math && math.getBoundingClientRect().width > box.clientWidth + 1) return true;
+  }
+  return false;
+}
+
+export function clearWideMath(el) {
+  for (const box of el.querySelectorAll('mjx-container[display="true"]')) box.style.fontSize = '';
 }

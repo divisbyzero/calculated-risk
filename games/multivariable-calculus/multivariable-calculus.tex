@@ -280,9 +280,11 @@
   \response
     What is a saddle point?
   \solution
-    \[
-    D=f_{xx}(a,b)f_{yy}(a,b)-(f_{xy}(a,b))^2=1\cdot 4-3^2=-5<0.
-    \]
+    \begin{align*}
+    D&=f_{xx}(a,b)f_{yy}(a,b)-\bigl(f_{xy}(a,b)\bigr)^2 \\
+    &=1\cdot 4-3^2 \\
+    &=-5<0.
+    \end{align*}
     So, by the Second Derivatives Test, $(a,b)$ is a saddle point. 
   \end{clue}
 
@@ -395,12 +397,11 @@
   \response
     What is $\frac{17}{16}$?
   \solution
-    We have $\Delta x=\frac{1}{2}$ and $\Delta y=\frac{1}{2}.$ The lower-left sample points are
-    $(0,0),$ $(\frac{1}{2},0),$ $(0,\frac{1}{2}),$ $(\frac{1}{2},\frac{1}{2}).$ So,
+    We have $\Delta x=\frac{1}{2}$ and $\Delta y=\frac{1}{2},$ so each subrectangle has area $\Delta A=\frac{1}{4}.$ The lower-left sample points are
+    $(0,0),$ $(\frac{1}{2},0),$ $(0,\frac{1}{2}),$ $(\frac{1}{2},\frac{1}{2}),$ where $f$ takes the values $1,$ $1,$ $1,$ and $\frac{5}{4}.$ So, the Riemann sum is
     \begin{align*}
-    \left(f(0,0)+f\!\left(\tfrac{1}{2},0\right)+f\!\left(0,\tfrac{1}{2}\right)+f\!\left(\tfrac{1}{2},\tfrac{1}{2}\right)\right)\cdot\tfrac{1}{2}\cdot\tfrac{1}{2}
-    &=\left(1+1+1+\tfrac{5}{4}\right)\cdot\tfrac{1}{4} \\
-    &=\frac{17}{4}\cdot\frac{1}{4}\\
+    \left(1+1+1+\frac{5}{4}\right)\cdot\frac{1}{4}
+    &=\frac{17}{4}\cdot\frac{1}{4} \\
     &=\frac{17}{16}.
     \end{align*}
 
@@ -443,7 +444,7 @@
   % \end{clue}
 
   \begin{clue}[say]
-    It is the value of $\displaystyle \iiint_E (x^2 + 2y) \; dV,$ where $E = \{(x,y,z) \colon 0 \leq x \leq 1, 0 \leq y \leq 1, 0 \leq z \leq 1\}.$
+    It is the value of $\displaystyle \iiint_E (x^2 + 2y) \; dV,$ where $E=[0,1]\times[0,1]\times[0,1].$
   \response
     What is $\frac{4}{3}$?
   \solution
