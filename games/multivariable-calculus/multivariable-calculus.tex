@@ -31,23 +31,18 @@
   \response
     What is $\sqrt{17}$?
   \solution
-    We compute
     \[
-    \bvec{a}-\bvec{b}=\langle 4,\,-1\rangle.
-    \]
-    So,
-    \[
-    \left|\bvec{a}-\bvec{b}\right|=\sqrt{4^2+(-1)^2}=\sqrt{17}.
+    \left|\bvec{a}-\bvec{b}\right|=\left|\langle 4,\,-1\rangle\right|=\sqrt{4^2+(-1)^2}=\sqrt{17}.
     \]
   \end{clue}
 
   \begin{clue}[say]
-    It is the value of $a$ that makes the vectors $\langle a,3\rangle$ and $\langle4,5\rangle$ orthogonal.
+    It is the value of $a$ that makes the vectors $\langle a,12\rangle$ and $\langle4,5\rangle$ orthogonal.
   \response
-    What is $-\frac{15}{4}$?
+    What is $-15$?
   \solution
-    We use orthogonality,
-    $\langle a,\,3\rangle \dotprod \langle 4,\,5\rangle = 4a+15=0.$ So, $a=-\frac{15}{4}.$
+    We use the dot product:
+    $\langle a,\,12\rangle \dotprod \langle 4,\,5\rangle = 4a+60=0.$ So, $a=-\frac{60}{4}=-15$.
   \end{clue}
 
   \begin{clue}[write]
@@ -113,7 +108,7 @@
     L
     &=\int_0^2 \left|\bvec{r}\,'(t)\right|\,dt \\
     &=\int_0^2 \left|\langle 1,\,2,\,2\rangle\right|\,dt \\
-    &=\int_0^2 \sqrt{1^2+2^2+2^2}\,dt \\
+%    &=\int_0^2 \sqrt{1^2+2^2+2^2}\,dt \\
     &=\int_0^2 3\,dt \\
     &=\left.3t\right|_0^2 \\
     &=6.
@@ -145,18 +140,18 @@
     It is the slope of the tangent line to the parametric curve 
     \begin{align*}
     x&=t^2\\
-    y&=t^3-3t
+    y&=4t^3-8t
     \end{align*}
     when $t=2.$
   \response
-    What is $\frac{9}{4}$?
+    What is $10$?
   \solution
     \[
-    \frac{dy}{dx}=\frac{dy/dt}{dx/dt}=\frac{3t^2-3}{2t}.
+    \frac{dy}{dx}=\frac{dy/dt}{dx/dt}=\frac{12t^2-8}{2t}.
     \]
     When $t=2,$
     \[
-    \frac{dy}{dx}=\frac{9}{4}.
+    \frac{dy}{dx}=\frac{12(4)-8}{4}=10.
     \]
   \end{clue}
 
@@ -181,7 +176,7 @@
 \end{category}
 
 %======================================================================
-\begin{category}{Partial Derivatives}
+\begin{category}{Functions of Several Variables}
 
   % NEW: written by Claude, not from Lab 11.
   % PICTURE (optional): a contour map of f(x,y) = x^2 + y^2.
@@ -213,7 +208,7 @@
   \end{clue}
 
   \begin{clue}[write]
-    It is the limit of $\displaystyle f(x,y) = \frac{xy}{x^2 + y^2}$ as $(x,y)$ approaches $(0,0)$ along the line $y = mx,$ where $m$ is a constant.
+    It is the limit of $\displaystyle f(x,y) = \frac{xy}{x^2 + y^2}$ as $(x,y)$ approaches $(0,0)$ along the line.
   \response
     What is $\displaystyle \frac{m}{1+m^2}$?
   \solution
@@ -258,7 +253,7 @@
 \end{category}
 
 %======================================================================
-\begin{category}{Optimization}
+\begin{category}{Applications of the Derivative}
 
   % NEW: written by Claude, not from Lab 11.
   \begin{clue}[say]
@@ -275,18 +270,32 @@
   \end{clue}
 
   % NEW: written by Claude, not from Lab 11.
+  % NEW: written by Claude, not from Lab 11.
   \begin{clue}[say]
-    This is the type of critical point of $(a,b),$ assuming $f_{xx}(a,b)=1,$ $f_{yy}(a,b)=4,$ and $f_{xy}(a,b)=3.$
+    It is the direction a bug should crawl to warm up as quickly as possible if it is standing on a metal plate at $(1,1)$ where the temperature is $T(x,y)=100-x^2-2y^2.$ 
   \response
-    What is a saddle point?
+    What is $\langle -2,-4\rangle$ (or any positive multiple)?
   \solution
-    \begin{align*}
-    D&=f_{xx}(a,b)f_{yy}(a,b)-\bigl(f_{xy}(a,b)\bigr)^2 \\
-    &=1\cdot 4-3^2 \\
-    &=-5<0.
-    \end{align*}
-    So, by the Second Derivatives Test, $(a,b)$ is a saddle point. 
+    The temperature increases fastest in the direction of the gradient. We have $\nabla T(x,y)=\langle -2x,\,-4y\rangle,$ so
+    \[
+    \nabla T(1,1)=\langle -2,\,-4\rangle
+    \]
+is the direction to crawl.
   \end{clue}
+
+  % Retired (tests the same thing as another clue in this category):
+  % \begin{clue}[say]
+  %   This is the type of critical point of $(a,b),$ assuming $f_{xx}(a,b)=1,$ $f_{yy}(a,b)=4,$ and $f_{xy}(a,b)=3.$
+  % \response
+  %   What is a saddle point?
+  % \solution
+  %   \begin{align*}
+  %   D&=f_{xx}(a,b)f_{yy}(a,b)-\bigl(f_{xy}(a,b)\bigr)^2 \\
+  %   &=1\cdot 4-3^2 \\
+  %   &=-5<0.
+  %   \end{align*}
+  %   So, by the Second Derivatives Test, $(a,b)$ is a saddle point. 
+  % \end{clue}
 
   \begin{clue}[say]
     The critical point $\left(-\frac{2}{3},\frac{1}{3}\right)$ for the function $f(x,y) = x^2 + y^2 + xy + x$ has this type.
@@ -301,32 +310,40 @@
     and $f_{xx}>0.$ So, the critical point is a local minimum.
    \end{clue}
 
+  % NEW: written by Claude, not from Lab 11.
   \begin{clue}[dailydouble, say]
-    It is the minimum value of $f(x,y) = xy$ subject to the constraint $4x^2 + y^2=8.$
+    They are the terms that complete this sentence: By the $\underline{\hspace{3em}}$ Theorem, every $\underline{\hspace{3em}}$ function defined on a $\underline{\hspace{3em}}$ and $\underline{\hspace{3em}}$ region has an absolute maximum and an absolute minimum.
   \response
-    What is $-2$?
-  \solution
-    Let $f(x,y)=xy$ and $g(x,y)=4x^2+y^2=8.$ The gradients are
-    \begin{align*}
-    \nabla f(x,y)&=\langle y,\,x\rangle, \\
-    \nabla g(x,y)&=\langle 8x,\,2y\rangle.
-    \end{align*}
-    So, by the method of Lagrange multipliers, we must solve
-    \begin{align*}
-    y&=8\lambda x, \\
-    x&=2\lambda y, \\
-    4x^2+y^2&=8.
-    \end{align*}
-    The first two equations give $y^2=4x^2.$ Substituting this into the constraint equation gives $4x^2+4x^2=8.$ So, $x^2=1.$
-    Hence, $x=\pm 1$ and $y=\pm 2.$ Evaluating,
-    \begin{align*}
-    f(1,2)&=2, \\
-    f(1,-2)&=-2, \\
-    f(-1,2)&=-2, \\
-    f(-1,-2)&=2,
-    \end{align*}
-    we find that the minimum value is $-2.$
+    What are Extreme Value, continuous, closed, and bounded?
   \end{clue}
+
+  % Retired (tests the same thing as another clue in this category):
+  % \begin{clue}[dailydouble, say]
+  %   It is the minimum value of $f(x,y) = xy$ subject to the constraint $4x^2 + y^2=8.$
+  % \response
+  %   What is $-2$?
+  % \solution
+  %   Let $f(x,y)=xy$ and $g(x,y)=4x^2+y^2=8.$ The gradients are
+  %   \begin{align*}
+  %   \nabla f(x,y)&=\langle y,\,x\rangle, \\
+  %   \nabla g(x,y)&=\langle 8x,\,2y\rangle.
+  %   \end{align*}
+  %   So, by the method of Lagrange multipliers, we must solve
+  %   \begin{align*}
+  %   y&=8\lambda x, \\
+  %   x&=2\lambda y, \\
+  %   4x^2+y^2&=8.
+  %   \end{align*}
+  %   The first two equations give $y^2=4x^2.$ Substituting this into the constraint equation gives $4x^2+4x^2=8.$ So, $x^2=1.$
+  %   Hence, $x=\pm 1$ and $y=\pm 2.$ Evaluating,
+  %   \begin{align*}
+  %   f(1,2)&=2, \\
+  %   f(1,-2)&=-2, \\
+  %   f(-1,2)&=-2, \\
+  %   f(-1,-2)&=2,
+  %   \end{align*}
+  %   we find that the minimum value is $-2.$
+  % \end{clue}
 
   % NEW: written by Claude, not from Lab 11.
   \begin{clue}[write]
@@ -441,17 +458,17 @@ This is the value of the Riemann sum of $f(x,y) = xy+1$ over $R = [0,1] \times [
 
 
   \begin{clue}[say]
-    It is the value of $\displaystyle \iiint_E (x^2 + 2y) \; dV,$ where $E=[0,1]\times[0,1]\times[0,1].$
+    It is the value of $\displaystyle \iiint_E (6x^2 + 2y) \; dV,$ where $E=[0,1]\times[0,1]\times[0,1].$
   \response
-    What is $\frac{4}{3}$?
+    What is $3$?
   \solution
     \begin{align*}
-    \int_0^1\int_0^1\int_0^1(x^2+2y)\,dx\,dy\,dz
-    &=\int_0^1\int_0^1\left[\frac{x^3}{3}+2xy\right]_0^1\,dy\,dz \\
-    &=\int_0^1\int_0^1\left(\frac{1}{3}+2y\right)dy\,dz \\
-    &=\int_0^1\left[\frac{y}{3}+y^2\right]_0^1\,dz \\
-    &=\int_0^1\left(\frac{1}{3}+1\right)dz \\
-    &=\left.\frac{4}{3}z\right|_0^1=\frac{4}{3}.
+    \int_0^1\int_0^1\int_0^1(6x^2+2y)\,dx\,dy\,dz
+    &=\int_0^1\int_0^1\left[2x^3+2xy\right]_0^1\,dy\,dz \\
+    &=\int_0^1\int_0^1\left(2+2y\right)dy\,dz \\
+    &=\int_0^1\left[2y+y^2\right]_0^1\,dz \\
+    &=\int_0^1\left(2+1\right)dz \\
+    &=\left.3z\right|_0^1=3.
     \end{align*}
   \end{clue}
 
