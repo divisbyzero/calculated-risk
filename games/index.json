@@ -1,22 +1,22 @@
 [
   {
     "file": "calculus1/calculus1.tex",
-    "title": "Sample Single Variable Calculus Game",
+    "title": "Sample Game: Single Variable Calculus",
     "description": "Derivatives, limits, definitions and theorems, and applications of the derivative."
   },
   {
     "file": "multivariable-calculus/multivariable-calculus.tex",
-    "title": "Sample Multivariable Calculus Game",
+    "title": "Sample Game: Multivariable Calculus",
     "description": "Vectors, curves, functions of several variables, optimization, and multiple integrals."
   },
   {
     "file": "calculus2/calculus2.tex",
-    "title": "Sample Limits and Integrals Game",
+    "title": "Sample Game: Limits and Integrals",
     "description": "Integration by parts, limits, improper integrals, and applications of integration."
   },
   {
     "file": "template/template.tex",
     "title": "Starter Game",
-    "description": "A short game that shows every feature, one clue at a time. It's also the template: download it and replace the clues with your own."
+    "description": "A game that shows every feature. It's also the game template: download the file and replace the clues with your own."
   }
 ]
