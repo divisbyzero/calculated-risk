@@ -1,27 +1,10 @@
-% Calculated Risk starter game and template.
+% Calculated Risk Starter Game. It's a complete game, and each clue shows
+% one feature (see the "% Shows:" comments). To make your own game, replace
+% the clues and keep the structure: 5 or 6 categories of 5 clues each, worth
+% 100 to 500 in the order they appear, then Fermat's Last Round.
 %
-% This is a complete game you can play as it is. Each clue also shows one
-% thing you can do in a game file; the "% Shows:" comment above it says what.
-% To make your own game, keep the structure and replace the clues.
-%
-% Keep this file, calculatedrisk.sty and any pictures together in one
-% folder. Rename the folder and this file if you like.
-%%
-% Rules:
-%   * 5 or 6 categories, each with exactly 5 clues.
-%   * Clues are worth 100, 200, 300, 400, 500 in the order they appear.
-%     To reorder, move the \begin{clue} ... \end{clue} blocks.
-%   * Each clue is: the clue, then \response and the correct response, then
-%     (optionally) \solution and a worked solution.
-%   * Options go in brackets after \begin{clue}, separated by commas:
-%       doubledown  makes the clue a Double Down
-%       write       shows a "Write it" banner (teams write before answering)
-%       say         shows a "Say it" banner (teams can just say it)
-%   * Pictures: \includegraphics{figure.png}, with the PNG or JPG in this
-%     folder. Options like [height=4cm] only affect the PDF.
-%   * Anything after a % is a comment, ignored by the app and by LaTeX.
-%
-% The full guide: guide.html on the Calculated Risk site.
+% Keep this file, calculatedrisk.sty and any pictures in one folder.
+% The full guide is the "Create a game" page on the Calculated Risk site.
 
 \documentclass{article}
 % Which PDF to make (the web game ignores this):
@@ -119,7 +102,7 @@
 
   % Shows: a numbered list (enumerate).
   \begin{clue}[say]
-    Doing these steps to a function $f$ finds these points.
+    Following these steps finds these points of a function $f.$
     \begin{enumerate}
       \item Find $f'(x).$
       \item Set $f'(x) = 0.$
@@ -282,7 +265,8 @@
   \end{clue}
 
   \begin{clue}[say]
-    It is what the harmonic series $\displaystyle\sum_{n=1}^{\infty} \frac{1}{n}$ does.
+    It is the word for what the harmonic series
+    $\displaystyle\sum_{n=1}^{\infty} \frac{1}{n}$ does.
   \response
     What is diverge?
   \end{clue}
@@ -297,8 +281,7 @@
 
 %======================================================================
 % Fermat's Last Round: one category and clue, after the categories.
-% [write] works here too.
-\begin{final}[write]{Famous Constants}
+\begin{final}{Famous Constants}
   It is the value of $\displaystyle\sum_{n=0}^{\infty} \frac{1}{n!}.$
 \response
   What is $e$?

@@ -1,6 +1,3 @@
-% Each clue is marked [write] or [say]: whether players must write their
-% response before ringing in, or can just say it. The game board shows
-% this on the clue screen; the PDF shows it only with the writesay option.
 \documentclass{article}
 % Which PDF to make (the web game ignores this):
 %   questions  clues only, e.g. a study sheet for students
@@ -12,9 +9,9 @@
 %   noboard    never show the board overview
 \usepackage[solutions,writesay]{../calculatedrisk}
 
-\gametitle{Sample Multivariable Calculus Game}
+\gametitle{Sample Game: Multivariable Calculus}
 
-% Notation used in the course notes
+% Vector notation
 \newcommand{\bvec}[1]{\vec{\mathbf{#1}}}
 \newcommand{\uveci}{\boldsymbol{\hat{\imath}}}
 \newcommand{\uvecj}{\boldsymbol{\hat{\jmath}}}
@@ -50,24 +47,23 @@
   \response
     What is $\left\langle \frac{1}{3}, \frac{2}{3}, \frac{2}{3}\right\rangle$ (or its negative)?
   \solution
-    The vector 
+    The vector
     \[
     \bvec{n}=\langle 1,\,2,\,2\rangle
     \]
-    is normal to the plane, so 
+    is normal to the plane, so
     \[
     \frac{\bvec{n}}{|\bvec{n}|}=\frac{\langle 1,\,2,\,2\rangle}{\sqrt{1^2+2^2+2^2}}=\left\langle \frac{1}{3},\,\frac{2}{3},\,\frac{2}{3}\right\rangle
     \]
-    is a unit normal vector. 
+    is a unit normal vector.
   \end{clue}
 
-  % NEW: written by Claude, not from Lab 11.
   \begin{clue}[say]
     It is the cross product $\langle 1,2,3\rangle\times\langle 2,4,6\rangle.$
   \response
     What is $\bvec{0}=\langle 0,0,0\rangle$?
   \solution
-    Since $\langle 2,4,6\rangle$ and $\langle 1,2,3\rangle$ are parallel, their cross product is $\bvec{0}.$ 
+    Since $\langle 2,4,6\rangle$ and $\langle 1,2,3\rangle$ are parallel, their cross product is $\bvec{0}.$
   \end{clue}
 
   \begin{clue}[say]
@@ -83,7 +79,6 @@
 %======================================================================
 \begin{category}{Curves and Motion}
 
-  % NEW: written by Claude, not from Lab 11.
   \begin{clue}[write]
     They are parametric equations for the line through the point $(1,-2,3)$ that is orthogonal to the plane $2x-y+4z=7.$
   \response
@@ -98,22 +93,6 @@
     (Any nonzero multiple of $\langle 2,-1,4\rangle$ also works as the direction.)
   \end{clue}
 
-  % Retired (replaced by the line question above):
-  % \begin{clue}[say]
-  %   It is the tangent vector to $\bvec{r}(t) = \sin t \uveci - \cos t \uvecj$ when $t = \frac{\pi}{2}.$
-  % \response
-  %   What is $\uvecj$?
-  % \solution
-  %   \[
-  %   \bvec{r}\,'(t)=\cos t\,\uveci+\sin t\,\uvecj.
-  %   \]
-  %   \[
-  %   \bvec{r}\,'\!\left(\tfrac{\pi}{2}\right)=\cos\!\left(\tfrac{\pi}{2}\right)\uveci+\sin\!\left(\tfrac{\pi}{2}\right)\uvecj
-  %   =0\,\uveci+1\,\uvecj.
-  %   \]
-  % \end{clue}
-
-  % NEW: written by Claude, not from Lab 11.
   \begin{clue}[say]
     It is a vector normal to the curve $x^2+xy+y^2=7$ at the point $(1,2).$
   \response
@@ -126,9 +105,8 @@
     is normal to the curve at $(1,2).$
   \end{clue}
 
-  % NEW: written by Claude, not from Lab 11.
   \begin{clue}[say]
-    It is the slope of the tangent line to the parametric curve 
+    It is the slope of the tangent line to the parametric curve
     \begin{align*}
     x&=t^2\\
     y&=4t^3-8t
@@ -147,7 +125,7 @@
   \end{clue}
 
   \begin{clue}[write]
-    This is a particle's position at $t=2$ provided that it has velocity $\bvec{v}(t) = \uveci + t \uvecj$ and starts at $\bvec{r}(0) = \uvecj + 2\uveck.$ 
+    This is a particle's position at $t=2$ provided that it has velocity $\bvec{v}(t) = \uveci + t \uvecj$ and starts at $\bvec{r}(0) = \uvecj + 2\uveck.$
   \response
     What is $2 \uveci + 3 \uvecj + 2 \uveck$?
   \solution
@@ -166,8 +144,6 @@
     \]
   \end{clue}
 
-  % NEW: written by Claude, not from Lab 11.
-  % Figure: the circle r = 2 sin(theta) (source in figures/polar-circle.tex).
   \begin{clue}[say]
     It is the area of the circle given by the polar equation $r=2\sin\theta.$
   \response
@@ -194,11 +170,11 @@
 \begin{category}{Functions of Several Variables}
 
   \begin{clue}[say]
-    This is the level curve of the function $f(x,y)=2x^2+2y^2$ when $k=2.$
+    It is the level curve $f(x,y)=2$ of the function $f(x,y)=2x^2+2y^2.$
   \response
     What is the unit circle?
   \solution
-    When $k=2,$ the level curve is $2x^2+2y^2=2.$ This equation simplifies to $x^2+y^2=1,$ which is the unit circle in the $xy$-plane.
+    The level curve is $2x^2+2y^2=2.$ This equation simplifies to $x^2+y^2=1,$ which is the unit circle in the $xy$-plane.
   \end{clue}
 
   \begin{clue}[say]
@@ -225,10 +201,9 @@
   \response
     What is $\displaystyle \frac{m}{1+m^2}$?
   \solution
-    Along $y=mx$ we have 
+    Along $y=mx$ we have
     \begin{align*}
     \lim_{x\to 0}\frac{x(mx)}{x^2+(mx)^2}&=\lim_{x\to 0}\frac{mx^2}{x^2+m^2x^2} \\
-    %&=\lim_{x\to 0}\frac{mx^2}{x^2(1+m^2)} \\
     &=\lim_{x\to 0}\frac{m}{1+m^2}\\
     &=\frac{m}{1+m^2}.
     \end{align*}
@@ -251,7 +226,6 @@
     which simplifies to $z=x+y+1.$
   \end{clue}
 
-  % NEW: written by Claude, not from Lab 11.
   \begin{clue}[say]
     It is the directional derivative of $f(x,y)=5xy^2$ at $(1,2)$ in the direction of $\langle 3,4\rangle.$
   \response
@@ -268,7 +242,6 @@
 %======================================================================
 \begin{category}{Applications of the Derivative}
 
-  % NEW: written by Claude, not from Lab 11.
   \begin{clue}[say]
     It is the only critical point of $f(x,y)=x^2+y^2-4x+6y.$
   \response
@@ -282,7 +255,6 @@
     So, $x=2$ and $y=-3,$ and the critical point is $(2,-3).$
   \end{clue}
 
-  % NEW: written by Claude, not from Lab 11.
   \begin{clue}[say]
     It is the direction a bug should crawl to warm up as quickly as possible if it is standing at $(1,1)$ on a metal plate whose temperature at $(x,y)$ is $T(x,y)=100-x^2-2y^2.$
   \response
@@ -295,20 +267,6 @@
     is the direction to crawl.
   \end{clue}
 
-  % Retired (tests the same thing as another clue in this category):
-  % \begin{clue}[say]
-  %   This is the type of critical point of $(a,b),$ assuming $f_{xx}(a,b)=1,$ $f_{yy}(a,b)=4,$ and $f_{xy}(a,b)=3.$
-  % \response
-  %   What is a saddle point?
-  % \solution
-  %   \begin{align*}
-  %   D&=f_{xx}(a,b)f_{yy}(a,b)-\bigl(f_{xy}(a,b)\bigr)^2 \\
-  %   &=1\cdot 4-3^2 \\
-  %   &=-5<0.
-  %   \end{align*}
-  %   So, by the Second Derivatives Test, $(a,b)$ is a saddle point. 
-  % \end{clue}
-
   \begin{clue}[say]
     The critical point $\left(-\frac{2}{3},\frac{1}{3}\right)$ for the function $f(x,y) = x^2 + y^2 + xy + x$ has this type.
   \response
@@ -320,44 +278,14 @@
     D=f_{xx}f_{yy}-(f_{xy})^2=2\cdot 2-1^2=3>0,
     \]
     and $f_{xx}>0.$ So, the critical point is a local minimum.
-   \end{clue}
+  \end{clue}
 
-  % NEW: written by Claude, not from Lab 11.
   \begin{clue}[doubledown, say]
     They are the terms that complete this sentence: By the $\underline{\hspace{3em}}$ Theorem, every $\underline{\hspace{3em}}$ function defined on a $\underline{\hspace{3em}}$ and $\underline{\hspace{3em}}$ region has an absolute maximum and an absolute minimum.
   \response
     What are Extreme Value, continuous, closed, and bounded?
   \end{clue}
 
-  % Retired (tests the same thing as another clue in this category):
-  % \begin{clue}[doubledown, say]
-  %   It is the minimum value of $f(x,y) = xy$ subject to the constraint $4x^2 + y^2=8.$
-  % \response
-  %   What is $-2$?
-  % \solution
-  %   Let $f(x,y)=xy$ and $g(x,y)=4x^2+y^2=8.$ The gradients are
-  %   \begin{align*}
-  %   \nabla f(x,y)&=\langle y,\,x\rangle, \\
-  %   \nabla g(x,y)&=\langle 8x,\,2y\rangle.
-  %   \end{align*}
-  %   So, by the method of Lagrange multipliers, we must solve
-  %   \begin{align*}
-  %   y&=8\lambda x, \\
-  %   x&=2\lambda y, \\
-  %   4x^2+y^2&=8.
-  %   \end{align*}
-  %   The first two equations give $y^2=4x^2.$ Substituting this into the constraint equation gives $4x^2+4x^2=8.$ So, $x^2=1.$
-  %   Hence, $x=\pm 1$ and $y=\pm 2.$ Evaluating,
-  %   \begin{align*}
-  %   f(1,2)&=2, \\
-  %   f(1,-2)&=-2, \\
-  %   f(-1,2)&=-2, \\
-  %   f(-1,-2)&=2,
-  %   \end{align*}
-  %   we find that the minimum value is $-2.$
-  % \end{clue}
-
-  % NEW: written by Claude, not from Lab 11.
   \begin{clue}[write]
     To find the extreme values of $f(x,y)=x^2y$ subject to the constraint $x^2+y^2=3$ with Lagrange multipliers, it is the system of equations to solve.
   \response
@@ -381,44 +309,6 @@
     \end{align*}
   \end{clue}
 
-  % Retired (too long for the game):
-  % Figure from Lab 11 (source in figures/square-candidates.tex).
-  % \begin{clue}[say]
-  %   It is the minimum value of $f(x,y) = x^2 - y^2+x^2y+4$ on the square with vertices at $(0,0),(1,0),(0,1),(1,1).$
-  % \response
-  %   What is $3$?
-  % \solution
-  %   First we compute the first partial derivatives, and then we set them equal to 0:
-  %   \begin{align*}
-  %   f_x(x,y)&=2x+2xy=2x(1+y)=0, \\
-  %   f_y(x,y)&=-2y+x^2=0.
-  %   \end{align*}
-  %   The first equation gives either $x=0$ or $y=-1.$ Since $y=-1$ is outside the region, $x=0.$ Substituting this into the second equation gives $-2y=0.$ So, $y=0.$ Critical point: $(0,0).$
-  %
-  %   \begin{itemize}
-  %   \item Along $x=0$: $f(0,y)=4-y^2,$ so $f'(y)=-2y=0$ gives $(0,0).$
-  %   \item Along $y=0$: $f(x,0)=x^2+4,$ so $f'(x)=2x=0$ gives $(0,0).$
-  %   \item Along $x=1$: $f(1,y)=5+y-y^2,$ so $f'(y)=1-2y=0$ gives $y=\frac{1}{2}.$ So, $(1,\tfrac{1}{2})$ is a candidate.
-  %   \item Along $y=1$: $f(x,1)=2x^2+3,$ so $f'(x)=4x=0$ gives $(0,1).$
-  %   \end{itemize}
-  %
-  %   We must also check the corners, $(0,0),$ $(1,0),$ $(0,1),$ and $(1,1).$
-  %
-  %   Evaluating at all candidates,
-  %   \begin{align*}
-  %   f(0,0)&=4, \\
-  %   f(1,0)&=5, \\
-  %   f(0,1)&=3, \\
-  %   f(1,1)&=5, \\
-  %   f\left(1,\tfrac{1}{2}\right)&=\tfrac{21}{4}.
-  %   \end{align*}
-  %   So, the minimum value is $3.$
-  %
-  %   \begin{center}
-  %     \includegraphics[width=3.9cm]{square-candidates.png}
-  %   \end{center}
-  % \end{clue}
-
 \end{category}
 
 %======================================================================
@@ -428,14 +318,10 @@
     These are the best choices for $u$ and $dv$ to find $\displaystyle \int x^2\ln x \, dx$ using integration by parts.
   \response
     What are $u=\ln x$ and $dv=x^2\,dx$?
-
   \end{clue}
 
-
-
-  % Figure from Lab 11 (source in figures/riemann-sum.tex).
   \begin{clue}[say]
-This is the value of the Riemann sum of $f(x,y) = xy+1$ over $R = [0,1] \times [0,1],$ when $R$ is split into four equal subrectangles and we use the lower left corner of each subrectangle as the sample point.
+    This is the value of the Riemann sum of $f(x,y) = xy+1$ over $R = [0,1] \times [0,1],$ when $R$ is split into four equal subrectangles and we use the lower left corner of each subrectangle as the sample point.
   \response
     What is $\frac{17}{16}$?
   \solution
@@ -452,23 +338,6 @@ This is the value of the Riemann sum of $f(x,y) = xy+1$ over $R = [0,1] \times [
     \end{center}
   \end{clue}
 
-
-  % \begin{clue}[say]
-  %   It is the value of $\displaystyle \iint_R (x + \sin y) \; dA,$ where $R = [0,2] \times [0, \pi].$
-  % \response
-  %   What is $4+2\pi$?
-  % \solution
-  %   \begin{align*}
-  %   \int_0^2\int_0^{\pi}(x+\sin y)\,dy\,dx
-  %   &=\int_0^2\left[xy-\cos y\right]_0^{\pi}\,dx \\
-  %   &=\int_0^2\bigl((\pi x-\cos\pi)-(0-\cos 0)\bigr)\,dx \\
-  %   &=\int_0^2(\pi x+2)\,dx \\
-  %   &=\left.\left(\frac{\pi}{2}x^2+2x\right)\right|_0^2 \\
-  %   &=2\pi+4.
-  %   \end{align*}
-  % \end{clue}
-
-
   \begin{clue}[say]
     It is the length of the curve $\bvec{r}(t) = \langle t, 2t, 2t\rangle$ for $0 \leq t \leq 2.$
   \response
@@ -478,30 +347,12 @@ This is the value of the Riemann sum of $f(x,y) = xy+1$ over $R = [0,1] \times [
     L
     &=\int_0^2 \left|\bvec{r}\,'(t)\right|\,dt \\
     &=\int_0^2 \left|\langle 1,\,2,\,2\rangle\right|\,dt \\
-%    &=\int_0^2 \sqrt{1^2+2^2+2^2}\,dt \\
     &=\int_0^2 3\,dt \\
     &=\left.3t\right|_0^2 \\
     &=6.
     \end{align*}
   \end{clue}
 
-  % Retired (replaced by the arc length question above):
-  % \begin{clue}[say]
-  %   It is the value of $\displaystyle \iiint_E (6x^2 + 2y) \; dV,$ where $E=[0,1]\times[0,1]\times[0,1].$
-  % \response
-  %   What is $3$?
-  % \solution
-  %   \begin{align*}
-  %   \int_0^1\int_0^1\int_0^1(6x^2+2y)\,dx\,dy\,dz
-  %   &=\int_0^1\int_0^1\left[2x^3+2xy\right]_0^1\,dy\,dz \\
-  %   &=\int_0^1\int_0^1\left(2+2y\right)dy\,dz \\
-  %   &=\int_0^1\left[2y+y^2\right]_0^1\,dz \\
-  %   &=\int_0^1\left(2+1\right)dz \\
-  %   &=\left.3z\right|_0^1=3.
-  %   \end{align*}
-  % \end{clue}
-
-  % Figure: the region D (source in figures/parabola-line.tex).
   \begin{clue}[say]
     It is the value of $\displaystyle \iint_D 12x\,dA,$ where $D$ is the region bounded by $y=x$ and $y=x^2.$
   \response
@@ -522,7 +373,6 @@ This is the value of the Riemann sum of $f(x,y) = xy+1$ over $R = [0,1] \times [
     \end{center}
   \end{clue}
 
-  % Figure from Lab 11 (source in figures/reverse-order.tex).
   \begin{clue}[write]
     It is $\displaystyle \int_0^1 \int_0^x F(x,y) \; dy\, dx$ with the order of integration reversed.
   \response
@@ -539,7 +389,6 @@ This is the value of the Riemann sum of $f(x,y) = xy+1$ over $R = [0,1] \times [
     \end{center}
   \end{clue}
 
-
 \end{category}
 
 %======================================================================
@@ -552,20 +401,18 @@ This is the value of the Riemann sum of $f(x,y) = xy+1$ over $R = [0,1] \times [
   \end{clue}
 
   \begin{clue}[say]
-    It is the second full moon in a single month.
+    It is a critical point where $f$ has a maximum in one direction and a
+    minimum in another, named for something you put on a horse.
   \response
-    What is a blue moon?
+    What is a saddle point?
   \end{clue}
 
-  % NEW: written by Claude, not from Lab 11.
   \begin{clue}[say]
     It is the volume of a pizza with radius $z$ and thickness $a.$
   \response
     What is $\text{pi}\cdot z\cdot z\cdot a\quad (=\pi z^2 a)$?
-
   \end{clue}
 
-  % NEW: written by Claude, not from Lab 11.
   \begin{clue}[say]
     Your roommate fell asleep on a sled, and the dining hall stops serving breakfast in five minutes. You drag the sled $100$ meters to the dining hall, pulling on its rope with a force of $40$ Newtons at an angle of $60^\circ$ above the ground. It is the work you do, in joules.
   \response
@@ -585,24 +432,6 @@ This is the value of the Riemann sum of $f(x,y) = xy+1$ over $R = [0,1] \times [
     \]
   \end{clue}
 
-  % Retired (replaced by the work question above):
-  % \begin{clue}[say]
-  %   This quadric surface, $z=x^2-y^2,$ gives a Pringles chip its shape.
-  % \response
-  %   What is a hyperbolic paraboloid?
-  %
-  % \end{clue}
-
-  % Retired clue:
-  % \begin{clue}[say]
-  %   It is a ``mathematical'' car from Acura
-  %
-  %   (at least the ``LS'' model)
-  % \response
-  %   What is the ``INTEGRA LS''?
-  % \end{clue}
-
-  % Figures from Lab 11 (sources in figures/ant-cube.tex and figures/ant-net.tex).
   \begin{clue}[say]
     An ant sits at one corner of a $1\times 1\times 1$ cube. It is the shortest distance the ant can walk, on the outside of the cube, to reach the opposite corner.
     \begin{center}

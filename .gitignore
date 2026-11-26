@@ -12,3 +12,6 @@
 # LaTeX Workshop build output
 tempfiles/
 *.xdv
+
+# Editor settings
+.vscode/

@@ -1,14 +1,15 @@
-% Calculus II review game, converted from the original powerdot slides.
-% The worked solutions from the slides are in \solution; the \response is
-% the final answer.
 \documentclass{article}
 % Which PDF to make (the web game ignores this):
 %   questions  clues only, e.g. a study sheet for students
 %   answers    clues and responses
 %   solutions  clues, responses, and worked solutions
+% Add any of these, separated by commas, e.g. [solutions, writesay]:
+%   writesay   show each clue's [write]/[say] mark (for you, not students)
+%   board      always show the board overview (even with questions)
+%   noboard    never show the board overview
 \usepackage[solutions,writesay]{../calculatedrisk}
 
-\gametitle{Sample Limits and Integrals Game}
+\gametitle{Sample Game: Limits and Integrals}
 
 \begin{document}
 
@@ -18,34 +19,34 @@
   \begin{clue}[write]
     \[ \int x e^{x} \; dx \]
   \response
-    What is $x e^{x} - e^{x} + c$?
+    What is $x e^{x} - e^{x} + C$?
   \solution
     Use integration by parts with $u=x$ and $dv=e^{x}\,dx.$ Then $du=dx$ and $v=e^{x}.$ So,
     \begin{align*}
     \int x e^{x} \; dx
     &= x e^{x} - \int e^{x} \; dx \\
-    &= x e^{x} - e^{x} + c.
+    &= x e^{x} - e^{x} + C.
     \end{align*}
   \end{clue}
 
   \begin{clue}[write]
     \[ \int x \ln x \; dx \]
   \response
-    What is $\frac{x^{2}}{2} \ln x - \frac{1}{4} x^{2} + c$?
+    What is $\frac{x^{2}}{2} \ln x - \frac{1}{4} x^{2} + C$?
   \solution
     Use integration by parts with $u=\ln x$ and $dv=x\,dx.$ Then $du=\frac{1}{x}\,dx$ and $v=\frac{x^{2}}{2}.$ So,
     \begin{align*}
     \int x \ln x \; dx
     &= \frac{x^{2}}{2} \ln x - \int \frac{x^{2}}{2x} \; dx \\
     &= \frac{x^{2}}{2} \ln x - \frac{1}{2} \int x \; dx \\
-    &= \frac{x^{2}}{2} \ln x - \frac{1}{4} x^{2} + c.
+    &= \frac{x^{2}}{2} \ln x - \frac{1}{4} x^{2} + C.
     \end{align*}
   \end{clue}
 
   \begin{clue}[write]
     \[ \int (x+2) e^{2x+1} \; dx \]
   \response
-    What is $\frac{1}{2}e^{2x+1}(x+2) - \frac{1}{4}e^{2x+1} + c$?
+    What is $\frac{1}{2}e^{2x+1}(x+2) - \frac{1}{4}e^{2x+1} + C$?
   \solution
     Use integration by parts with $u=x+2$ and $dv=e^{2x+1}\,dx.$ Then $du=dx$ and $v=\frac{1}{2}e^{2x+1}.$ So,
     \begin{align*}
@@ -106,11 +107,13 @@
   \response
     What is $0$?
   \solution
-  \begin{align*}
-    \lim_{x\to 0}\frac{x-\sin x}{x^2} &= \lim_{x\to 0}\frac{1-\cos x}{2x} \\
+    By L'H\^opital's Rule, twice,
+    \begin{align*}
+    \lim_{x\to 0}\frac{x-\sin x}{x^2}
+    &= \lim_{x\to 0}\frac{1-\cos x}{2x} \\
     &= \lim_{x\to 0}\frac{\sin x}{2} \\
     &= 0.
-  \end{align*}
+    \end{align*}
   \end{clue}
 
   \begin{clue}[say]
@@ -118,12 +121,13 @@
   \response
     What is $\dfrac{\ln 6}{\ln 5}$?
   \solution
-  \begin{align*}
+    By the change of base formula,
+    \begin{align*}
     \lim_{x\to\infty}\frac{\log_5 x}{\log_6 x}
     &= \lim_{x\to\infty}\frac{\ln x/\ln 5}{\ln x/\ln 6} \\
     &= \lim_{x\to\infty}\frac{\ln 6}{\ln 5} \\
     &= \frac{\ln 6}{\ln 5}.
-  \end{align*}
+    \end{align*}
   \end{clue}
 
   \begin{clue}[say]
@@ -131,11 +135,13 @@
   \response
     What is $0$?
   \solution
+    Combine the terms, then use L'H\^opital's Rule:
     \begin{align*}
-    \lim_{x\to 0}(3\csc x-3\cot x) &= \lim_{x\to 0}\Big(\frac{3}{\sin x}-\frac{3\cos x}{\sin x}\Big) \\
-    &= \lim_{x\to 0}\Big(\frac{3-3\cos x}{\sin x}\Big)\\
-    &= \lim_{x\to 0}\Big(\frac{3\sin x}{\cos x}\Big)\\
-    &= 0
+    \lim_{x\to 0}(3\csc x-3\cot x)
+    &= \lim_{x\to 0}\left(\frac{3}{\sin x}-\frac{3\cos x}{\sin x}\right) \\
+    &= \lim_{x\to 0}\frac{3-3\cos x}{\sin x} \\
+    &= \lim_{x\to 0}\frac{3\sin x}{\cos x} \\
+    &= 0.
     \end{align*}
   \end{clue}
 
@@ -144,14 +150,16 @@
   \response
     What is $1$?
   \solution
-  \begin{align*}
-    \lim_{x\to 0^{+}}\ln (x^{x}) &= \lim_{x\to 0^{+}}x\ln x \\
-    &= \lim_{x\to 0^{+}}\frac{\ln x}{x^{-1}}\\
-    &= \lim_{x\to 0^{+}}\frac{x^{-1}}{-x^{-2}}\\
-    &= \lim_{x\to 0^{+}}-x\\
-    &= 0
-  \end{align*}
-Therefore,
+    Take the natural log and use L'H\^opital's Rule:
+    \begin{align*}
+    \lim_{x\to 0^{+}}\ln \left(x^{x}\right)
+    &= \lim_{x\to 0^{+}}x\ln x \\
+    &= \lim_{x\to 0^{+}}\frac{\ln x}{x^{-1}} \\
+    &= \lim_{x\to 0^{+}}\frac{x^{-1}}{-x^{-2}} \\
+    &= \lim_{x\to 0^{+}}(-x) \\
+    &= 0.
+    \end{align*}
+    Therefore,
     \[
     \lim_{x\to 0^{+}} x^{x} = e^{0} = 1.
     \]
@@ -256,12 +264,12 @@ Therefore,
   \response
     What is $(\cos t)x + C$?
   \solution
-    \[
-    \begin{array}{rcl}
-    {\displaystyle \int \cos t \; dx} & = & {\displaystyle \cos t \int  dx} \\
-     & = & {\displaystyle (\cos t)x +   c }
-    \end{array}
-    \]
+    Since $\cos t$ is a constant with respect to $x,$
+    \begin{align*}
+    \int \cos t \; dx
+    &= \cos t \int dx \\
+    &= (\cos t)x + C.
+    \end{align*}
   \end{clue}
 
   \begin{clue}[say]
@@ -275,16 +283,13 @@ Therefore,
   \response
     What is $\tan^{-1} (\sin x) + C$?
   \solution
-    \[
-    \begin{array}{rcl}
-    {\displaystyle \int \frac{\cos x}{1 + \sin^{2} x} \; dx} & = & {\displaystyle \int \frac{du}{1+u^{2}}} \\
-    \left( \begin{array}{rcl}
-    u & = & \sin x \\
-    du & = & \cos x \; dx
-    \end{array} \right)^{\nearrow} & = & {\displaystyle \tan^{-1} u + C} \\
-     & = & {\displaystyle \tan^{-1} (\sin x) + C}
-    \end{array}
-    \]
+    Substitute $u=\sin x,$ so $du=\cos x\,dx.$ Then
+    \begin{align*}
+    \int \frac{\cos x}{1 + \sin^{2} x} \; dx
+    &= \int \frac{du}{1+u^{2}} \\
+    &= \tan^{-1} u + C \\
+    &= \tan^{-1} (\sin x) + C.
+    \end{align*}
   \end{clue}
 
   \begin{clue}[say]
@@ -292,17 +297,14 @@ Therefore,
   \response
     What is $e^{e^{x}} + C$?
   \solution
-    \[
-    \begin{array}{rcl}
-    {\displaystyle \int e^{x+e^{x}} \; dx} & = & {\displaystyle \int e^{x}e^{e^{x}} \; dx} \\
-    \left( \begin{array}{rcl}
-    u & = & e^{x} \\
-    du & = & e^{x} \; dx
-    \end{array} \right) \rightarrow & = & {\displaystyle \int e^{u} \; du} \\
-     & = & {\displaystyle e^{u} + C} \\
-     & = & {\displaystyle e^{e^{x}} + C }
-    \end{array}
-    \]
+    Write $e^{x+e^{x}}=e^{x}e^{e^{x}}$ and substitute $u=e^{x},$ so $du=e^{x}\,dx.$ Then
+    \begin{align*}
+    \int e^{x+e^{x}} \; dx
+    &= \int e^{x}e^{e^{x}} \; dx \\
+    &= \int e^{u} \; du \\
+    &= e^{u} + C \\
+    &= e^{e^{x}} + C.
+    \end{align*}
   \end{clue}
 
 \end{category}
@@ -361,21 +363,22 @@ Therefore,
 \end{category}
 
 %======================================================================
-\begin{final}[write]{Musical Instruments}
+\begin{final}{Musical Instruments}
   This is the volume of \emph{Gabriel's horn}, i.e., the solid obtained by
   revolving $\displaystyle y=\frac{1}{x}$ (for $1\le x<\infty$) about the
   $x$-axis.
 \response
   What is $\pi$?
 \solution
-  \[
-  \begin{array}{rcl}
-  {\displaystyle \int_{1}^{\infty}\pi\Big(\frac{1}{x}\Big)^{2}\; dx} & = & {\displaystyle \lim_{b\to \infty} \int_{1}^{b}\frac{\pi}{x^{2}}\; dx} \\
-  & = & {\displaystyle \lim_{b\to \infty}\Big(-\frac{\pi}{x}\Big)\Big]_{1}^{b}}\\
-  & = & {\displaystyle \lim_{b\to \infty}\Big(-\frac{\pi}{b}+\frac{\pi}{1}\Big)}\\
-  & = & \pi
-  \end{array}
-  \]
+  By the disk method,
+  \begin{align*}
+  V
+  &= \int_{1}^{\infty}\pi\left(\frac{1}{x}\right)^{2} dx \\
+  &= \lim_{b\to \infty} \int_{1}^{b}\frac{\pi}{x^{2}} \; dx \\
+  &= \lim_{b\to \infty}\left[-\frac{\pi}{x}\right]_{1}^{b} \\
+  &= \lim_{b\to \infty}\left(\pi-\frac{\pi}{b}\right) \\
+  &= \pi.
+  \end{align*}
 \end{final}
 
 \end{document}
