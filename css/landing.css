@@ -149,17 +149,7 @@ kbd {
   transform: rotate(1.5deg);
   animation: rise 0.7s 0.2s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
-.mock-clue-head { color: var(--gold); font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
-.mock-pill {
-  display: inline-block;
-  margin: 10px 0 8px;
-  padding: 3px 12px;
-  border-radius: 999px;
-  background: #1e8449;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-}
+.mock-clue-head { margin-bottom: 10px; color: var(--gold); font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
 .mock-clue-text { font-family: Georgia, "Times New Roman", serif; font-size: 21px; line-height: 1.35; }
 
 @keyframes rise {
@@ -195,23 +185,9 @@ kbd {
   font-weight: 800;
   margin-bottom: 14px;
 }
-.steps h3, .feature h3 { font-size: 19px; margin-bottom: 8px; }
-.steps p, .feature p { color: var(--muted); font-size: 16px; }
+.steps h3 { font-size: 19px; margin-bottom: 8px; }
+.steps p { color: var(--muted); font-size: 16px; }
 
-.features {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
-  margin-top: 36px;
-}
-.feature {
-  background: #fff;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 24px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.feature:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(22, 26, 36, 0.07); }
 
 /* ---- Write a game ---- */
 
@@ -277,13 +253,9 @@ kbd {
 .faq details[open] summary::after { transform: rotate(45deg); }
 .faq details p { color: var(--muted); padding-bottom: 20px; }
 
-/* ---- Closing call to action and footer ---- */
+/* ---- Footer ---- */
 
-.cta { background: linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 100%); color: #fff; padding: 64px 0; }
-.cta-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
-.cta h2 { font-size: clamp(26px, 3vw, 34px); font-weight: 800; }
-
-.footer { padding: 28px 0; font-size: 14px; color: var(--muted); }
+.footer { padding: 28px 0; font-size: 14px; color: var(--muted); border-top: 1px solid var(--line); }
 .footer-inner { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 
 /* ---- Small screens ---- */
@@ -292,7 +264,7 @@ kbd {
   .hero { padding: 56px 0 64px; }
   .hero-inner, .write { grid-template-columns: 1fr; gap: 44px; }
   .hero-visual { max-width: 520px; }
-  .steps, .features { grid-template-columns: 1fr; }
+  .steps { grid-template-columns: 1fr; }
   .nav-links { display: none; }
   .nav-inner .button-small { margin-left: auto; }
   .mock-clue { right: -6px; width: 76%; }
@@ -308,6 +280,6 @@ kbd {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .mock-clue { animation: none; }
-  .button, .feature { transition: none; }
-  .button:hover, .feature:hover { transform: none; }
+  .button { transition: none; }
+  .button:hover { transform: none; }
 }
