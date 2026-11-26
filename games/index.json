@@ -1,5 +1,10 @@
 [
   {
+    "file": "calculus1/calculus1.tex",
+    "title": "Calculus I",
+    "description": "Derivatives, limits, definitions and theorems, and applications of the derivative."
+  },
+  {
     "file": "multivariable-calculus/multivariable-calculus.tex",
     "title": "Multivariable Calculus",
     "description": "Vectors, curves, functions of several variables, optimization, and multiple integrals."
