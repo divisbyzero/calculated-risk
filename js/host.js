@@ -30,7 +30,7 @@ const MAX_HISTORY = 200;
 const $ = (sel) => document.querySelector(sel);
 
 let loaded = null; // { game, errors, warnings, source } for the setup screen
-let teamNames = ['Team 1', 'Team 2', 'Team 3'];
+let teamNames = ['Leonhard Euler', 'Emmy Noether', 'Srinivasa Ramanujan'];
 let state = null; // the running game
 let history = []; // snapshots for Undo
 let boardWindow = null;
