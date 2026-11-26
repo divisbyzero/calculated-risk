@@ -6,7 +6,7 @@
 %   questions  clues only, e.g. a study sheet for students
 %   answers    clues and responses
 %   solutions  clues, responses, and worked solutions
-\usepackage[solutions]{../calculatedrisk}
+\usepackage[solutions,writesay]{../calculatedrisk}
 
 \gametitle{Sample Integration and Infinite Series Game}
 
@@ -15,7 +15,7 @@
 %======================================================================
 \begin{category}{Integration by Parts}
 
-  \begin{clue}
+  \begin{clue}[write]
     \[ \int x e^{x} \; dx \]
   \response
     What is $x e^{x} - e^{x} + c$?
@@ -28,10 +28,10 @@
     \end{align*}
   \end{clue}
 
-  \begin{clue}
+  \begin{clue}[write]
     \[ \int x \ln x \; dx \]
   \response
-    What is $\dfrac{x^{2}}{2} \ln x - \dfrac{1}{4} x^{2} + c$?
+    What is $\frac{x^{2}}{2} \ln x - \frac{1}{4} x^{2} + c$?
   \solution
     Use integration by parts with $u=\ln x$ and $dv=x\,dx.$ Then $du=\frac{1}{x}\,dx$ and $v=\frac{x^{2}}{2}.$ So,
     \begin{align*}
@@ -42,23 +42,23 @@
     \end{align*}
   \end{clue}
 
-  \begin{clue}
+  \begin{clue}[write]
     \[ \int (x+2) e^{2x+1} \; dx \]
   \response
-    What is $\dfrac{1}{2}e^{2x+1}(x+2) - \dfrac{1}{4}e^{2x+1} + c$?
+    What is $\frac{1}{2}e^{2x+1}(x+2) - \frac{1}{4}e^{2x+1} + c$?
   \solution
     Use integration by parts with $u=x+2$ and $dv=e^{2x+1}\,dx.$ Then $du=dx$ and $v=\frac{1}{2}e^{2x+1}.$ So,
     \begin{align*}
     \int (x+2) e^{2x+1} \; dx
     &= \frac{1}{2}e^{2x+1}(x+2) - \int \frac{1}{2}e^{2x+1} \; dx \\
-    &= \frac{1}{2}e^{2x+1}(x+2) - \frac{1}{4}e^{2x+1} + c.
+    &= \frac{1}{2}e^{2x+1}(x+2) - \frac{1}{4}e^{2x+1} + C.
     \end{align*}
   \end{clue}
 
-  \begin{clue}
+  \begin{clue}[write]
     \[ \int \sin^{-1} x \; dx \]
   \response
-    What is $x\sin^{-1} x + \sqrt{1-x^{2}} + c$?
+    What is $x\sin^{-1} x + \sqrt{1-x^{2}} + C$?
   \solution
     Use integration by parts with $u=\sin^{-1} x$ and $dv=dx.$ Then $du=\frac{1}{\sqrt{1-x^{2}}}\,dx$ and $v=x.$ So,
     \[
@@ -68,15 +68,15 @@
     \begin{align*}
     \int \sin^{-1} x \; dx
     &= x\sin^{-1} x + \frac{1}{2} \int w^{-\frac{1}{2}} \; dw \\
-    &= x\sin^{-1} x + w^{\frac{1}{2}} + c \\
-    &= x\sin^{-1} x + \sqrt{1-x^{2}} + c.
+    &= x\sin^{-1} x + w^{\frac{1}{2}} + C \\
+    &= x\sin^{-1} x + \sqrt{1-x^{2}} + C.
     \end{align*}
   \end{clue}
 
-  \begin{clue}
+  \begin{clue}[write]
     \[ \int x^{2} \sin x \; dx \]
   \response
-    What is $-x^{2} \cos x + 2x \sin x + 2 \cos x + c$?
+    What is $-x^{2} \cos x + 2x \sin x + 2 \cos x + C$?
   \solution
     Use integration by parts with $u=x^{2}$ and $dv=\sin x\,dx.$ Then $du=2x\,dx$ and $v=-\cos x.$ So,
     \[
@@ -86,7 +86,7 @@
     \begin{align*}
     \int x^{2} \sin x \; dx
     &= -x^{2} \cos x + \left( 2x \sin x - \int 2 \sin x \; dx \right) \\
-    &= -x^{2} \cos x + 2x \sin x + 2 \cos x + c.
+    &= -x^{2} \cos x + 2x \sin x + 2 \cos x + C.
     \end{align*}
   \end{clue}
 
@@ -95,69 +95,65 @@
 %======================================================================
 \begin{category}{Limits}
 
-  \begin{clue}
+  \begin{clue}[say]
     This is the value $\displaystyle\lim_{x\to\infty} e^{-x^2}.$
   \response
     What is $0$?
   \end{clue}
 
-  \begin{clue}
+  \begin{clue}[say]
     This is the value $\displaystyle \lim_{x\to 0}\frac{x-\sin x}{x^2}.$
   \response
     What is $0$?
   \solution
-    \[
-    \begin{array}{rcl}
-    {\displaystyle \lim_{x\to 0}\frac{x-\sin x}{x^2}} & = & {\displaystyle \lim_{x\to 0}\frac{1-\cos x}{2x}} \\
-    & = & {\displaystyle \lim_{x\to 0}\frac{\sin x}{2}}\\
-    & = & 0
-    \end{array}
-    \]
+  \begin{align*}
+    \lim_{x\to 0}\frac{x-\sin x}{x^2} &= \lim_{x\to 0}\frac{1-\cos x}{2x} \\
+    &= \lim_{x\to 0}\frac{\sin x}{2} \\
+    &= 0.
+  \end{align*}
   \end{clue}
 
-  \begin{clue}
+  \begin{clue}[say]
     This is the value $\displaystyle\lim_{x\to\infty}\frac{\log_5 x}{\log_6 x}.$
   \response
     What is $\dfrac{\ln 6}{\ln 5}$?
   \solution
-    \[
-    \begin{array}{rcl}
-    {\displaystyle\lim_{x\to\infty}\frac{\log_5 x}{\log_6 x}} & = & {\displaystyle\lim_{x\to\infty}\frac{\Big(\frac{1}{x\ln 5}\Big)}{\Big(\frac{1}{x\ln 6}\Big)}} \\
-    & = & {\displaystyle\lim_{x\to\infty}\frac{\ln 6}{\ln 5}}\\
-    & = & {\displaystyle \frac{\ln 6}{\ln 5}}
-    \end{array}
-    \]
+  \begin{align*}
+    \lim_{x\to\infty}\frac{\log_5 x}{\log_6 x}
+    &= \lim_{x\to\infty}\frac{\ln x/\ln 5}{\ln x/\ln 6} \\
+    &= \lim_{x\to\infty}\frac{\ln 6}{\ln 5} \\
+    &= \frac{\ln 6}{\ln 5}.
+  \end{align*}
   \end{clue}
 
-  \begin{clue}
+  \begin{clue}[say]
     This is the value $\displaystyle \lim_{x\to 0}(3\csc x-3\cot x).$
   \response
     What is $0$?
   \solution
-    \[
-    \begin{array}{rcl}
-    {\displaystyle \lim_{x\to 0}(3\csc x-3\cot x)} & = & {\displaystyle \lim_{x\to 0}\Big(\frac{3}{\sin x}-\frac{3\cos x}{\sin x}\Big)} \\
-    & = & {\displaystyle \lim_{x\to 0}\Big(\frac{3-3\cos x}{\sin x}\Big)}\\
-    & = & {\displaystyle \lim_{x\to 0}\Big(\frac{3\sin x}{\cos x}\Big)}\\
-    & = & 0
-    \end{array}
-    \]
+    \begin{align*}
+    \lim_{x\to 0}(3\csc x-3\cot x) &= \lim_{x\to 0}\Big(\frac{3}{\sin x}-\frac{3\cos x}{\sin x}\Big) \\
+    &= \lim_{x\to 0}\Big(\frac{3-3\cos x}{\sin x}\Big)\\
+    &= \lim_{x\to 0}\Big(\frac{3\sin x}{\cos x}\Big)\\
+    &= 0
+    \end{align*}
   \end{clue}
 
-  \begin{clue}
+  \begin{clue}[say]
     This is the value $\displaystyle\lim_{x\to 0^{+}}x^x.$
   \response
     What is $1$?
   \solution
+  \begin{align*}
+    \lim_{x\to 0^{+}}\ln (x^{x}) &= \lim_{x\to 0^{+}}x\ln x \\
+    &= \lim_{x\to 0^{+}}\frac{\ln x}{x^{-1}}\\
+    &= \lim_{x\to 0^{+}}\frac{x^{-1}}{-x^{-2}}\\
+    &= \lim_{x\to 0^{+}}-x\\
+    &= 0
+  \end{align*}
+Therefore,
     \[
-    \begin{array}{rcl}
-    {\displaystyle \lim_{x\to 0^{+}}\ln (x^{x})} & = & {\displaystyle \lim_{x\to 0^{+}}x\ln x} \\
-    & = & {\displaystyle \lim_{x\to 0^{+}}\frac{\ln x}{x^{-1}}}\\
-    & = & {\displaystyle \lim_{x\to 0^{+}}\frac{x^{-1}}{-x^{-2}}}\\
-    & = & {\displaystyle \lim_{x\to 0^{+}}-x}\\
-    & = & 0\\
-    {\displaystyle \lim_{x\to 0^{+}} x^{x}} & = & e^{0}=1
-    \end{array}
+    \lim_{x\to 0^{+}} x^{x} = e^{0} = 1.
     \]
   \end{clue}
 
@@ -166,31 +162,31 @@
 %======================================================================
 \begin{category}{Proper or Improper?}
 
-  \begin{clue}
+  \begin{clue}[say]
     \[ \int_{-3}^{\infty} \frac{x^{3}}{7+ \sin^{2} x} \, dx \]
   \response
     What is IMPROPER?
   \end{clue}
 
-  \begin{clue}
+  \begin{clue}[say]
     \[ \int_{-3}^{10} \frac{x^{3}}{(x+5)(x-11)} \, dx \]
   \response
     What is PROPER?
   \end{clue}
 
-  \begin{clue}
+  \begin{clue}[say]
     \[ \int_{-\pi/2}^{\pi/2} \frac{e^{x}}{\cos x} \, dx \]
   \response
     What is IMPROPER?
   \end{clue}
 
-  \begin{clue}
+  \begin{clue}[say]
     \[ \int_{\pi/6}^{\pi/4} \frac{1}{\sec x} \, dx \]
   \response
     What is PROPER?
   \end{clue}
 
-  \begin{clue}
+  \begin{clue}[say]
     Wearing white shoes between Labor Day and Easter
   \response
     What is IMPROPER?
@@ -201,14 +197,14 @@
 %======================================================================
 \begin{category}{Applied Integration}
 
-  \begin{clue}
+  \begin{clue}[write]
     This is the INTEGRAL used to compute the area bounded by the curves
     $y=x^2+1,$ $y=2x$ and $x=0.$
   \response
     What is $\displaystyle A=\int_0^1 (x^2+1-2x)\; dx$?
   \end{clue}
 
-  \begin{clue}
+  \begin{clue}[write]
     This is the INTEGRAL used to compute the volume of the solid obtained by
     revolving the region bounded by the curves $y=x^2+1,$ $y=2x$ and $x=0$
     about the $x$-axis.
@@ -217,7 +213,7 @@
     \[V=\pi\int_0^1 \left((x^2+1)^2-(2x)^2\right) dx\,?\]
   \end{clue}
 
-  \begin{clue}[doubledown]
+  \begin{clue}[doubledown, write]
     This is the INTEGRAL used to compute the volume of the solid obtained by
     revolving the region bounded by the curves $y=x^2+1,$ $y=2x$ and $x=0$
     about the line $x=-2.$
@@ -226,7 +222,7 @@
     \[V=2\pi\int_0^1 (x+2)(x^2+1-2x)\, dx\,?\]
   \end{clue}
 
-  \begin{clue}
+  \begin{clue}[write]
     These are the INTEGRALS needed to find the centroid of the region bounded
     by $y=\sin x$ and the $x$-axis on $0\le x\le \pi.$
   \response
@@ -237,7 +233,7 @@
     where $\displaystyle A=\int_{0}^{\pi}\sin x\; dx$?
   \end{clue}
 
-  \begin{clue}
+  \begin{clue}[write]
     This is the INTEGRAL used to compute the arclength of one period of the
     graph of $y=\sin x.$
   \response
@@ -249,16 +245,16 @@
 %======================================================================
 \begin{category}{Creative Calculus}
 
-  \begin{clue}
+  \begin{clue}[say]
     \[ \int \left[ \frac{d}{dx} f(x) \right] \; dx \]
   \response
-    What is $f(x) + c$?
+    What is $f(x) + C$?
   \end{clue}
 
-  \begin{clue}
+  \begin{clue}[say]
     \[ \int \cos t \; dx \]
   \response
-    What is $(\cos t)x + c$?
+    What is $(\cos t)x + C$?
   \solution
     \[
     \begin{array}{rcl}
@@ -268,16 +264,16 @@
     \]
   \end{clue}
 
-  \begin{clue}
+  \begin{clue}[say]
     \[ \frac{d}{dr} \int_{3}^{r} \sin (x^{2}) \; dx \]
   \response
     What is $\sin (r^{2})$?
   \end{clue}
 
-  \begin{clue}
+  \begin{clue}[say]
     \[ \int \frac{\cos x}{1 + \sin^{2} x} \; dx \]
   \response
-    What is $\tan^{-1} (\sin x) + c$?
+    What is $\tan^{-1} (\sin x) + C$?
   \solution
     \[
     \begin{array}{rcl}
@@ -285,16 +281,16 @@
     \left( \begin{array}{rcl}
     u & = & \sin x \\
     du & = & \cos x \; dx
-    \end{array} \right)^{\nearrow} & = & {\displaystyle \tan^{-1} u + c} \\
-     & = & {\displaystyle \tan^{-1} (\sin x) + c}
+    \end{array} \right)^{\nearrow} & = & {\displaystyle \tan^{-1} u + C} \\
+     & = & {\displaystyle \tan^{-1} (\sin x) + C}
     \end{array}
     \]
   \end{clue}
 
-  \begin{clue}
+  \begin{clue}[say]
     \[ \int e^{x+e^{x}} \; dx \]
   \response
-    What is $e^{e^{x}} + c$?
+    What is $e^{e^{x}} + C$?
   \solution
     \[
     \begin{array}{rcl}
@@ -303,8 +299,8 @@
     u & = & e^{x} \\
     du & = & e^{x} \; dx
     \end{array} \right) \rightarrow & = & {\displaystyle \int e^{u} \; du} \\
-     & = & {\displaystyle e^{u} + c} \\
-     & = & {\displaystyle e^{e^{x}} + c }
+     & = & {\displaystyle e^{u} + C} \\
+     & = & {\displaystyle e^{e^{x}} + C }
     \end{array}
     \]
   \end{clue}
@@ -314,7 +310,7 @@
 %======================================================================
 \begin{category}{Potpourri}
 
-  \begin{clue}
+  \begin{clue}[say]
     An important player in the creation of calculus other than Newton and Leibniz.
   \response
     Many possible questions.
@@ -344,7 +340,7 @@
     your limits.''
   \end{clue}
 
-  \begin{clue}
+  \begin{clue}[say]
     The second full moon in a single month
   \response
     What is a blue moon?
@@ -365,7 +361,7 @@
 \end{category}
 
 %======================================================================
-\begin{final}{Musical instruments}
+\begin{final}[write]{Musical instruments}
   This is the volume of \emph{Gabriel's horn}, i.e., the solid obtained by
   revolving $\displaystyle y=\frac{1}{x}$ (for $1\le x<\infty$) about the
   $x$-axis.
