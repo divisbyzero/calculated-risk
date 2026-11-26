@@ -1,17 +1,17 @@
 [
   {
     "file": "calculus1/calculus1.tex",
-    "title": "Calculus I",
+    "title": "Sample Single Variable Calculus Game",
     "description": "Derivatives, limits, definitions and theorems, and applications of the derivative."
   },
   {
     "file": "multivariable-calculus/multivariable-calculus.tex",
-    "title": "Multivariable Calculus",
+    "title": "Sample Multivariable Calculus Game",
     "description": "Vectors, curves, functions of several variables, optimization, and multiple integrals."
   },
   {
     "file": "calculus2/calculus2.tex",
-    "title": "Calculus II",
+    "title": "Sample Integration and Infinite Series Game",
     "description": "Integration by parts, limits, improper integrals, and applications of integration."
   },
   {
