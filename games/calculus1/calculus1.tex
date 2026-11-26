@@ -10,7 +10,7 @@
 %   writesay   show each clue's [write]/[say] mark (for you, not students)
 %   board      always show the board overview (even with questions)
 %   noboard    never show the board overview
-\usepackage[solutions]{../calculatedrisk}
+\usepackage[solutions,writesay]{../calculatedrisk}
 
 \gametitle{Sample Single Variable Calculus Game}
 
@@ -24,8 +24,6 @@
     \[ f(x) = 4x^3 - 2x^2 + 9x - 7. \]
   \response
     What is $f'(x) = 12x^2 - 4x + 9$?
-  \solution
-    Use the power rule on each term.
   \end{clue}
 
   \begin{clue}[write]
@@ -33,9 +31,6 @@
     \[ g(x) = \frac{2}{x} - \frac{5x}{x^4}. \]
   \response
     What is $g'(x) = -\dfrac{2}{x^2} + \dfrac{15}{x^4}$?
-  \solution
-    Simplify first: $g(x) = 2x^{-1} - 5x^{-3}.$ Then
-    \[ g'(x) = -2x^{-2} + 15x^{-4}. \]
   \end{clue}
 
   \begin{clue}[write]
@@ -43,8 +38,6 @@
     \[ y = 4x^{5/2}. \]
   \response
     What is $\dfrac{dy}{dx} = 10x^{3/2}$?
-  \solution
-    \[ \frac{dy}{dx} = 4 \cdot \frac{5}{2} x^{3/2} = 10x^{3/2}. \]
   \end{clue}
 
   \begin{clue}[write]
@@ -52,9 +45,6 @@
     \[ f(x) = \sqrt[3]{x} + 2x^7 - 2x^{-1/5}. \]
   \response
     What is $f'(x) = \dfrac{1}{3}x^{-2/3} + 14x^6 + \dfrac{2}{5}x^{-6/5}$?
-  \solution
-    Write $\sqrt[3]{x} = x^{1/3}$ and use the power rule on each term:
-    \[ f'(x) = \frac{1}{3}x^{-2/3} + 14x^6 - 2\left(-\frac{1}{5}\right)x^{-6/5}. \]
   \end{clue}
 
   \begin{clue}[say]
@@ -63,9 +53,22 @@
   \response
     What is $0,$ except at $x = 0,$ where it is undefined?
   \solution
-    $f(x) = 1$ for $x > 0$ and $f(x) = -1$ for $x < 0,$ so $f'(x) = 0$
-    wherever $x \ne 0.$ The function isn't defined at $x = 0,$ so neither is
-    its derivative.
+    \[
+    f(x) = \begin{cases}
+      1, & x > 0, \\
+      -1, & x < 0, \\
+      \text{undefined}, & x = 0
+    \end{cases}
+    \]
+    and
+    \[
+    f'(x) = \begin{cases}
+      0, & x > 0, \\
+      0, & x < 0, \\
+      \text{undefined}, & x = 0
+    \end{cases}
+    \]
+    $f$ and $f'$ are undefined at $x = 0.$
   \end{clue}
 
 \end{category}
@@ -87,9 +90,6 @@
     \[ \lim_{x\to 3^-} \frac{x}{x-3}. \]
   \response
     What is $-\infty$?
-  \solution
-    As $x \to 3^-,$ the numerator approaches $3$ and the denominator
-    approaches $0$ through negative values.
   \end{clue}
 
   \begin{clue}[say]
@@ -171,7 +171,7 @@
 %======================================================================
 \begin{category}{More Derivatives}
 
-  \begin{clue}[say]
+  \begin{clue}[write]
     It is the derivative of $\csc x.$
   \response
     What is $-\csc x \cot x$?
@@ -181,19 +181,13 @@
     It is the derivative of $x^2 \cos x.$
   \response
     What is $2x\cos x - x^2 \sin x$?
-  \solution
-    By the product rule,
-    \[ \frac{d}{dx}\left(x^2 \cos x\right) = 2x \cos x + x^2(-\sin x). \]
   \end{clue}
 
   \begin{clue}[write]
     It is the derivative of
     \[ h(t) = \frac{3t+2}{2t+3}. \]
   \response
-    What is $h'(t) = \dfrac{5}{(2t+3)^2}$?
-  \solution
-    By the quotient rule,
-    \[ h'(t) = \frac{3(2t+3) - 2(3t+2)}{(2t+3)^2} = \frac{5}{(2t+3)^2}. \]
+    What is $\displaystyle h'(t) = \frac{3(2t+3) - 2(3t+2)}{(2t+3)^2} = \frac{5}{(2t+3)^2}$?
   \end{clue}
 
   \begin{clue}[doubledown, write]
@@ -201,19 +195,12 @@
     \[ f(x) = \cot(x^2 + x). \]
   \response
     What is $\dfrac{df}{dx} = -(2x+1)\csc^2(x^2+x)$?
-  \solution
-    By the chain rule,
-    \[ \frac{df}{dx} = -\csc^2(x^2+x) \cdot (2x+1). \]
   \end{clue}
 
   \begin{clue}[write]
     It is the derivative of $\tan(\tan(\tan x)).$
   \response
     What is $\sec^2(\tan(\tan x)) \sec^2(\tan x) \sec^2 x$?
-  \solution
-    Use the chain rule twice. The derivative of the outer $\tan$ is
-    $\sec^2(\tan(\tan x)),$ times the derivative of $\tan(\tan x),$ which is
-    $\sec^2(\tan x) \sec^2 x.$
   \end{clue}
 
 \end{category}
@@ -223,10 +210,9 @@
 
   \begin{clue}[write]
     It is the tangent line to the curve
-    \[ y = x^3 - \sqrt{x} \]
-    at $x = 1.$
+    $y = x^3 - \sqrt{x} $ at $x = 1.$
   \response
-    What is $y = \dfrac{5}{2}(x - 1)$?
+    What is $y = \frac{5}{2}(x - 1)$?
   \solution
     At $x = 1,$ $y = 1 - 1 = 0.$ The slope is
     \[ y'(1) = 3(1)^2 - \frac{1}{2\sqrt{1}} = \frac{5}{2}. \]
@@ -234,7 +220,7 @@
 
   \begin{clue}[say]
     They are the locations of the horizontal tangent lines to the graph of
-    \[ y = 2x^3 - 12x^2. \]
+    $ y = 2x^3 - 12x^2.$
   \response
     What are $x = 0$ and $x = 4$?
   \solution
@@ -243,10 +229,10 @@
   \end{clue}
 
   \begin{clue}[say]
-    They are the units of $dm/dt,$ where $m(t)$ is the number of M\&M's
+    They are the units of $dm/dt,$ where $m(t)$ is the number of m\&m's
     eaten in $t$ minutes.
   \response
-    What are M\&M's per minute?
+    What are m\&m/m?
   \end{clue}
 
   \begin{clue}[say]
@@ -264,7 +250,7 @@
   \response
     What is the line $x = 0$?
   \solution
-    $y' = \dfrac{1}{3}x^{-2/3},$ which goes to $\infty$ as $x \to 0.$ The
+    $y' = \frac{1}{3}x^{-2/3},$ which goes to $\infty$ as $x \to 0.$ The
     tangent line at the origin is vertical: the $y$-axis, $x = 0.$
   \end{clue}
 
@@ -277,9 +263,6 @@
     It is an example of a continuous function that is not differentiable.
   \response
     There are many responses. For example, what is $f(x) = |x|$?
-  \solution
-    $f(x) = |x|$ is continuous everywhere but has no derivative at $x = 0,$
-    where the graph has a corner.
   \end{clue}
 
   \begin{clue}[say]
@@ -299,9 +282,6 @@
     It is the derivative of $\pi^e + e^\pi.$
   \response
     What is $0$?
-  \solution
-    It's a trap: $\pi^e + e^\pi$ is a constant (about $45.6$), so its
-    derivative is $0.$
   \end{clue}
 
   \begin{clue}[say]
