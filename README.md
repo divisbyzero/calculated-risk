@@ -20,6 +20,7 @@ An independent, non-commercial math review game for classroom use, not affiliate
 | Page | What it's for |
 | --- | --- |
 | `index.html` | The landing page: what the app is, how it works, how to write a game, and a FAQ |
+| `guide.html` | How to write a game, for teachers |
 | `host.html` | Set up and run a game (the teacher's screen) |
 | `board.html` | The projector screen. The host page opens it; you don't open it yourself. |
 
@@ -88,7 +89,7 @@ During the game:
 
 ## Writing a game
 
-A game is one LaTeX file. The easiest start is the **template** link on the
+A game is one LaTeX file. [`guide.html`](guide.html) walks teachers through it; this section is the summary. The easiest start is the **template** link on the
 host page (or **Download the template** on the landing page). It gives a
 `.zip` with `template.tex` and `calculatedrisk.sty` in one folder, ready to edit in
 any LaTeX editor or Overleaf.
@@ -239,7 +240,7 @@ its `calculatedrisk.sty`, and change the line back to `\usepackage{../calculated
 
 | Path | What it is |
 | --- | --- |
-| `index.html`, `css/landing.css`, `js/landing.js` | Landing page |
+| `index.html`, `guide.html`, `css/landing.css`, `js/landing.js` | Landing page and the guide to writing a game |
 | `host.html`, `css/host.css`, `js/host.js` | Host window: setup, game flow, scoring, undo |
 | `board.html`, `css/board.css`, `js/board.js` | Projector window: display only |
 | `css/shared.css` | Styles for clue content, used by both windows |

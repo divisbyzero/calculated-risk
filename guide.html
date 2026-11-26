@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Create a game · Calculated Risk</title>
+  <meta name="description"
+    content="How to write your own Calculated Risk game: the template, the parts of a game file, math and pictures, loading it, and printing handouts.">
+  <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/landing.css">
+  <script type="module">
+    import { downloadGameFromButton } from './js/files.js';
+    for (const btn of document.querySelectorAll('[data-download-template]')) {
+      btn.addEventListener('click', () => downloadGameFromButton('template/template.tex', btn));
+    }
+  </script>
+</head>
+
+<body>
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a href="./" class="brand"><img src="img/favicon.svg" alt="" width="28" height="28"> Calculated Risk</a>
+      <nav class="nav-links" aria-label="Site">
+        <a href="./#how">How it works</a>
+        <a href="guide.html" aria-current="page">Create a game</a>
+        <a href="./#faq">FAQ</a>
+      </nav>
+      <a href="host.html" class="button button-small">Play!</a>
+    </div>
+  </header>
+
+  <main class="guide-page">
+    <div class="guide-hero">
+      <div class="wrap">
+        <p class="eyebrow">Guide</p>
+        <h1>Create your own game</h1>
+        <p class="lede">A game is one LaTeX file. You fill in a template, load it on the host page, and play. The same
+          file also prints as a study sheet or an answer key.</p>
+      </div>
+    </div>
+
+    <div class="wrap guide">
+      <nav class="guide-toc" aria-label="On this page">
+        <p class="guide-toc-title">On this page</p>
+        <ol>
+          <li><a href="#start">Getting started</a></li>
+          <li><a href="#file">The game file</a></li>
+          <li><a href="#clues">Writing clues</a></li>
+          <li><a href="#options">Clue options</a></li>
+          <li><a href="#final">Fermat’s Last Round</a></li>
+          <li><a href="#math">Math and text</a></li>
+          <li><a href="#pictures">Pictures</a></li>
+          <li><a href="#load">Loading your game</a></li>
+          <li><a href="#print">Printing handouts</a></li>
+          <li><a href="#tips">Tips</a></li>
+        </ol>
+      </nav>
+
+      <article class="guide-body">
+
+        <section id="start">
+          <h2>Getting started</h2>
+          <ol class="guide-steps">
+            <li>
+              <strong>Download the template.</strong> It’s a <code>.zip</code> with two files in one folder:
+              <ul>
+                <li><code>template.tex</code>, the game file. This is the only file you edit.</li>
+                <li><code>calculatedrisk.sty</code>, the style file that lets LaTeX turn the game into a PDF. Leave it
+                  as it is, next to the game file.</li>
+              </ul>
+              <button class="button button-small guide-inline-button" data-download-template>Download the
+                template</button>
+            </li>
+            <li>
+              <strong>Fill in the clues.</strong> Unzip the folder, rename it and the <code>.tex</code> file if you like
+              (say, <code>calc1-review/calc1-review.tex</code>), and edit it in any LaTeX editor or plain text editor.
+              To use <a href="https://www.overleaf.com">Overleaf</a>, choose <em>New Project → Upload Project</em> and
+              upload the <code>.zip</code> as it is.
+            </li>
+            <li>
+              <strong>Load it on the host page.</strong> On <a href="host.html">the host page</a>, drop the file (or the
+              zipped folder, if the game has pictures) on <strong>Your own game</strong>. The app checks the file,
+              lists any problems with their line numbers, and lets you preview every clue before class.
+            </li>
+          </ol>
+          <p class="guide-note">You don’t need LaTeX installed to play. The app reads the file itself. LaTeX is only for
+            making PDFs.</p>
+        </section>
+
+        <section id="file">
+          <h2>The game file</h2>
+          <p>A game file has three parts: a few setup lines at the top, the categories, and Fermat’s Last Round at the
+            end. Here is a whole game, shortened.</p>
+          <pre class="code guide-code" aria-label="An example game file"><code><span class="m">% 1. Setup</span>
+<span class="c">\documentclass{article}</span>
+<span class="c">\usepackage[solutions]{calculatedrisk}</span>  <span class="m">% which PDF to print</span>
+<span class="k">\gametitle</span>{Calculus I Review}           <span class="m">% shown on the board</span>
+<span class="c">\newcommand{\dd}[1]{\frac{d}{d#1}}</span>   <span class="m">% your macros (optional)</span>
+
+<span class="k">\begin</span>{document}
+
+<span class="m">% 2. Five or six categories, five clues each</span>
+<span class="k">\begin</span>{category}{Derivatives}       <span class="m">% the category name</span>
+
+  <span class="k">\begin</span>{clue}[say]                 <span class="m">% the 100 clue</span>
+    It is the derivative of $x^3.$   <span class="m">% what the class sees</span>
+  <span class="k">\response</span>
+    What is $3x^2$?                  <span class="m">% the correct response</span>
+  <span class="k">\solution</span>
+    By the power rule, $\dd{x} x^n = n x^{n-1}.$  <span class="m">% optional</span>
+  <span class="k">\end</span>{clue}
+
+  <span class="k">\begin</span>{clue}                      <span class="m">% the 200 clue</span>
+    ...
+  <span class="k">\response</span>
+    ...
+  <span class="k">\end</span>{clue}
+
+  <span class="m">% ... the 300, 400 and 500 clues</span>
+<span class="k">\end</span>{category}
+
+<span class="m">% ... more categories</span>
+
+<span class="m">% 3. Fermat's Last Round</span>
+<span class="k">\begin</span>{final}{Series}
+  It is the value of $\sum_{n=1}^\infty \frac{1}{n^2}.$
+<span class="k">\response</span>
+  What is $\pi^2/6$?
+<span class="k">\end</span>{final}
+
+<span class="k">\end</span>{document}</code></pre>
+          <dl class="guide-defs">
+            <dt><code>\usepackage[solutions]{calculatedrisk}</code></dt>
+            <dd>Loads the style file. The word in brackets only affects the PDF (see <a href="#print">Printing
+                handouts</a>); the game ignores it.</dd>
+            <dt><code>\gametitle{...}</code></dt>
+            <dd>The title shown on the board and the host screen.</dd>
+            <dt><code>\begin{category}{Name} ... \end{category}</code></dt>
+            <dd>One column of the board. Keep names short so they fit at the top of the column.</dd>
+            <dt><code>\begin{clue} ... \end{clue}</code></dt>
+            <dd>One square. Inside it: the clue, then <code>\response</code> and the correct response, then optionally
+              <code>\solution</code> and a worked solution.</dd>
+          </dl>
+          <p>Anything after a <code>%</code> is a comment, ignored by both the app and LaTeX. That makes it easy to keep
+            spare clues in the file: put <code>%</code> in front of each of their lines.</p>
+        </section>
+
+        <section id="clues">
+          <h2>Writing clues</h2>
+          <ul class="checklist">
+            <li><strong>Five or six categories, five clues each.</strong> The app won’t start a game with a different
+              number.</li>
+            <li><strong>Values come from the order.</strong> The first clue in a category is worth 100, the second 200,
+              and so on up to 500. To change a clue’s value, move its whole <code>\begin{clue}</code> …
+              <code>\end{clue}</code> block up or down.</li>
+            <li><strong>Clues are answers, responses are questions.</strong> Write the clue as a statement (“It is the
+              derivative of <span class="nowrap">x³.”</span>) and the response as a question (“What is 3x²?”).</li>
+            <li><strong>The response is for you.</strong> It shows on your host screen during the clue, and on the
+              board after a correct answer, depending on the setting you choose.</li>
+            <li><strong>The solution is optional.</strong> Use it for worked steps you’d like to show the class after
+              the response. <code>align*</code> works well here.</li>
+          </ul>
+        </section>
+
+        <section id="options">
+          <h2>Clue options</h2>
+          <p>Put options in square brackets after <code>\begin{clue}</code>, separated by commas, as in
+            <code>\begin{clue}[doubledown, write]</code>.</p>
+          <table class="guide-table keys">
+            <thead>
+              <tr><th>Option</th><th>What it does</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>doubledown</code></td>
+                <td>Makes the clue a Double Down. Before the clue appears, you choose the team that picked it and
+                  enter its wager. The board doesn’t mark Double Down squares, but your host screen does. One or two per game is
+                  typical.</td>
+              </tr>
+              <tr>
+                <td><code>write</code></td>
+                <td>Shows a large “Write it” banner: teams write their response before ringing in. Good for long
+                  expressions.</td>
+              </tr>
+              <tr>
+                <td><code>say</code></td>
+                <td>Shows a large “Say it” banner: teams can just say the response, like “What is 6?”</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>A clue without <code>write</code> or <code>say</code> shows no banner.</p>
+        </section>
+
+        <section id="final">
+          <h2>Fermat’s Last Round</h2>
+          <p>The last part of the file, after the categories, is one final clue:</p>
+          <pre class="code guide-code"><code><span class="k">\begin</span>{final}{Series}
+  It is the value of $\sum_{n=1}^\infty \frac{1}{n^2}.$
+<span class="k">\response</span>
+  What is $\pi^2/6$?
+<span class="k">\end</span>{final}</code></pre>
+          <p>The board shows only the category at first. Each team wagers some of its points, then you show the clue,
+            and every team writes a response. A <code>\solution</code> works here too, and so do
+            <code>[write]</code> and <code>[say]</code>, as in <code>\begin{final}[write]{Series}</code>. The final
+            round is optional; the app reminds you if it’s missing.</p>
+        </section>
+
+        <section id="math">
+          <h2>Math and text</h2>
+          <p>Write math the way you always do: <code>$...$</code> or <code>\(...\)</code> inline, and
+            <code>\[...\]</code> or environments like <code>align*</code> for displays. On the board, long equations
+            shrink to fit the screen, but two short lines read better than one long one.</p>
+          <p><strong>Your macros.</strong> <code>\newcommand</code> and <code>\DeclareMathOperator</code> lines at the top
+            of the file work inside math. If you keep your macros in your own package, such as
+            <code>\usepackage{mymacros}</code>, put <code>mymacros.sty</code> in the game’s folder and load the zipped
+            folder; the app reads its macros too.</p>
+          <p><strong>Text.</strong> Outside math, the app understands the common formatting commands:</p>
+          <ul class="guide-list">
+            <li><code>\textbf</code>, <code>\emph</code>, <code>\textit</code>, <code>\texttt</code>,
+              <code>\underline</code>, and <code>\textcolor{red}{...}</code> with named colors</li>
+            <li><code>itemize</code>, <code>enumerate</code>, and <code>center</code></li>
+            <li><code>\\</code> for a line break, a blank line for a new paragraph, and <code>\$</code> for a dollar
+              sign</li>
+            <li>quotes (<code>``...''</code>), dashes (<code>--</code>, <code>---</code>), and accents</li>
+          </ul>
+          <p>Anything else is listed when you load the file, so you can fix it before class.</p>
+        </section>
+
+        <section id="pictures">
+          <h2>Pictures</h2>
+          <p>Add a picture anywhere in a clue, response or solution with</p>
+          <pre class="code guide-code"><code><span class="k">\includegraphics</span>[height=4cm]{region.png}</code></pre>
+          <ul class="guide-list">
+            <li>Keep the image in the same folder as the game file.</li>
+            <li>Use <strong>PNG</strong> or <strong>JPG</strong>; both work in the game and in the PDF. (Browsers
+              can’t show PDF images, and pdflatex can’t use SVG.) A name without an extension
+              (<code>region</code>) finds <code>region.png</code> or <code>region.jpg</code>.</li>
+            <li>Options like <code>[height=4cm]</code> or <code>[width=0.5\textwidth]</code> only set the size in the
+              PDF. On the board, the text goes on the left and the picture on the right, sized to fit the screen.</li>
+            <li>To load a game with pictures, zip its folder and load the <code>.zip</code> (see below).</li>
+          </ul>
+        </section>
+
+        <section id="load">
+          <h2>Loading your game</h2>
+          <p>On <a href="host.html">the host page</a>, under <strong>Choose a game</strong>, drop your file on
+            <strong>Your own game</strong>, or click it to choose the file.</p>
+          <table class="guide-table">
+            <thead>
+              <tr><th>Your game has</th><th>Load</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Only text and math</td>
+                <td>The <code>.tex</code> file</td>
+              </tr>
+              <tr>
+                <td>Pictures, or its own <code>.sty</code> file of macros</td>
+                <td>A <code>.zip</code> of the game’s folder. On a Mac, right-click the folder and choose
+                  <em>Compress</em>; on Windows, right-click and choose <em>Send to → Compressed (zipped)
+                    folder</em>. You can also select the <code>.tex</code> file and its pictures together.</td>
+              </tr>
+              <tr>
+                <td>Written in Overleaf</td>
+                <td>The <code>.zip</code> from Overleaf’s <em>Menu → Download → Source</em></td>
+              </tr>
+            </tbody>
+          </table>
+          <p>The app finds the game file and its pictures in the <code>.zip</code> and ignores everything else (PDFs,
+            LaTeX’s extra files, TikZ sources, and <code>calculatedrisk.sty</code>). Your files stay on your computer;
+            nothing is uploaded.</p>
+          <p><strong>Check it before class.</strong> After loading, the host page shows the game’s title and size, or a
+            list of problems with their line numbers. Fix any problems and load the file again. Then click
+            <strong>Preview every clue and response</strong> to read through everything as it will appear.</p>
+        </section>
+
+        <section id="print">
+          <h2>Printing handouts</h2>
+          <p>Compile the game file with LaTeX (pdflatex, xelatex, or Overleaf) to get a PDF. The word in brackets on the
+            <code>\usepackage[...]{calculatedrisk}</code> line chooses what it contains:</p>
+          <table class="guide-table keys">
+            <thead>
+              <tr><th>Option</th><th>The PDF contains</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>questions</code></td><td>The clues only, such as a study sheet for students</td></tr>
+              <tr><td><code>answers</code></td><td>The clues and responses, after an overview of the board</td></tr>
+              <tr><td><code>solutions</code></td><td>The clues, responses and worked solutions, after an overview of
+                  the board. The best one to proofread while you write.</td></tr>
+            </tbody>
+          </table>
+          <p>You can add these after it, separated by commas, as in
+            <code>\usepackage[solutions, writesay]{calculatedrisk}</code>:</p>
+          <table class="guide-table keys">
+            <tbody>
+              <tr><td><code>writesay</code></td><td>Marks each clue’s <code>[write]</code> or <code>[say]</code>.
+                  Handy while writing; leave it off for copies you give students.</td></tr>
+              <tr><td><code>board</code></td><td>Always shows the board overview, even with <code>questions</code></td>
+              </tr>
+              <tr><td><code>noboard</code></td><td>Never shows the board overview</td></tr>
+            </tbody>
+          </table>
+          <p>The PDFs never reveal which clues are Double Downs.</p>
+        </section>
+
+        <section id="tips">
+          <h2>Tips</h2>
+          <ul class="checklist">
+            <li><strong>Keep most clues quick.</strong> A board has 25 or 30 clues, so a few long ones are fine, but
+              most should take under a minute. One way to make a clue quicker is to ask for one step: the
+              <em>u</em> and <em>dv</em> for an integration by parts, instead of the whole integral.</li>
+            <li><strong>Go up in difficulty.</strong> Put the easiest clue first in each category, since it’s worth
+              100.</li>
+            <li><strong>Mark long responses <code>[write]</code>.</strong> It saves arguments about who said what
+              first.</li>
+            <li><strong>Start from a built-in game.</strong> Each game on the host page has a <strong>Download</strong>
+              link. Its file is a good example to copy from.</li>
+          </ul>
+          <div class="guide-end">
+            <button class="button" data-download-template>Download the template</button>
+            <a href="host.html" class="text-link">Go to the host page →</a>
+          </div>
+        </section>
+
+      </article>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <span>Calculated Risk is a free tool for teachers.</span>
+      <span>An independent, non-commercial math review game for classroom use, not affiliated with any television
+        program.</span>
+    </div>
+  </footer>
+</body>
+
+</html>

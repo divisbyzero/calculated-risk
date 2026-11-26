@@ -206,6 +206,25 @@ kbd {
   background: var(--gold);
   box-shadow: 0 0 0 3px rgba(255, 204, 51, 0.25);
 }
+.write-steps { counter-reset: step; list-style: none; padding: 0; margin: 24px 0 0; }
+.write-steps li { counter-increment: step; position: relative; padding-left: 44px; margin: 14px 0; color: var(--muted); }
+.write-steps li strong { color: var(--ink); }
+.write-steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--navy);
+  color: var(--gold);
+  font-size: 14px;
+  font-weight: 800;
+}
 .write-actions { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 28px; }
 .fine { font-size: 14px; }
 
@@ -282,4 +301,75 @@ kbd {
   .mock-clue { animation: none; }
   .button { transition: none; }
   .button:hover { transform: none; }
+}
+
+/* ---- Guide page ---- */
+
+.nav-links a[aria-current="page"] { color: var(--ink); font-weight: 600; }
+
+.guide-hero {
+  background: linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 100%);
+  color: #fff;
+  padding: 56px 0 60px;
+}
+.guide-hero h1 { font-size: clamp(32px, 4vw, 44px); font-weight: 800; }
+.guide-hero .lede { max-width: 40em; }
+
+.guide { display: grid; grid-template-columns: 210px minmax(0, 1fr); gap: 56px; padding-top: 48px; padding-bottom: 88px; }
+.guide-toc { position: sticky; top: 88px; align-self: start; font-size: 15px; }
+.guide-toc-title { color: var(--muted); font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
+.guide-toc ol { list-style: none; padding: 0; margin: 0; border-left: 2px solid var(--line); }
+.guide-toc a { display: block; padding: 5px 0 5px 14px; margin-left: -2px; border-left: 2px solid transparent; color: var(--muted); text-decoration: none; }
+.guide-toc a:hover { color: var(--ink); border-left-color: var(--gold); }
+
+.guide-body { max-width: 760px; }
+.guide-body section { scroll-margin-top: 84px; }
+.guide-body section + section { margin-top: 56px; padding-top: 48px; border-top: 1px solid var(--line); }
+.guide-body h2 { font-size: 28px; font-weight: 800; margin-bottom: 16px; }
+.guide-body p { margin-top: 14px; }
+.guide-body h2 + p { margin-top: 0; }
+.guide-body .checklist { margin-top: 18px; }
+.guide-note { color: var(--muted); font-size: 15px; }
+
+.guide-steps { counter-reset: step; list-style: none; padding: 0; margin: 0; }
+.guide-steps > li { counter-increment: step; position: relative; padding-left: 52px; margin: 0 0 26px; }
+.guide-steps > li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: -3px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--navy);
+  color: var(--gold);
+  font-weight: 800;
+}
+.guide-steps ul, .guide-list { margin: 10px 0 0; padding-left: 22px; }
+.guide-steps ul li, .guide-list li { margin: 6px 0; }
+.guide-inline-button { margin-top: 14px; }
+
+.guide-code { margin-top: 18px; font-size: 13px; white-space: pre; }
+
+.guide-defs { margin: 22px 0 0; }
+.guide-defs dt { margin-top: 14px; }
+.guide-defs dd { margin: 4px 0 0 0; color: var(--muted); }
+
+.guide-table { width: 100%; border-collapse: collapse; margin-top: 18px; font-size: 16px; }
+.guide-table th, .guide-table td { text-align: left; vertical-align: top; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+.guide-table th { font-size: 13px; color: var(--muted); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+.guide-table.keys td:first-child { white-space: nowrap; width: 1%; }
+.guide-table:not(.keys) td:first-child { width: 34%; }
+.guide-table + .guide-table { margin-top: 8px; }
+
+.guide-end { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; margin-top: 32px; }
+.nowrap { white-space: nowrap; }
+
+@media (max-width: 900px) {
+  .guide { grid-template-columns: minmax(0, 1fr); gap: 0; padding-top: 32px; }
+  .guide-toc { display: none; }
+  .guide-table.keys td:first-child { white-space: normal; }
 }

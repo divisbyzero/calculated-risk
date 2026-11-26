@@ -20,7 +20,7 @@
       <a href="./" class="brand"><img src="img/favicon.svg" alt="" width="28" height="28"> Calculated Risk</a>
       <nav class="nav-links" aria-label="Page sections">
         <a href="#how">How it works</a>
-        <a href="#write">Create a game</a>
+        <a href="guide.html">Create a game</a>
         <a href="#faq">FAQ</a>
       </nav>
       <a href="host.html" class="button button-small">Play!</a>
@@ -103,20 +103,19 @@
       <div class="wrap write">
         <div class="write-text">
           <h2 class="section-title">Create your own game</h2>
-          <p>A game is a single LaTeX file. Write five or six categories with five clues each. Values go up by 100 in
-            the order you write them.</p>
-          <ul class="checklist">
-            <li>Each clue is the clue, then <code>\response</code>, then an optional <code>\solution</code>.</li>
-            <li>Add <code>[doubledown]</code>, <code>[write]</code>, or <code>[say]</code> to a clue with one word.</li>
-            <li>Use <code>\includegraphics{figure.png}</code> for a picture.</li>
-            <li>Finish with <code>\begin{final}{Category}</code> for Fermat's Last Round.</li>
-          </ul>
+          <p>A game is a single LaTeX file: five or six categories of five clues, plus a final clue. If you write
+            LaTeX, you already know how.</p>
+          <ol class="write-steps">
+            <li><strong>Download the template.</strong> A folder with the game file to fill in and the style file
+              that prints it as a PDF.</li>
+            <li><strong>Fill in the clues</strong> in Overleaf or any editor. Each clue is the clue, then
+              <code>\response</code>, then an optional worked <code>\solution</code>.</li>
+            <li><strong>Load it on the host page.</strong> The app checks it and lets you preview every clue.</li>
+          </ol>
           <div class="write-actions">
             <button class="button" id="download-template">Download the template</button>
-            <a href="host.html" class="text-link">Then load it on the host page →</a>
+            <a href="guide.html" class="text-link">Read the full guide →</a>
           </div>
-          <p class="fine">The template comes with <code>calculatedrisk.sty</code>, so it also compiles in Overleaf or
-            any LaTeX editor. If your game has pictures, load a <code>.zip</code> of its folder.</p>
         </div>
         <pre class="code" aria-label="Example game file"><code><span class="c">\documentclass{article}</span>
 <span class="c">\usepackage[solutions]{calculatedrisk}</span>
