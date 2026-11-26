@@ -1,36 +1,32 @@
-% Calculated Risk game template.
+% Calculated Risk starter game and template.
 %
-% Keep this file, calculatedrisk.sty and any pictures together in one folder.
-% Rename the folder and this file, and fill in the clues.
+% This is a complete game you can play as it is. Each clue also shows one
+% thing you can do in a game file; the "% Shows:" comment above it says what.
+% To make your own game, keep the structure and replace the clues.
+%
+% Keep this file, calculatedrisk.sty and any pictures together in one
+% folder. Rename the folder and this file if you like.
 %
 % (In the Calculated Risk repository, the games instead share one master copy,
-% games/calculatedrisk.sty, one folder up, and use \usepackage{../calculatedrisk};
-% pdflatex's warning that the package "provides calculatedrisk" is harmless.
+% games/calculatedrisk.sty, one folder up, and use \usepackage{../calculatedrisk}.
 % The Download button changes that line to \usepackage{calculatedrisk} and puts
-% a copy of calculatedrisk.sty in the folder. To list a game in the app, add it
-% to games/index.json.)
+% a copy of calculatedrisk.sty in the folder.)
 %
 % Rules:
 %   * 5 or 6 categories, each with exactly 5 clues.
 %   * Clues are worth 100, 200, 300, 400, 500 in the order they appear.
-%     To reorder, just move the \begin{clue} ... \end{clue} blocks.
-%   * Each clue is: the clue, then \response, then the correct response.
-%   * Optionally add \solution after the response, followed by worked steps.
-%     After a correct answer, the board can show the response and solution.
-%   * Mark a Double Down with \begin{clue}[doubledown].
-%   * Optional: mark a clue [write] if players must write the response
-%     before ringing in, or [say] if they can just say it. The board shows
-%     a large icon for it. Combine options with commas:
-%     \begin{clue}[doubledown, write]. Fermat's Last Round takes it too:
-%     \begin{final}[write]{Category}.
-%   * Pictures: \includegraphics[height=4cm]{figure.png} anywhere in a
-%     clue, response or solution. Put the file in this game's folder and
-%     use PNG or JPG. The board shows the picture to the right of the text.
-%   * Math works inside $...$, \(...\), \[...\], and environments like align*.
-%   * \newcommand and \DeclareMathOperator macros defined below work
-%     inside math.
-%   * In text you can use \textbf, \emph, \textit, itemize, enumerate, \\,
-%     and \$ for a dollar sign.
+%     To reorder, move the \begin{clue} ... \end{clue} blocks.
+%   * Each clue is: the clue, then \response and the correct response, then
+%     (optionally) \solution and a worked solution.
+%   * Options go in brackets after \begin{clue}, separated by commas:
+%       doubledown  makes the clue a Double Down
+%       write       shows a "Write it" banner (teams write before answering)
+%       say         shows a "Say it" banner (teams can just say it)
+%   * Pictures: \includegraphics{figure.png}, with the PNG or JPG in this
+%     folder. Options like [height=4cm] only affect the PDF.
+%   * Anything after a % is a comment, ignored by the app and by LaTeX.
+%
+% The full guide: guide.html on the Calculated Risk site.
 
 \documentclass{article}
 % Which PDF to make (the web game ignores this):
@@ -43,179 +39,277 @@
 %   noboard    never show the board overview
 \usepackage[solutions]{../calculatedrisk}
 
-\gametitle{My Game Title}
+\gametitle{Starter Game}
 
-% Game-specific macros (optional):
-% \newcommand{\avg}[1]{\overline{#1}}
+% Your own macros. They work inside math in every clue.
+\newcommand{\dd}[1]{\frac{d}{d#1}}
 
 \begin{document}
 
-\begin{category}{First Category}
-  \begin{clue}
-    Clue
+%======================================================================
+\begin{category}{Math Notation}
+
+  % Shows: inline math with $...$, and the [say] option.
+  \begin{clue}[say]
+    It is the value of $2^{10}.$
   \response
-    Response
+    What is $1024$?
+  \end{clue}
+
+  % Shows: a macro defined at the top of the file (\dd), inline math
+  % with \( ... \), and a one-line solution.
+  \begin{clue}[say]
+    It is the value of \(\dd{x}\left(x^3\right)\) at \(x = 2.\)
+  \response
+    What is $12$?
   \solution
-    Worked solution (optional; delete these two lines if not needed)
+    $\dd{x}\left(x^3\right) = 3x^2,$ and $3(2)^2 = 12.$
   \end{clue}
 
-  \begin{clue}
-    Clue
+  % Shows: display math with \[ ... \], and a worked solution in align*.
+  \begin{clue}[say]
+    It is the value of
+    \[ \int_0^{\pi} \sin x \, dx. \]
   \response
-    Response
+    What is $2$?
+  \solution
+    \begin{align*}
+      \int_0^{\pi} \sin x \, dx &= \Big[-\cos x\Big]_0^{\pi} \\
+        &= -\cos\pi + \cos 0 \\
+        &= 2.
+    \end{align*}
   \end{clue}
 
-  \begin{clue}
-    Clue
+  % Shows: a piecewise function with the cases environment.
+  \begin{clue}[say]
+    It is $f(-3)$ for
+    \[ f(x) = \begin{cases} x^2 & \text{if } x \ge 0, \\ -x & \text{if } x < 0. \end{cases} \]
   \response
-    Response
+    What is $3$?
   \end{clue}
 
-  \begin{clue}
-    Clue
+  % Shows: a matrix.
+  \begin{clue}[say]
+    It is the determinant of
+    \[ A = \begin{pmatrix} 1 & 2 \\ 3 & 4 \end{pmatrix}. \]
   \response
-    Response
+    What is $-2$?
+  \solution
+    $\det A = (1)(4) - (2)(3) = -2.$
   \end{clue}
 
-  \begin{clue}
-    Clue
-  \response
-    Response
-  \end{clue}
 \end{category}
 
-\begin{category}{Second Category}
-  \begin{clue}
-    Clue
+%======================================================================
+\begin{category}{Text and Lists}
+
+  % Shows: \textbf and \emph.
+  \begin{clue}[say]
+    It is the \textbf{only} prime number that is \emph{even}.
   \response
-    Response
+    What is $2$?
   \end{clue}
 
-  \begin{clue}
-    Clue
+  % Shows: a bulleted list (itemize).
+  \begin{clue}[say]
+    It is the only prime in this list:
+    \begin{itemize}
+      \item $21$
+      \item $23$
+      \item $25$
+    \end{itemize}
   \response
-    Response
+    What is $23$?
   \end{clue}
 
-  \begin{clue}[doubledown]
-    Clue
+  % Shows: a numbered list (enumerate).
+  \begin{clue}[say]
+    Doing these steps to a function $f$ finds these points.
+    \begin{enumerate}
+      \item Find $f'(x).$
+      \item Set $f'(x) = 0.$
+      \item Solve for $x.$
+    \end{enumerate}
   \response
-    Response
+    What are the critical points?
   \end{clue}
 
-  \begin{clue}
-    Clue
+  % Shows: ``quotes'' and a dollar sign in text (\$).
+  \begin{clue}[say]
+    It is the price of a ``baker's dozen'' of donuts at \$2 each.
   \response
-    Response
+    What is \$26?
   \end{clue}
 
-  \begin{clue}
-    Clue
+  % Shows: accents (G\"odel) and an em dash (---).
+  \begin{clue}[say]
+    Kurt G\"odel proved these two theorems---the most famous results in
+    mathematical logic.
   \response
-    Response
+    What are the Incompleteness Theorems?
   \end{clue}
+
 \end{category}
 
-\begin{category}{Third Category}
-  \begin{clue}
-    Clue
+%======================================================================
+\begin{category}{Pictures and Layout}
+
+  % Shows: a picture in a clue. On the board it goes to the right of the
+  % text; in the PDF, center puts it on its own line and [height=3.5cm]
+  % sets its size.
+  \begin{clue}[say]
+    It is the area of the shaded region under $y = x^2.$
+    \begin{center}
+      \includegraphics[height=3.5cm]{shaded-area.png}
+    \end{center}
   \response
-    Response
+    What is $9$?
+  \solution
+    $\displaystyle\int_0^3 x^2 \, dx = \frac{x^3}{3}\Big|_0^3 = 9.$
   \end{clue}
 
-  \begin{clue}
-    Clue
+  % Shows: a picture in a solution.
+  \begin{clue}[say]
+    It is the hypotenuse of a right triangle with legs $5$ and $12.$
   \response
-    Response
+    What is $13$?
+  \solution
+    $\sqrt{5^2 + 12^2} = \sqrt{169} = 13.$
+    \begin{center}
+      \includegraphics[height=2cm]{right-triangle.png}
+    \end{center}
   \end{clue}
 
-  \begin{clue}
-    Clue
+  % Shows: line breaks with \\.
+  \begin{clue}[say]
+    Roses are red,\\
+    violets are blue,\\
+    it's the derivative of $x^2,$\\
+    and it starts with a $2.$
   \response
-    Response
+    What is $2x$?
   \end{clue}
 
-  \begin{clue}
-    Clue
+  % Shows: a long clue. The board shrinks text to fit the screen.
+  \begin{clue}[say]
+    It is the theorem that says: if $f$ is continuous on $[a,b]$ and
+    differentiable on $(a,b),$ then there is some $c$ in $(a,b)$ where the
+    tangent line is parallel to the secant line through the endpoints, that
+    is,
+    \[ f'(c) = \frac{f(b) - f(a)}{b - a}. \]
   \response
-    Response
+    What is the Mean Value Theorem?
   \end{clue}
 
-  \begin{clue}
-    Clue
+  % Shows: an align* environment in a clue.
+  \begin{clue}[say]
+    It is the value of $x + y$ if
+    \begin{align*}
+      2x + y &= 7, \\
+      x - y &= 2.
+    \end{align*}
   \response
-    Response
+    What is $4$?
+  \solution
+    Adding the equations gives $3x = 9,$ so $x = 3$ and $y = 1.$
   \end{clue}
+
 \end{category}
 
-\begin{category}{Fourth Category}
-  \begin{clue}
-    Clue
+%======================================================================
+\begin{category}{Clue Options}
+
+  % Shows: a "Who is" response.
+  \begin{clue}[say]
+    He invented calculus at about the same time as Gottfried Leibniz.
   \response
-    Response
+    Who is Isaac Newton?
   \end{clue}
 
-  \begin{clue}
-    Clue
+  % Shows: the [write] option, for a response teams should write down.
+  \begin{clue}[write]
+    It is the derivative of $\sin\left(x^2\right).$
   \response
-    Response
+    What is $2x\cos\left(x^2\right)$?
   \end{clue}
 
+  % Shows: a clue with neither [write] nor [say]. The board shows no banner.
   \begin{clue}
-    Clue
+    It is the next number in $1, 1, 2, 3, 5, 8, \ldots$
   \response
-    Response
+    What is $13$?
   \end{clue}
 
-  \begin{clue}
-    Clue
+  % Shows: two options at once. This clue is a Double Down.
+  \begin{clue}[doubledown, write]
+    It is the tangent line to $y = x^2$ at $x = 3.$
   \response
-    Response
+    What is $y = 6x - 9$?
+  \solution
+    The slope is $y'(3) = 6$ and the point is $(3, 9),$ so
+    $y - 9 = 6(x - 3),$ or $y = 6x - 9.$
   \end{clue}
 
-  \begin{clue}
-    Clue
+  % Shows: a "What are" response with more than one answer.
+  \begin{clue}[say]
+    They are the solutions of $x^2 - 5x + 6 = 0.$
   \response
-    Response
+    What are $x = 2$ and $x = 3$?
+  \solution
+    $x^2 - 5x + 6 = (x - 2)(x - 3).$
   \end{clue}
+
 \end{category}
 
-\begin{category}{Fifth Category}
-  \begin{clue}
-    Clue
+%======================================================================
+% Shows: math in a category name.
+\begin{category}{Sums $\Sigma$}
+
+  \begin{clue}[say]
+    It is the value of $\displaystyle\sum_{k=1}^{4} k.$
   \response
-    Response
+    What is $10$?
   \end{clue}
 
-  \begin{clue}
-    Clue
+  \begin{clue}[say]
+    It is the value of $\displaystyle\sum_{k=0}^{\infty} \left(\frac{1}{2}\right)^k.$
   \response
-    Response
+    What is $2$?
+  \solution
+    It is a geometric series with ratio $\frac{1}{2},$ so its sum is
+    $\dfrac{1}{1 - \frac{1}{2}} = 2.$
   \end{clue}
 
-  \begin{clue}
-    Clue
+  \begin{clue}[write]
+    It is a formula for $\displaystyle\sum_{k=1}^{n} k.$
   \response
-    Response
+    What is $\dfrac{n(n+1)}{2}$?
   \end{clue}
 
-  \begin{clue}
-    Clue
+  \begin{clue}[say]
+    It is what the harmonic series $\displaystyle\sum_{n=1}^{\infty} \frac{1}{n}$ does.
   \response
-    Response
+    What is diverge?
   \end{clue}
 
-  \begin{clue}
-    Clue
+  \begin{clue}[say]
+    It is the value of $\displaystyle\sum_{n=1}^{\infty} \frac{1}{n^2}.$
   \response
-    Response
+    What is $\dfrac{\pi^2}{6}$?
   \end{clue}
+
 \end{category}
 
-\begin{final}{Final Category}
-  Fermat's Last Round clue
+%======================================================================
+% Fermat's Last Round: one category and clue, after the categories.
+% [write] works here too.
+\begin{final}[write]{Famous Constants}
+  It is the value of $\displaystyle\sum_{n=0}^{\infty} \frac{1}{n!}.$
 \response
-  Fermat's Last Round response
+  What is $e$?
+\solution
+  The Taylor series of $e^x$ is $\displaystyle\sum_{n=0}^{\infty} \frac{x^n}{n!}.$
+  Setting $x = 1$ gives $e.$
 \end{final}
 
 \end{document}

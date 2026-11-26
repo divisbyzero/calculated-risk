@@ -91,8 +91,10 @@ During the game:
 
 A game is one LaTeX file. [`guide.html`](guide.html) walks teachers through it; this section is the summary. The easiest start is the **template** link on the
 host page (or **Download the template** on the landing page). It gives a
-`.zip` with `template.tex` and `calculatedrisk.sty` in one folder, ready to edit in
-any LaTeX editor or Overleaf.
+`.zip` with `template.tex`, `calculatedrisk.sty` and two example pictures in one
+folder, ready to edit in any LaTeX editor or Overleaf. `template.tex` is the
+**Starter Game** from the host page: a complete game in which each clue shows
+one feature, with a comment saying which.
 
 ```latex
 \documentclass{article}
@@ -208,7 +210,10 @@ master copy of `calculatedrisk.sty`:
 games/
   index.json                      the list shown on the host page
   calculatedrisk.sty                    shared by every game
-  template/template.tex
+  template/
+    template.tex                  the Starter Game, also the downloadable template
+    shaded-area.png, right-triangle.png
+    figures/                      TikZ sources for its pictures
   multivariable-calculus/
     multivariable-calculus.tex    uses \usepackage[...]{../calculatedrisk}
     polar-circle.png

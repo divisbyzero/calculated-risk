@@ -1,0 +1,13 @@
+% A right triangle with legs 5 and 12 and hypotenuse 13.
+\documentclass[border=4pt]{standalone}
+\usepackage{tikz}
+\begin{document}
+\begin{tikzpicture}[scale=0.32]
+  \fill[blue!20] (0,0) -- (12,0) -- (12,5) -- cycle;
+  \draw[thick] (0,0) -- (12,0) -- (12,5) -- cycle;
+  \draw (11.2,0) -- (11.2,0.8) -- (12,0.8);
+  \node[below] at (6,0) {$12$};
+  \node[right] at (12,2.5) {$5$};
+  \node[above left] at (6,2.5) {$13$};
+\end{tikzpicture}
+\end{document}

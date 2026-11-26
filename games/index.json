@@ -15,13 +15,8 @@
     "description": "Integration by parts, limits, improper integrals, and applications of integration."
   },
   {
-    "file": "sample-game/sample-game.tex",
-    "title": "Sample Game",
-    "description": "A quick tour with placeholder clues. Good for trying out the board."
-  },
-  {
-    "file": "formatting-demo/formatting-demo.tex",
-    "title": "Formatting Demo",
-    "description": "Shows what you can write in a clue: math, macros, lists, and more."
+    "file": "template/template.tex",
+    "title": "Starter Game",
+    "description": "A short game that shows every feature, one clue at a time. It's also the template: download it and replace the clues with your own."
   }
 ]
