@@ -279,4 +279,4 @@ delete its `calculatedrisk.sty`, and change the line back to
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+[CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/). You may share and adapt this work for non-commercial purposes, with attribution. See [LICENSE](LICENSE).
