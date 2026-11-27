@@ -106,7 +106,7 @@ comment saying which.
 
 ```latex
 \documentclass{article}
-\usepackage[solutions]{calculatedrisk}   % or questions, or answers (see Printing)
+\usepackage{calculatedrisk}              % options choose the PDF (see Printing)
 \gametitle{Calculus I Review}
 \newcommand{\dd}[1]{\frac{d}{d#1}}       % macros work inside math
 
@@ -191,23 +191,17 @@ pictures may be too big for the browser to save for **Resume**.
 
 Compile the game file with LaTeX as usual (pdflatex, xelatex or Overleaf).
 `calculatedrisk.sty` must be in the same folder as the game (a downloaded game
-already has it). The option on `\usepackage[...]{calculatedrisk}` chooses the
-PDF:
-
-| Option | The PDF contains |
-| --- | --- |
-| `questions` | The clues only, e.g. a study sheet for students |
-| `answers` | The clues and responses, after an overview of the board |
-| `solutions` (default) | The clues, responses and worked solutions, after an overview of the board. This is the one to proofread while you write. |
-
-Add any of these after it, separated by commas, as in
-`\usepackage[solutions, writesay, noboard]{calculatedrisk}`:
+already has it). By default the PDF shows an overview of the board, then the
+clues, responses and worked solutions: the one to proofread while you write.
+To change what it contains, add any of these options, separated by commas, as
+in `\usepackage[clues, noboard]{calculatedrisk}`:
 
 | Option | What it does |
 | --- | --- |
+| `clues` | Shows the clues only, e.g. a study sheet for students |
+| `answers` | Shows the clues and responses |
 | `writesay` | Shows each clue's `[write]` or `[say]` mark under its value. Handy while writing; leave it off for copies you give students. |
-| `board` | Always shows the board overview, even with `questions` |
-| `noboard` | Never shows the board overview |
+| `noboard` | Leaves out the board overview |
 
 The web game ignores these options, and the PDFs never mention the Double
 Down. Each clue stays on one page with its response; Fermat's Last Round

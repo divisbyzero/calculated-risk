@@ -116,7 +116,7 @@
           </div>
         </div>
         <pre class="code" aria-label="Example game file"><code><span class="c">\documentclass{article}</span>
-<span class="c">\usepackage[solutions]{calculatedrisk}</span>
+<span class="c">\usepackage{calculatedrisk}</span>
 <span class="k">\gametitle</span>{Calculus Review}
 
 <span class="k">\begin</span>{document}
@@ -168,9 +168,9 @@
         </details>
         <details>
           <summary>How do I make a handout from a game?</summary>
-          <p>Compile the game’s <code>.tex</code> file with LaTeX. Change the option on the
-            <code>\usepackage[…]{calculatedrisk}</code> line to <code>questions</code> for a study sheet,
-            <code>answers</code> for an answer key, or <code>solutions</code> for answers with worked solutions.</p>
+          <p>Compile the game’s <code>.tex</code> file with LaTeX. By default the PDF includes the
+            responses and worked solutions. Change the line to <code>\usepackage[clues]{calculatedrisk}</code> for a
+            study sheet, or <code>\usepackage[answers]{calculatedrisk}</code> for an answer key without solutions.</p>
         </details>
       </div>
     </section>

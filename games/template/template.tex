@@ -1,5 +1,5 @@
 % Calculated Risk Starter Game. It's a complete game, and each clue shows
-% one feature (see the "% Shows:" comments). To make your own game, replace
+% one feature. To make your own game, replace
 % the clues and keep the structure: 5 or 6 categories of 5 clues each, worth
 % 100 to 500 in the order they appear, then Fermat's Last Round.
 %
@@ -7,15 +7,18 @@
 % The full guide is the "Create a game" page on the Calculated Risk site.
 
 \documentclass{article}
-% Which PDF to make (the web game ignores this):
-%   questions  clues only, e.g. a study sheet for students
-%   answers    clues and responses
-%   solutions  clues, responses, and worked solutions
-% Add any of these, separated by commas, e.g. [solutions, writesay]:
-%   writesay   show each clue's [write]/[say] mark (for you, not students)
-%   board      always show the board overview (even with questions)
-%   noboard    never show the board overview
-\usepackage[solutions]{../calculatedrisk}
+%%%%
+% Settings for the calculatedrisk package. 
+% These affect only the PDF, not the web game.
+% By default the PDF shows the game board, the clues, the responses, and the
+% worked solutions. To change what appears in the PDF, add one or more of these
+% options, separated by commas, 
+% e.g. \usepackage[clues, noboard]{calculatedrisk}
+% clues      The PDF shows the clues only, e.g. a study sheet for students
+% answers    The PDF shows the clues and responses
+% writesay   The PDF shows each clue's [write]/[say] designation
+% noboard    The PDF does not include the game board
+\usepackage{../calculatedrisk}
 
 \gametitle{Starter Game}
 

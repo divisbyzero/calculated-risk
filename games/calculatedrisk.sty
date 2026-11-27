@@ -19,18 +19,16 @@
 %
 % Clue values are assigned by position: 100, 200, 300, ...
 %
-% Choose the version of the PDF with a package option:
-%   \usepackage[questions]{calculatedrisk}  clues only (a study sheet for students)
-%   \usepackage[answers]{calculatedrisk}    clues and responses
-%   \usepackage[solutions]{calculatedrisk}  clues, responses, and worked solutions
-%                                     (the default)
-% The answers and solutions versions start with an overview of the board.
-%
-% Extra options (combine with commas, e.g. [solutions, writesay, noboard]):
+% By default the PDF shows the board overview, then the clues, responses,
+% and worked solutions. Change this with package options, separated by
+% commas, e.g. \usepackage[clues, noboard]{calculatedrisk}:
+%   clues       the clues only (a study sheet for students)
+%   answers     the clues and responses
 %   writesay    show each clue's [write]/[say] mark under its value
 %               (handy while writing; leave it off for student copies)
-%   board       always show the board overview (even with questions)
-%   noboard     never show the board overview
+%   noboard     leave out the board overview
+% (Older option names still work: questions = clues, and solutions and
+% board, which are now the default.)
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{calculatedrisk}[2026/11/25 Calculated Risk game files]
 
@@ -41,19 +39,17 @@
 \newif\ifcrisk@solutions % show worked solutions
 \newif\ifcrisk@writesay  % show [write]/[say] marks
 \newif\ifcrisk@board     % show the board overview
-\newcommand*{\crisk@boardchoice}{auto} % auto: only with responses
-\DeclareOption{questions}{\crisk@keyfalse\crisk@solutionsfalse}
+\crisk@keytrue\crisk@solutionstrue\crisk@boardtrue % the default
+\DeclareOption{clues}{\crisk@keyfalse\crisk@solutionsfalse}
 \DeclareOption{answers}{\crisk@keytrue\crisk@solutionsfalse}
-\DeclareOption{solutions}{\crisk@keytrue\crisk@solutionstrue}
 \DeclareOption{writesay}{\crisk@writesaytrue}
+\DeclareOption{noboard}{\crisk@boardfalse}
+% Older names, kept so existing game files still compile.
+\DeclareOption{questions}{\crisk@keyfalse\crisk@solutionsfalse}
+\DeclareOption{solutions}{\crisk@keytrue\crisk@solutionstrue}
 \DeclareOption{nowritesay}{\crisk@writesayfalse}
-\DeclareOption{board}{\renewcommand*{\crisk@boardchoice}{on}}
-\DeclareOption{noboard}{\renewcommand*{\crisk@boardchoice}{off}}
-\ExecuteOptions{solutions}
+\DeclareOption{board}{\crisk@boardtrue}
 \ProcessOptions\relax
-\def\crisk@tmp{on}\ifx\crisk@boardchoice\crisk@tmp\crisk@boardtrue\else
-\def\crisk@tmp{off}\ifx\crisk@boardchoice\crisk@tmp\crisk@boardfalse\else
-\ifcrisk@key\crisk@boardtrue\else\crisk@boardfalse\fi\fi\fi
 
 %----------------------------------------------------------------------
 % Packages
@@ -91,7 +87,7 @@
 \else\ifcrisk@key
   \newcommand*{\crisk@version}{Answer Key}
 \else
-  \newcommand*{\crisk@version}{Questions}
+  \newcommand*{\crisk@version}{Clues}
 \fi\fi
 
 \newcommand*{\crisk@kicker}{\sffamily\bfseries\footnotesize\color{criskGold}}
@@ -124,7 +120,7 @@
 \AtBeginDocument{\crisk@maketitle}
 
 %----------------------------------------------------------------------
-% Board overview (answers and solutions versions, or with the board option)
+% Board overview (left out with the noboard option)
 %
 % Each run records the categories in the .aux file; the next run draws
 % them as a small board. latexmk reruns automatically.

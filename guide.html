@@ -96,7 +96,7 @@
             end. Here is a whole game, shortened.</p>
           <pre class="code guide-code" aria-label="An example game file"><code><span class="m">% 1. Setup</span>
 <span class="c">\documentclass{article}</span>
-<span class="c">\usepackage[solutions]{calculatedrisk}</span>  <span class="m">% which PDF to print</span>
+<span class="c">\usepackage{calculatedrisk}</span>             <span class="m">% options choose the PDF</span>
 <span class="k">\gametitle</span>{Calculus I Review}           <span class="m">% shown on the board</span>
 <span class="c">\newcommand{\dd}[1]{\frac{d}{d#1}}</span>   <span class="m">% your macros (optional)</span>
 
@@ -133,8 +133,8 @@
 
 <span class="k">\end</span>{document}</code></pre>
           <dl class="guide-defs">
-            <dt><code>\usepackage[solutions]{calculatedrisk}</code></dt>
-            <dd>Loads the style file. The word in brackets only affects the PDF (see <a href="#print">Printing
+            <dt><code>\usepackage{calculatedrisk}</code></dt>
+            <dd>Loads the style file. Options in brackets, as in <code>\usepackage[clues]{calculatedrisk}</code>, only affect the PDF (see <a href="#print">Printing
                 handouts</a>); the game ignores it.</dd>
             <dt><code>\gametitle{...}</code></dt>
             <dd>The title shown on the board and the host screen.</dd>
@@ -279,28 +279,20 @@
 
         <section id="print">
           <h2>Printing handouts</h2>
-          <p>Compile the game file with LaTeX (pdflatex, xelatex, or Overleaf) to get a PDF. The word in brackets on the
-            <code>\usepackage[...]{calculatedrisk}</code> line chooses what it contains:</p>
+          <p>Compile the game file with LaTeX (pdflatex, xelatex, or Overleaf) to get a PDF. By default it shows an
+            overview of the board, then the clues, responses and worked solutions: the best one to proofread while you
+            write. To change what it contains, add any of these options in brackets, separated by commas, as in
+            <code>\usepackage[clues, noboard]{calculatedrisk}</code>:</p>
           <table class="guide-table keys">
             <thead>
-              <tr><th>Option</th><th>The PDF contains</th></tr>
+              <tr><th>Option</th><th>What it does</th></tr>
             </thead>
             <tbody>
-              <tr><td><code>questions</code></td><td>The clues only, such as a study sheet for students</td></tr>
-              <tr><td><code>answers</code></td><td>The clues and responses, after an overview of the board</td></tr>
-              <tr><td><code>solutions</code></td><td>The clues, responses and worked solutions, after an overview of
-                  the board. The best one to proofread while you write.</td></tr>
-            </tbody>
-          </table>
-          <p>You can add these after it, separated by commas, as in
-            <code>\usepackage[solutions, writesay]{calculatedrisk}</code>:</p>
-          <table class="guide-table keys">
-            <tbody>
+              <tr><td><code>clues</code></td><td>Shows the clues only, such as a study sheet for students</td></tr>
+              <tr><td><code>answers</code></td><td>Shows the clues and responses</td></tr>
               <tr><td><code>writesay</code></td><td>Marks each clue’s <code>[write]</code> or <code>[say]</code>.
                   Handy while writing; leave it off for copies you give students.</td></tr>
-              <tr><td><code>board</code></td><td>Always shows the board overview, even with <code>questions</code></td>
-              </tr>
-              <tr><td><code>noboard</code></td><td>Never shows the board overview</td></tr>
+              <tr><td><code>noboard</code></td><td>Leaves out the board overview</td></tr>
             </tbody>
           </table>
           <p>The PDFs never reveal which clues are Double Downs.</p>
