@@ -1,0 +1,44 @@
+name: Bug report
+description: Something isn't working the way it should.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a problem. A few details help a lot.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you see, and what did you expect to see instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: What were you doing when it happened?
+      placeholder: |
+        1. Opened the host page
+        2. Chose the Calculus 1 game
+        3. Clicked ...
+  - type: dropdown
+    id: page
+    attributes:
+      label: Which part of the site?
+      options:
+        - Host page (running a game)
+        - Board window (projector screen)
+        - Loading my own .tex game
+        - Guide or home page
+        - Not sure
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and computer
+      placeholder: e.g. Chrome on Windows, Safari on a Mac
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else?
+      description: Screenshots or the .tex file you were using are welcome (drag them into this box).

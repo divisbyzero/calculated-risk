@@ -276,6 +276,8 @@ kbd {
 
 .footer { padding: 28px 0; font-size: 14px; color: var(--muted); border-top: 1px solid var(--line); }
 .footer-inner { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.footer a { color: inherit; }
+.footer a:hover { color: var(--ink); }
 
 /* ---- Small screens ---- */
 
