@@ -105,7 +105,8 @@ body.idle { cursor: none; }
 
 .cell.val {
   color: var(--gold);
-  font-size: 8.5vh;
+  /* Shrinks on boards with many categories so the values fit their cells. */
+  font-size: min(8.5vh, calc(40vw / var(--cols, 6)));
   font-weight: 800;
   text-shadow: 0.35vh 0.35vh 0 #000;
   font-variant-numeric: tabular-nums;

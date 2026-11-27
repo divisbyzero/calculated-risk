@@ -129,7 +129,7 @@ comment saying which.
   % ... 5 clues per category
 \end{category}
 
-% ... 5 or 6 categories
+% ... as many categories as you like
 
 \begin{final}{Series}
   It is the value of $\sum_{n=1}^\infty \frac{1}{n^2}.$
@@ -140,7 +140,8 @@ comment saying which.
 \end{document}
 ```
 
-- **Board size:** 5 or 6 categories with 5 clues each. Clues are worth
+- **Board size:** any number of categories, with 5 clues each. The board
+  resizes to fit. Clues are worth
   100–500 **by position**, so you can reorder them by moving blocks around.
 - **Options on a clue**, combined with commas:
   - `doubledown` makes it a Double Down.

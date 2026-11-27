@@ -220,12 +220,6 @@ export function parseGame(source, options = {}) {
   if (categories.length === 0) {
     err('No categories found. Write each category as \\begin{category}{Name} ... \\end{category}.');
   } else if (BOARD.enforceStandardSize) {
-    if (categories.length < BOARD.minCategories || categories.length > BOARD.maxCategories) {
-      const need = BOARD.minCategories === BOARD.maxCategories
-        ? `exactly ${BOARD.minCategories}`
-        : `${BOARD.minCategories} to ${BOARD.maxCategories}`;
-      err(`The board needs ${need} categories; this file has ${categories.length}.`);
-    }
     for (const c of categories) {
       if (c.clues.length !== BOARD.cluesPerCategory) {
         errors.push(`Line ${c.line}: Category "${c.nameText}" has ${c.clues.length} clue${c.clues.length === 1 ? '' : 's'}; each category needs exactly ${BOARD.cluesPerCategory}.`);

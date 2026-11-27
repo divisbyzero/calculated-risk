@@ -128,7 +128,7 @@ function buildMain() {
 function boardHtml() {
   const n = pub.categories.length;
   const rows = pub.rows;
-  let html = `<div class="grid" style="grid-template-columns: repeat(${n}, minmax(0, 1fr)); grid-template-rows: 1.3fr repeat(${rows}, minmax(0, 1fr));">`;
+  let html = `<div class="grid" style="--cols: ${n}; grid-template-columns: repeat(${n}, minmax(0, 1fr)); grid-template-rows: 1.3fr repeat(${rows}, minmax(0, 1fr));">`;
   for (const cat of pub.categories) {
     html += `<div class="cell cat" data-fit-max="0.045" data-fit-min="0.014"><div class="fit-inner clue-content">${cat}</div></div>`;
   }
