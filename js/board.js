@@ -102,8 +102,8 @@ function buildMain() {
         : `
         <div class="screen">
           ${screenLabel(label)}
-          ${modeBadge(pub.final.mode)}
           ${clueBody(pub.final.clue)}
+          ${modeBadge(pub.final.mode)}
         </div>`;
       break;
     }
@@ -155,8 +155,8 @@ function clueHtml() {
   return `
     <div class="screen">
       ${screenLabel(label)}
-      ${modeBadge(a.mode)}
       ${clueBody(a.clue)}
+      ${modeBadge(a.mode)}
     </div>`;
 }
 

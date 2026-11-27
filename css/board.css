@@ -163,7 +163,7 @@ body.idle { cursor: none; }
   display: flex;
   align-items: center;
   gap: 2.5vh;
-  margin-bottom: 3vh;
+  margin-top: 3vh;
   padding: 1.2vh 4vh 1.2vh 2.5vh;
   border-radius: 999px;
   font-size: 6.5vh;
